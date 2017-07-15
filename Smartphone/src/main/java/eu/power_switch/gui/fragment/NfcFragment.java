@@ -276,18 +276,13 @@ public class NfcFragment extends EventBusFragment {
         switch (action.getActionType()) {
             case Action.ACTION_TYPE_RECEIVER:
                 ReceiverAction receiverAction = (ReceiverAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom()
-                        .getId() + HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver()
-                        .getId() + HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton()
-                        .getId();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoomId() + HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiverId() + HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButtonId();
             case Action.ACTION_TYPE_ROOM:
                 RoomAction roomAction = (RoomAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom()
-                        .getId() + HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + roomAction.getRoomId() + HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
             case Action.ACTION_TYPE_SCENE:
                 SceneAction sceneAction = (SceneAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene()
-                        .getId();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_SCENE + sceneAction.getSceneId();
         }
 
         return null;
@@ -625,7 +620,7 @@ public class NfcFragment extends EventBusFragment {
                     }
                 }
 
-                action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
+                action = new ReceiverAction(-1, currentApartment.getId(), selectedRoom.getId(), selectedReceiver.getId(), selectedButton.getId());
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
                 Timber.d(spinner_room.getSelectedItem()
                         .toString());
@@ -634,9 +629,7 @@ public class NfcFragment extends EventBusFragment {
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1,
-                        currentApartment.getName(),
-                        selectedRoom,
+                action = new RoomAction(-1, currentApartment.getId(), selectedRoom.getId(),
                         spinner_button.getSelectedItem()
                                 .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
@@ -646,7 +639,7 @@ public class NfcFragment extends EventBusFragment {
                 Scene selectedScene = persistanceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
-                action = new SceneAction(-1, currentApartment.getName(), selectedScene);
+                action = new SceneAction(-1, currentApartment.getId(), selectedScene.getId());
             }
 
         } catch (Exception e) {

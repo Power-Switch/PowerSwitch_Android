@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
@@ -39,14 +42,16 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Provides database methods for managing Timers
  */
+@Singleton
 class TimerHandler {
 
-    private ActionHandler      actionHandler;
-    private TimerActionHandler timerActionHandler;
+    @Inject
+    ActionHandler      actionHandler;
+    @Inject
+    TimerActionHandler timerActionHandler;
 
+    @Inject
     TimerHandler() {
-        actionHandler = new ActionHandler();
-        timerActionHandler = new TimerActionHandler();
     }
 
     /**

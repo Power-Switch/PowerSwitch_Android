@@ -40,11 +40,11 @@ import timber.log.Timber;
 @Singleton
 class GeofenceActionHandler {
 
-    private ActionHandler actionHandler;
+    @Inject
+    ActionHandler actionHandler;
 
     @Inject
     GeofenceActionHandler() {
-        actionHandler = new ActionHandler();
     }
 
     /**

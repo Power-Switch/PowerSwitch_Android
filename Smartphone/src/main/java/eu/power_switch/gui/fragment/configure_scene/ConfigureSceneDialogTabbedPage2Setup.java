@@ -158,25 +158,24 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                 HashMap<Long, SceneItem> map              = new HashMap<>();
 
                 for (SceneItem sceneItem : scene.getSceneItems()) {
-                    map.put(sceneItem.getReceiver()
-                            .getId(), sceneItem);
+                    map.put(sceneItem.getReceiverId(), sceneItem);
+
+                    Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
 
                     boolean roomFound = false;
                     for (Room room : checkedReceivers) {
                         if (room.getId()
-                                .equals(sceneItem.getReceiver()
-                                        .getRoomId())) {
-                            room.addReceiver(sceneItem.getReceiver());
+                                .equals(receiver.getRoomId())) {
+                            room.addReceiver(receiver);
                             roomFound = true;
                         }
                     }
 
                     if (!roomFound) {
-                        Room room = persistanceHandler.getRoom(sceneItem.getReceiver()
-                                .getRoomId());
+                        Room room = persistanceHandler.getRoom(receiver.getRoomId());
                         room.getReceivers()
                                 .clear();
-                        room.addReceiver(sceneItem.getReceiver());
+                        room.addReceiver(receiver);
                         checkedReceivers.add(room);
                     }
                 }
@@ -216,9 +215,10 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                 for (Receiver receiver : room.getReceivers()) {
                     SceneItem sceneItem = receiverSceneItemHashMap.get(receiver.getId());
                     if (sceneItem == null) {
-                        sceneItem = new SceneItem(receiver,
+                        sceneItem = new SceneItem(receiver.getId(),
                                 receiver.getButtons()
-                                        .get(0));
+                                        .get(0)
+                                        .getId());
                         receiverSceneItemHashMap.put(receiver.getId(), sceneItem);
                     }
 
@@ -295,8 +295,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                     final int accentColor   = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
                     final int inactiveColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.textColorInactive);
                     if (receiverSceneItemHashMap.get(receiver.getId())
-                            .getActiveButton()
-                            .getId()
+                            .getButtonId()
                             .equals(button.getId())) {
                         buttonView.setTextColor(accentColor);
                     } else {
@@ -316,7 +315,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                                         if (receiverButton.getName()
                                                 .equals(button.getText())) {
                                             receiverSceneItemHashMap.get(receiver.getId())
-                                                    .setActiveButton(receiverButton);
+                                                    .setButtonId(receiverButton.getId());
                                             break;
                                         }
                                     }

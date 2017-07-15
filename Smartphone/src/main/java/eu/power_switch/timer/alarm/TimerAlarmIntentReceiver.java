@@ -50,6 +50,9 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    AndroidAlarmHandler androidAlarmHandler;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -129,8 +132,8 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
     private void reinitializeAlarms(Context context) {
         try {
             for (Timer timer : persistanceHandler.getAllTimers(true)) {
-                AndroidAlarmHandler.cancelAlarm(context, timer);
-                AndroidAlarmHandler.createAlarm(context, timer);
+                androidAlarmHandler.cancelAlarm(timer);
+                androidAlarmHandler.createAlarm(timer);
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);

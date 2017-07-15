@@ -435,11 +435,13 @@ public class ActionHandlerImpl implements ActionHandler {
             return;
         }
 
+        // TODO: check for missing associated gateway
+
         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (SceneItem sceneItem : scene.getSceneItems()) {
-            Room room = persistanceHandler.getRoom(sceneItem.getReceiver()
-                    .getRoomId());
-            Receiver receiver = sceneItem.getReceiver();
+            Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
+            Room     room     = persistanceHandler.getRoom(receiver.getRoomId());
+            Button   button   = receiver.getButton(sceneItem.getButtonId());
 
             List<Gateway> gateways;
             if (!receiver.getAssociatedGateways()
@@ -456,20 +458,16 @@ public class ActionHandlerImpl implements ActionHandler {
 
             for (Gateway gateway : gateways) {
                 if (gateway.isActive()) {
-                    NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton());
+                    NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
 
                     for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                         networkPackages.add(networkPackage);
                     }
 
                     // set on object, as well as in database
-                    sceneItem.getReceiver()
-                            .setLastActivatedButtonId(sceneItem.getActiveButton()
-                                    .getId());
-                    persistanceHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                                    .getId(),
-                            sceneItem.getActiveButton()
-                                    .getId());
+                    // TODO: why set in on the object? o.O
+                    receiver.setLastActivatedButtonId(sceneItem.getButtonId());
+                    persistanceHandler.setLastActivatedButtonId(sceneItem.getReceiverId(), sceneItem.getButtonId());
                 }
             }
         }
@@ -638,7 +636,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_RECEIVER:
                     ReceiverAction receiverAction = (ReceiverAction) action;
 
-                    apartment = persistanceHandler.getApartment(receiverAction.getApartmentName());
+                    apartment = persistanceHandler.getApartment(receiverAction.getApartmentId());
                     room = apartment.getRoom(receiverAction.getRoomId());
                     Receiver receiver = room.getReceiver(receiverAction.getReceiverId());
                     Button button = receiver.getButton(receiverAction.getButtonId());
@@ -648,7 +646,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_ROOM:
                     RoomAction roomAction = (RoomAction) action;
 
-                    apartment = persistanceHandler.getApartment(roomAction.getApartmentName());
+                    apartment = persistanceHandler.getApartment(roomAction.getApartmentId());
                     room = apartment.getRoom(roomAction.getRoomId());
 
                     executeRoomAction(room, roomAction.getButtonName());
@@ -656,7 +654,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_SCENE:
                     SceneAction sceneAction = (SceneAction) action;
 
-                    apartment = persistanceHandler.getApartment(sceneAction.getApartmentName());
+                    apartment = persistanceHandler.getApartment(sceneAction.getApartmentId());
                     Scene scene = apartment.getScene(sceneAction.getSceneId());
 
                     executeScene(scene);

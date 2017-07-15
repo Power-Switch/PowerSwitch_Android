@@ -34,8 +34,8 @@ public class AlarmClockActionTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ALARM_TYPE_ID + " integer not null," +
-            COLUMN_ACTION_ID + " integer not null" +
+            COLUMN_ALARM_TYPE_ID    + " integer not null," +
+            COLUMN_ACTION_ID        + " integer not null" +
         ");";
     //@formatter:on
 

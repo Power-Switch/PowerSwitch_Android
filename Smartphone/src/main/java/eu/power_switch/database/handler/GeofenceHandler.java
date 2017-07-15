@@ -50,11 +50,11 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 @Singleton
 class GeofenceHandler {
 
-    private GeofenceActionHandler geofenceActionHandler;
+    @Inject
+    GeofenceActionHandler geofenceActionHandler;
 
     @Inject
     GeofenceHandler() {
-        geofenceActionHandler = new GeofenceActionHandler();
     }
 
     /**

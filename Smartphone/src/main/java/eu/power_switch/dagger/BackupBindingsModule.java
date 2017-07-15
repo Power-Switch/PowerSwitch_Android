@@ -6,6 +6,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.CreateBackupProcessingDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
+import eu.power_switch.gui.dialog.RestoreBackupProcessingDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
 
 /**
@@ -25,6 +26,9 @@ public abstract class BackupBindingsModule {
 
     @ContributesAndroidInjector
     abstract CreateBackupProcessingDialog createBackupProcessingDialog();
+
+    @ContributesAndroidInjector
+    abstract RestoreBackupProcessingDialog restoreBackupProcessingDialog();
 
     @ContributesAndroidInjector
     abstract RestoreBackupFromFileActivity restoreBackupFromFileActivity();

@@ -252,8 +252,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
 
                 ArrayList<Receiver> activeReceivers = new ArrayList<>();
                 for (SceneItem sceneItem : scene.getSceneItems()) {
-                    Receiver receiver = persistanceHandler.getReceiver(sceneItem.getActiveButton()
-                            .getReceiverId());
+                    Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
                     activeReceivers.add(receiver);
                 }
 

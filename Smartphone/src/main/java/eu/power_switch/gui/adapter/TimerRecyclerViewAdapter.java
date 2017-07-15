@@ -48,17 +48,20 @@ import eu.power_switch.timer.alarm.AndroidAlarmHandler;
  * Created by Markus on 27.07.2015.
  */
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
-    private final PersistanceHandler persistanceHandler;
-    private       ArrayList<Timer>   timers;
-    private       Context            context;
+    private final PersistanceHandler  persistanceHandler;
+    private final AndroidAlarmHandler androidAlarmHandler;
+    private       ArrayList<Timer>    timers;
+    private       Context             context;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public TimerRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, ArrayList<Timer> timers) {
+    public TimerRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, AndroidAlarmHandler androidAlarmHandler,
+                                    ArrayList<Timer> timers) {
         this.timers = timers;
         this.context = context;
         this.persistanceHandler = persistanceHandler;
+        this.androidAlarmHandler = androidAlarmHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -152,10 +155,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                     try {
                         if (isChecked) {
                             persistanceHandler.enableTimer(timer.getId());
-                            AndroidAlarmHandler.createAlarm(context, timer);
+                            androidAlarmHandler.createAlarm(timer);
                         } else {
                             persistanceHandler.disableTimer(timer.getId());
-                            AndroidAlarmHandler.cancelAlarm(context, timer);
+                            androidAlarmHandler.cancelAlarm(timer);
                         }
                         timer.setActive(isChecked);
                     } catch (Exception e) {
@@ -169,11 +172,19 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         LayoutInflater inflater       = (LayoutInflater) context.getSystemService(inflaterString);
 
         holder.linearLayoutTimerActions.removeAllViews();
-        for (Action action : timer.getActions()) {
-            AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
-            textViewActionDescription.setText(action.toString());
-            textViewActionDescription.setPadding(0, 0, 0, 4);
-            holder.linearLayoutTimerActions.addView(textViewActionDescription);
+        try {
+            for (Action action : timer.getActions()) {
+
+                String readableString = Action.createReadableString(action, persistanceHandler);
+
+                AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
+
+                textViewActionDescription.setText(readableString);
+                textViewActionDescription.setPadding(0, 0, 0, 4);
+                holder.linearLayoutTimerActions.addView(textViewActionDescription);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
 
         // collapse timer

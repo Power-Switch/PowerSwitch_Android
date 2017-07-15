@@ -41,19 +41,24 @@ import eu.power_switch.shared.constants.AlarmClockConstants;
 @Singleton
 class AlarmClockHandler {
 
-    private ActionHandler actionHandler;
+    @Inject
+    ActionHandler actionHandler;
 
     @Inject
-    AlarmClockHandler(ActionHandler actionHandler) {
-        this.actionHandler = actionHandler;
+    AlarmClockHandler() {
     }
 
     protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {AlarmClockActionTable.COLUMN_ALARM_TYPE_ID, AlarmClockActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = database.query(AlarmClockActionTable.TABLE_NAME, columns,
-                AlarmClockActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(), null, null, null, null);
+        Cursor cursor = database.query(AlarmClockActionTable.TABLE_NAME,
+                columns,
+                AlarmClockActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

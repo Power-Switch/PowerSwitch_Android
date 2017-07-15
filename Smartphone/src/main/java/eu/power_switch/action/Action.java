@@ -24,6 +24,12 @@ import android.support.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import eu.power_switch.database.handler.PersistanceHandler;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.receiver.Receiver;
 import lombok.Getter;
 
 /**
@@ -53,9 +59,68 @@ public abstract class Action {
     @NonNull
     public abstract String getActionType();
 
+    /**
+     * Create a human readable text for an action
+     *
+     * @param action
+     * @param persistanceHandler
+     *
+     * @return
+     */
+    public static String createReadableString(Action action, PersistanceHandler persistanceHandler) {
+        // TODO: this is a huge performance monster :(
+        try {
+            StringBuilder s = new StringBuilder();
+            if (action instanceof ReceiverAction) {
+                ReceiverAction receiverAction = (ReceiverAction) action;
+                Apartment      apartment      = persistanceHandler.getApartment(receiverAction.getApartmentId());
+                Room           room           = apartment.getRoom(receiverAction.getRoomId());
+                Receiver       receiver       = room.getReceiver(receiverAction.getReceiverId());
+                Button         button         = receiver.getButton(receiverAction.getButtonId());
+
+
+                s.append(apartment.getName())
+                        .append(": ")
+                        .append(room.getName())
+                        .append(": ")
+                        .append(receiver.getName())
+                        .append(": ")
+                        .append(button.getName());
+            } else if (action instanceof RoomAction) {
+                RoomAction roomAction = (RoomAction) action;
+                Apartment  apartment  = persistanceHandler.getApartment(roomAction.getApartmentId());
+                Room       room       = apartment.getRoom(roomAction.getRoomId());
+
+                s.append(apartment.getName())
+                        .append(": ")
+                        .append(room.getName())
+                        .append(": ")
+                        .append(roomAction.getButtonName());
+            } else if (action instanceof SceneAction) {
+                SceneAction sceneAction = (SceneAction) action;
+                Apartment   apartment   = persistanceHandler.getApartment(sceneAction.getApartmentId());
+                Scene       scene       = apartment.getScene(sceneAction.getSceneId());
+
+                s.append(apartment.getName())
+                        .append(": ")
+                        .append(scene.getName());
+            } else {
+                s.append("Unknown");
+            }
+
+            return s.toString();
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
     @StringDef({ACTION_TYPE_RECEIVER, ACTION_TYPE_ROOM, ACTION_TYPE_SCENE, ACTION_TYPE_PAUSE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface ActionType {
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

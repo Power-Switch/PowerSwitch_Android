@@ -28,6 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
@@ -36,14 +39,16 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Scenes
  */
+@Singleton
 class SceneHandler {
 
-    private ActionHandler    actionHandler;
-    private SceneItemHandler sceneItemHandler;
+    @Inject
+    ActionHandler    actionHandler;
+    @Inject
+    SceneItemHandler sceneItemHandler;
 
+    @Inject
     SceneHandler() {
-        sceneItemHandler = new SceneItemHandler();
-        actionHandler = new ActionHandler();
     }
 
     /**

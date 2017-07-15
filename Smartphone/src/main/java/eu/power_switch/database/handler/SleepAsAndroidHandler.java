@@ -26,6 +26,9 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
@@ -36,12 +39,14 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 30.11.2015.
  */
+@Singleton
 class SleepAsAndroidHandler {
 
-    private ActionHandler actionHandler;
+    @Inject
+    ActionHandler actionHandler;
 
+    @Inject
     SleepAsAndroidHandler() {
-        actionHandler = new ActionHandler();
     }
 
     protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {

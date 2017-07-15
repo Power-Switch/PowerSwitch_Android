@@ -18,37 +18,25 @@
 
 package eu.power_switch.obj;
 
-import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.receiver.Receiver;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * Represents a SceneItem
  * A SceneItem is associated with a Receiver and one of its buttons.
  */
+@AllArgsConstructor
 @Data
-@ToString
 public class SceneItem {
 
     /**
      * Associated Receiver
      */
-    private Receiver receiver;
+    private long receiverId;
 
     /**
      * Associated Button
      */
-    private Button activeButton;
+    private Long buttonId;
 
-    /**
-     * Constructor
-     *
-     * @param receiver
-     * @param activeButton
-     */
-    public SceneItem(Receiver receiver, Button activeButton) {
-        this.receiver = receiver;
-        this.activeButton = activeButton;
-    }
 }

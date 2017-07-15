@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -49,14 +50,17 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     private GeofenceApiHandler  geofenceApiHandler;
     private ArrayList<Geofence> geofences;
     private Context             context;
+    private PersistanceHandler  persistanceHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler) {
+    public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler,
+                                       PersistanceHandler persistanceHandler) {
         this.geofences = geofences;
         this.context = context;
         this.geofenceApiHandler = geofenceApiHandler;
+        this.persistanceHandler = persistanceHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

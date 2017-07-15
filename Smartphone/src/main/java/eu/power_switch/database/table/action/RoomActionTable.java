@@ -18,25 +18,31 @@
 
 package eu.power_switch.database.table.action;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import eu.power_switch.database.table.room.RoomTable;
 
 /**
  * TimerRoomAction table description
  */
 public class RoomActionTable {
 
-    public static final String TABLE_NAME = "room_actions";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTION_ID = "action_id";
-    public static final String COLUMN_ROOM_ID = "room_id";
-    public static final String COLUMN_BUTTON_NAME = "button_name";
+    public static final String TABLE_NAME          = "room_actions";
+    public static final String COLUMN_ID           = "_id";
+    public static final String COLUMN_ACTION_ID    = "action_id";
+    public static final String COLUMN_APARTMENT_ID = "apartment_id";
+    public static final String COLUMN_ROOM_ID      = "room_id";
+    public static final String COLUMN_BUTTON_NAME  = "button_name";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTION_ID + " integer not null," +
-            COLUMN_ROOM_ID + " integer not null," +
-            COLUMN_BUTTON_NAME + " text not null," +
+            COLUMN_ID               + " integer primary key autoincrement," +
+            COLUMN_ACTION_ID        + " integer not null," +
+            COLUMN_APARTMENT_ID     + " integer not null," +
+            COLUMN_ROOM_ID          + " integer not null," +
+            COLUMN_BUTTON_NAME      + " text not null," +
             "FOREIGN KEY(" + COLUMN_ACTION_ID + ") REFERENCES " +
                 ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID +
             ")" +
@@ -59,7 +65,32 @@ public class RoomActionTable {
             case 8:
                 onCreate(db);
                 break;
+            case 19:
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID + " integer not null DEFAULT -1");
 
+                //@formatter:off
+                String select = "SELECT " +
+                        TABLE_NAME + "." + COLUMN_ID + ", " +
+                        RoomTable.TABLE_NAME + "." + RoomTable.COLUMN_APARTMENT_ID +
+                        " FROM " +
+                        RoomTable.TABLE_NAME + " INNER JOIN " + TABLE_NAME +
+                        " ON " +
+                        RoomTable.TABLE_NAME +"." + RoomTable.COLUMN_ID + "=" +
+                        TABLE_NAME + "." + COLUMN_ROOM_ID + ";";
+                //@formatter:on
+
+                Cursor cursor = db.rawQuery(select, null);
+                if (cursor.moveToFirst()) {
+                    long actionId    = cursor.getLong(0);
+                    long apartmentId = cursor.getLong(1);
+
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_APARTMENT_ID, apartmentId);
+
+                    db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(actionId)});
+                }
+
+                cursor.close();
         }
     }
 }

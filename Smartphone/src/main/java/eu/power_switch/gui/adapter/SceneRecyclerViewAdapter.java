@@ -39,10 +39,12 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
@@ -53,20 +55,22 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
  * Created by Markus on 27.07.2015.
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
-    private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Scene>     scenes;
-    private FragmentActivity     fragmentActivity;
+    private final RecyclerViewFragment recyclerViewFragment;
+    private final ArrayList<Scene>     scenes;
+    private final FragmentActivity     fragmentActivity;
+    private final PersistanceHandler   persistanceHandler;
+    private final ActionHandler        actonHandler;
 
-    private       OnItemClickListener     onItemClickListener;
-    private       OnItemLongClickListener onItemLongClickListener;
-    private final ActionHandler           actonHandler;
+    private OnItemClickListener     onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes,
-                                    ActionHandler actionHandler) {
+                                    ActionHandler actionHandler, PersistanceHandler persistanceHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
         this.actonHandler = actionHandler;
+        this.persistanceHandler = persistanceHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -146,10 +150,16 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             receiverRow.setOrientation(LinearLayout.HORIZONTAL);
             holder.linearLayoutSceneItems.addView(receiverRow);
 
+            Receiver receiver;
+            try {
+                receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+
             // setup TextView to display receiver name
             AppCompatTextView receiverName = new AppCompatTextView(fragmentActivity);
-            receiverName.setText(sceneItem.getReceiver()
-                    .getName());
+            receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
             receiverName.setTextColor(ThemeHelper.getThemeAttrColor(fragmentActivity, android.R.attr.textColorPrimary));
             receiverName.setGravity(Gravity.CENTER_VERTICAL);
@@ -159,8 +169,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             receiverRow.addView(buttonLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
             int buttonsPerRow;
-            if (sceneItem.getReceiver()
-                    .getButtons()
+            if (receiver.getButtons()
                     .size() % 3 == 0) {
                 buttonsPerRow = 3;
             } else {
@@ -169,8 +178,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             int      i         = 0;
             TableRow buttonRow = null;
-            for (final Button button : sceneItem.getReceiver()
-                    .getButtons()) {
+            for (final Button button : receiver.getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, buttonRow, false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     buttonView.setElevation(0);
@@ -181,8 +189,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
                 final int accentColor   = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
                 final int inactiveColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.textColorInactive);
-                if (sceneItem.getActiveButton()
-                        .equals(button)) {
+                if (sceneItem.getButtonId()
+                        .equals(button.getId())) {
                     buttonView.setTextColor(accentColor);
                 } else {
                     buttonView.setTextColor(inactiveColor);

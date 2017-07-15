@@ -40,11 +40,11 @@ import timber.log.Timber;
 @Singleton
 class CallEventActionHandler {
 
-    private ActionHandler actionHandler;
+    @Inject
+    ActionHandler actionHandler;
 
     @Inject
     CallEventActionHandler() {
-        actionHandler = new ActionHandler();
     }
 
     /**

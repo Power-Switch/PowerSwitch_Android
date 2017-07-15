@@ -28,6 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
@@ -38,16 +41,18 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 /**
  * Provides database methods for managing Rooms
  */
+@Singleton
 class RoomHandler {
 
-    private ActionHandler   actionHandler;
-    private GatewayHandler  gatewayHandler;
-    private ReceiverHandler receiverHandler;
+    @Inject
+    ActionHandler   actionHandler;
+    @Inject
+    GatewayHandler  gatewayHandler;
+    @Inject
+    ReceiverHandler receiverHandler;
 
+    @Inject
     RoomHandler() {
-        this.actionHandler = new ActionHandler();
-        this.gatewayHandler = new GatewayHandler();
-        this.receiverHandler = new ReceiverHandler();
     }
 
     /**

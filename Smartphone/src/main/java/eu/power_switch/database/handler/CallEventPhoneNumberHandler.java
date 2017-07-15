@@ -40,11 +40,11 @@ import timber.log.Timber;
 @Singleton
 class CallEventPhoneNumberHandler {
 
-    private PhoneNumberHandler phoneNumberHandler;
+    @Inject
+    PhoneNumberHandler phoneNumberHandler;
 
     @Inject
     CallEventPhoneNumberHandler() {
-        phoneNumberHandler = new PhoneNumberHandler();
     }
 
     protected void add(@NonNull SQLiteDatabase database, Set<String> phoneNumbers, long callEventId,

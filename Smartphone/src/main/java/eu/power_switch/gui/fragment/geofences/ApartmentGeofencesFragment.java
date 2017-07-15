@@ -46,6 +46,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -77,6 +78,9 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Inject
     GeofenceApiHandler geofenceApiHandler;
 
+    @Inject
+    PersistanceHandler persistanceHandler;
+
     private HashMap<Long, Apartment> geofenceIdApartmentMap = new HashMap<>();
     private ArrayList<Geofence>      geofences              = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
@@ -95,7 +99,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
         setHasOptionsMenu(true);
 
-        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
+        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler, persistanceHandler);
         getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);

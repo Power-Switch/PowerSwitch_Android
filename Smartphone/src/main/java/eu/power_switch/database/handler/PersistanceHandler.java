@@ -65,8 +65,6 @@ import timber.log.Timber;
 public final class PersistanceHandler {
 
     @Inject
-    ActionHandler               actionHandler;
-    @Inject
     ApartmentHandler            apartmentHandler;
     @Inject
     AlarmClockHandler           alarmClockHandler;

@@ -37,6 +37,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.TimerChangedEvent;
@@ -49,6 +51,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.timer.Timer;
+import eu.power_switch.timer.alarm.AndroidAlarmHandler;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -64,6 +67,9 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
 
     private FloatingActionButton addTimerFAB;
+
+    @Inject
+    AndroidAlarmHandler androidAlarmHandler;
 
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
@@ -82,7 +88,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), persistanceHandler, timers);
+        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), persistanceHandler, androidAlarmHandler, timers);
         getRecyclerView().setAdapter(timerRecyclerViewAdapter);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);

@@ -42,8 +42,6 @@ import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroi
 import eu.power_switch.database.table.alarm_clock.stock.AlarmClockActionTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import timber.log.Timber;
 
 /**
@@ -54,13 +52,8 @@ import timber.log.Timber;
 @Singleton
 class ActionHandler {
 
-    private RoomHandler  roomHandler;
-    private SceneHandler sceneHandler;
-
     @Inject
     ActionHandler() {
-        this.roomHandler = new RoomHandler();
-        this.sceneHandler = new SceneHandler();
     }
 
     /**
@@ -94,6 +87,7 @@ class ActionHandler {
                                      @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
+        values.put(ReceiverActionTable.COLUMN_APARTMENT_ID, receiverAction.getApartmentId());
         values.put(ReceiverActionTable.COLUMN_ROOM_ID, receiverAction.getRoomId());
         values.put(ReceiverActionTable.COLUMN_RECEIVER_ID, receiverAction.getReceiverId());
         values.put(ReceiverActionTable.COLUMN_BUTTON_ID, receiverAction.getButtonId());
@@ -103,6 +97,7 @@ class ActionHandler {
     private void insertActionDetails(@NonNull SQLiteDatabase database, @NonNull RoomAction roomAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomActionTable.COLUMN_ACTION_ID, actionId);
+        values.put(RoomActionTable.COLUMN_APARTMENT_ID, roomAction.getApartmentId());
         values.put(RoomActionTable.COLUMN_ROOM_ID, roomAction.getRoomId());
         values.put(RoomActionTable.COLUMN_BUTTON_NAME, roomAction.getButtonName());
         database.insert(RoomActionTable.TABLE_NAME, null, values);
@@ -111,6 +106,7 @@ class ActionHandler {
     private void insertActionDetails(@NonNull SQLiteDatabase database, @NonNull SceneAction sceneAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneActionTable.COLUMN_ACTION_ID, actionId);
+        values.put(SceneActionTable.COLUMN_APARTMENT_ID, sceneAction.getApartmentId());
         values.put(SceneActionTable.COLUMN_SCENE_ID, sceneAction.getSceneId());
         database.insert(SceneActionTable.TABLE_NAME, null, values);
     }
@@ -236,7 +232,10 @@ class ActionHandler {
         String actionType = cursor.getString(1);
 
         if (Action.ACTION_TYPE_RECEIVER.equals(actionType)) {
-            String[] columns1 = {ReceiverActionTable.COLUMN_ROOM_ID, ReceiverActionTable.COLUMN_RECEIVER_ID, ReceiverActionTable.COLUMN_BUTTON_ID};
+            String[] columns1 = {ReceiverActionTable.COLUMN_APARTMENT_ID,
+                                 ReceiverActionTable.COLUMN_ROOM_ID,
+                                 ReceiverActionTable.COLUMN_RECEIVER_ID,
+                                 ReceiverActionTable.COLUMN_BUTTON_ID};
             Cursor cursor1 = database.query(ReceiverActionTable.TABLE_NAME,
                     columns1,
                     ReceiverActionTable.COLUMN_ACTION_ID + "=" + actionId,
@@ -246,17 +245,16 @@ class ActionHandler {
                     null);
             cursor1.moveToFirst();
 
-            long roomId     = cursor1.getLong(0);
-            long receiverId = cursor1.getLong(1);
-            long buttonId   = cursor1.getLong(2);
+            long apartmentId = cursor1.getLong(0);
+            long roomId      = cursor1.getLong(1);
+            long receiverId  = cursor1.getLong(2);
+            long buttonId    = cursor1.getLong(3);
 
             cursor1.close();
 
-            Room room = roomHandler.get(database, roomId);
-
-            return new ReceiverAction(actionId, room.getApartmentId(), roomId, receiverId, buttonId);
+            return new ReceiverAction(actionId, apartmentId, roomId, receiverId, buttonId);
         } else if (Action.ACTION_TYPE_ROOM.equals(actionType)) {
-            String[] columns1 = {RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME};
+            String[] columns1 = {RoomActionTable.COLUMN_APARTMENT_ID, RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME};
             Cursor cursor1 = database.query(RoomActionTable.TABLE_NAME,
                     columns1,
                     RoomActionTable.COLUMN_ACTION_ID + "=" + actionId,
@@ -266,15 +264,14 @@ class ActionHandler {
                     null);
             cursor1.moveToFirst();
 
-            long   roomId     = cursor1.getLong(0);
-            String buttonName = cursor1.getString(1);
+            long   apartmentId = cursor1.getLong(0);
+            long   roomId      = cursor1.getLong(1);
+            String buttonName  = cursor1.getString(2);
             cursor1.close();
 
-            Room room = roomHandler.get(database, roomId);
-
-            return new RoomAction(actionId, room.getApartmentId(), roomId, buttonName);
+            return new RoomAction(actionId, apartmentId, roomId, buttonName);
         } else if (Action.ACTION_TYPE_SCENE.equals(actionType)) {
-            String[] columns1 = {SceneActionTable.COLUMN_SCENE_ID};
+            String[] columns1 = {SceneActionTable.COLUMN_APARTMENT_ID, SceneActionTable.COLUMN_SCENE_ID};
             Cursor cursor1 = database.query(SceneActionTable.TABLE_NAME,
                     columns1,
                     SceneActionTable.COLUMN_ACTION_ID + "=" + actionId,
@@ -284,12 +281,11 @@ class ActionHandler {
                     null);
             cursor1.moveToFirst();
 
-            long sceneId = cursor1.getLong(0);
+            long apartmentId = cursor1.getLong(0);
+            long sceneId     = cursor1.getLong(1);
             cursor1.close();
 
-            Scene scene = sceneHandler.get(database, sceneId);
-
-            return new SceneAction(actionId, scene.getApartmentId(), sceneId);
+            return new SceneAction(actionId, apartmentId, sceneId);
         } else {
             Timber.e("Unknown ActionType!");
             throw new RuntimeException("Unknown ActionType: " + actionType);

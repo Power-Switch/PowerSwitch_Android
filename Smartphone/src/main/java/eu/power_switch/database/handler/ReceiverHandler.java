@@ -40,34 +40,33 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import timber.log.Timber;
 
+import static android.R.attr.id;
+
 /**
  * Provides database methods for managing Receivers of any type
  */
 @Singleton
 class ReceiverHandler {
 
-    private RoomHandler                roomHandler;
-    private MasterSlaveReceiverHandler masterSlaveReceiverHandler;
-    private DipHandler                 dipHandler;
-    private UniversalButtonHandler     universalButtonHandler;
-    private AutoPairHandler            autoPairHandler;
-    private SceneItemHandler           sceneItemHandler;
-    private ActionHandler              actionHandler;
-    private ReceiverReflectionMagic    receiverReflectionMagic;
-    private GatewayHandler             gatewayHandler;
+    @Inject
+    MasterSlaveReceiverHandler masterSlaveReceiverHandler;
+    @Inject
+    DipHandler                 dipHandler;
+    @Inject
+    UniversalButtonHandler     universalButtonHandler;
+    @Inject
+    AutoPairHandler            autoPairHandler;
+    @Inject
+    SceneItemHandler           sceneItemHandler;
+    @Inject
+    ActionHandler              actionHandler;
+    @Inject
+    ReceiverReflectionMagic    receiverReflectionMagic;
+    @Inject
+    GatewayHandler             gatewayHandler;
 
     @Inject
-    ReceiverHandler(ReceiverReflectionMagic receiverReflectionMagic) {
-        this.receiverReflectionMagic = receiverReflectionMagic;
-
-        roomHandler = new RoomHandler();
-        masterSlaveReceiverHandler = new MasterSlaveReceiverHandler();
-        dipHandler = new DipHandler();
-        universalButtonHandler = new UniversalButtonHandler();
-        autoPairHandler = new AutoPairHandler();
-        sceneItemHandler = new SceneItemHandler();
-        actionHandler = new ActionHandler();
-        gatewayHandler = new GatewayHandler();
+    ReceiverHandler() {
     }
 
     /**
@@ -86,9 +85,8 @@ class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_TYPE,
                 receiver.getType()
                         .toString());
-        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, roomHandler.get(database, receiver.getRoomId())
-                        .getReceivers()
-                        .size());
+        // TODO: Check if 999 yields the expected results
+        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, 999); // so it is always added in last position
         values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
         Long receiverId = database.insert(ReceiverTable.TABLE_NAME, null, values);
@@ -155,7 +153,7 @@ class ReceiverHandler {
         removeAssociatedGateways(database, receiver.getId());
         addAssociatedGateways(database, receiver.getId(), receiver.getAssociatedGateways());
 
-        sceneItemHandler.update(database, receiver.getId());
+        sceneItemHandler.update(database, receiver);
     }
 
     /**
@@ -416,6 +414,13 @@ class ReceiverHandler {
      * @return Receiver
      */
     private Receiver dbToReceiver(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
-        return receiverReflectionMagic.fromDatabase(database, c);
+        // create object instance using reflection
+        Receiver receiver = receiverReflectionMagic.fromDatabase(database, c);
+
+        // find associated gateways
+        List<Gateway> associatedGateways = getAssociatedGateways(database, id);
+        receiver.setAssociatedGateways(associatedGateways);
+
+        return receiver;
     }
 }

@@ -63,7 +63,7 @@ public class PlayStoreModeDataModel {
     private static Context context;
 
     private static ArrayList<Apartment> APARTMENTS = new ArrayList<>();
-    private static ArrayList<Gateway> GATEWAYS = new ArrayList<>();
+    private static ArrayList<Gateway>   GATEWAYS   = new ArrayList<>();
 
     private static ArrayList<Room> ROOMS_HEIMAT = new ArrayList<>();
 
@@ -73,15 +73,15 @@ public class PlayStoreModeDataModel {
     private static Apartment APARTMENT_HEIMAT;
     private static Apartment APARTMENT_ELTERN;
     // Scenes
-    private static Scene SCENE_KINOABEND = new Scene((long) 0, (long) 0, "Kinoabend");
-    private static Scene SCENE_ABENDESSEN = new Scene((long) 1, (long) 0, "Abendessen");
-    private static Scene SCENE_FEIER = new Scene((long) 2, (long) 0, "Feier");
+    private static Scene SCENE_KINOABEND   = new Scene((long) 0, (long) 0, "Kinoabend");
+    private static Scene SCENE_ABENDESSEN  = new Scene((long) 1, (long) 0, "Abendessen");
+    private static Scene SCENE_FEIER       = new Scene((long) 2, (long) 0, "Feier");
     // Rooms
-    private static Room ROOM_WOHNZIMMER = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false, new ArrayList<Gateway>());
-    private static Room ROOM_SCHLAFZIMMER = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false, new ArrayList<Gateway>());
-    private static Room ROOM_KUECHE = new Room((long) 2, (long) 0, "Küche", 0, false, new ArrayList<Gateway>());
-    private static Room ROOM_KINDERZIMMER = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false, new ArrayList<Gateway>());
-    private static Room ROOM_GARTEN = new Room((long) 4, (long) 0, "Garten", 0, false, new ArrayList<Gateway>());
+    private static Room  ROOM_WOHNZIMMER   = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room  ROOM_SCHLAFZIMMER = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room  ROOM_KUECHE       = new Room((long) 2, (long) 0, "Küche", 0, false, new ArrayList<Gateway>());
+    private static Room  ROOM_KINDERZIMMER = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room  ROOM_GARTEN       = new Room((long) 4, (long) 0, "Garten", 0, false, new ArrayList<Gateway>());
     // Receiver
     private static Receiver RECEIVER_SOFA_WOHNZIMMER;
     private static Receiver RECEIVER_ECKLAMPE_WOHNZIMMER;
@@ -119,12 +119,20 @@ public class PlayStoreModeDataModel {
         HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
         actionsMap.put(Geofence.EventType.ENTER, new ArrayList<Action>());
 
-        APARTMENT_HEIMAT = new Apartment((long) 0, true, "Heimat", ROOMS_HEIMAT, SCENES_HEIMAT, GATEWAYS,
-                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
-                        null, actionsMap, Geofence.STATE_NONE));
-        APARTMENT_ELTERN = new Apartment((long) 0, false, "Eltern", ROOMS_HEIMAT, SCENES_HEIMAT, GATEWAYS,
-                new Geofence((long) 0, true, "Eltern", new LatLng(52.437418, 13.573122), 500,
-                        null, actionsMap, Geofence.STATE_NONE));
+        APARTMENT_HEIMAT = new Apartment((long) 0,
+                true,
+                "Heimat",
+                ROOMS_HEIMAT,
+                SCENES_HEIMAT,
+                GATEWAYS,
+                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100, null, actionsMap, Geofence.STATE_NONE));
+        APARTMENT_ELTERN = new Apartment((long) 0,
+                false,
+                "Eltern",
+                ROOMS_HEIMAT,
+                SCENES_HEIMAT,
+                GATEWAYS,
+                new Geofence((long) 0, true, "Eltern", new LatLng(52.437418, 13.573122), 500, null, actionsMap, Geofence.STATE_NONE));
         APARTMENTS.add(APARTMENT_HEIMAT);
         APARTMENTS.add(APARTMENT_ELTERN);
     }
@@ -133,9 +141,33 @@ public class PlayStoreModeDataModel {
         GATEWAYS.clear();
 
 
-        GATEWAYS.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "example.myfritz.dyndns.org", 49880, new HashSet<>(Arrays.asList("FritzBox 7272"))));
-        GATEWAYS.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880, "example.myfritz.dyndns.org", 49881, Collections.<String>emptySet()));
-        GATEWAYS.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880, "example.myfritz.dyndns.org", 49882, Collections.<String>emptySet()));
+        GATEWAYS.add(new ConnAir((long) 0,
+                true,
+                "AutoDiscovered",
+                "1.0",
+                "192.168.2.125",
+                49880,
+                "example.myfritz.dyndns.org",
+                49880,
+                new HashSet<>(Arrays.asList("FritzBox 7272"))));
+        GATEWAYS.add(new ITGW433((long) 1,
+                true,
+                "AutoDiscovered",
+                "1.0",
+                "192.168.2.148",
+                49880,
+                "example.myfritz.dyndns.org",
+                49881,
+                Collections.<String>emptySet()));
+        GATEWAYS.add(new BrematicGWY433((long) 2,
+                true,
+                "AutoDiscovered",
+                "1.0",
+                "192.168.2.189",
+                49880,
+                "example.myfritz.dyndns.org",
+                49882,
+                Collections.<String>emptySet()));
     }
 
     private static void initReceivers(Context context) {
@@ -144,7 +176,13 @@ public class PlayStoreModeDataModel {
         RECEIVER_VERSTAERKER_WOHNZIMMER = new CMR1000(context, (long) 2, "Verstärker", 'E', 1, ROOM_WOHNZIMMER.getId(), new ArrayList<Gateway>());
         RECEIVER_DECKE_SCHLAFZIMMER = new CMR1000(context, (long) 3, "Decke", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
         RECEIVER_FENSTER_SCHLAFZIMMER = new CMR1000(context, (long) 4, "Fenster", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
-        RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context, (long) 5, "Nachttische", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context,
+                (long) 5,
+                "Nachttische",
+                'E',
+                1,
+                ROOM_SCHLAFZIMMER.getId(),
+                new ArrayList<Gateway>());
         RECEIVER_ABZUGSHAUBE_KUECHE = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
         RECEIVER_ESSTISCH_KUECHE = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
         RECEIVER_ARBEITSFLAECHE_KUECHE = new CMR1000(context, (long) 8, "Arbeitsfläche", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
@@ -158,17 +196,20 @@ public class PlayStoreModeDataModel {
     }
 
     private static void initScenes() {
-        SCENE_KINOABEND.getSceneItems().clear();
+        SCENE_KINOABEND.getSceneItems()
+                .clear();
         SCENE_KINOABEND.addSceneItem(RECEIVER_SOFA_WOHNZIMMER, RECEIVER_SOFA_WOHNZIMMER.getButton(OnButton.ID));
         SCENE_KINOABEND.addSceneItem(RECEIVER_ECKLAMPE_WOHNZIMMER, RECEIVER_ECKLAMPE_WOHNZIMMER.getButton(OffButton.ID));
         SCENE_KINOABEND.addSceneItem(RECEIVER_VERSTAERKER_WOHNZIMMER, RECEIVER_VERSTAERKER_WOHNZIMMER.getButton(OnButton.ID));
 
-        SCENE_ABENDESSEN.getSceneItems().clear();
+        SCENE_ABENDESSEN.getSceneItems()
+                .clear();
         SCENE_ABENDESSEN.addSceneItem(RECEIVER_ESSTISCH_KUECHE, RECEIVER_ESSTISCH_KUECHE.getButton(OnButton.ID));
         SCENE_ABENDESSEN.addSceneItem(RECEIVER_ABZUGSHAUBE_KUECHE, RECEIVER_ABZUGSHAUBE_KUECHE.getButton(OffButton.ID));
         SCENE_ABENDESSEN.addSceneItem(RECEIVER_ARBEITSFLAECHE_KUECHE, RECEIVER_ARBEITSFLAECHE_KUECHE.getButton(OffButton.ID));
 
-        SCENE_FEIER.getSceneItems().clear();
+        SCENE_FEIER.getSceneItems()
+                .clear();
         SCENE_FEIER.addSceneItem(RECEIVER_WEGBELEUCHTUNG_GARTEN, RECEIVER_WEGBELEUCHTUNG_GARTEN.getButton(OnButton.ID));
         SCENE_FEIER.addSceneItem(RECEIVER_ESSTISCH_KUECHE, RECEIVER_ESSTISCH_KUECHE.getButton(OnButton.ID));
         SCENE_FEIER.addSceneItem(RECEIVER_SOFA_WOHNZIMMER, RECEIVER_SOFA_WOHNZIMMER.getButton(OnButton.ID));
@@ -181,27 +222,32 @@ public class PlayStoreModeDataModel {
     }
 
     private static void initRooms() {
-        ROOM_WOHNZIMMER.getReceivers().clear();
+        ROOM_WOHNZIMMER.getReceivers()
+                .clear();
         ROOM_WOHNZIMMER.addReceiver(RECEIVER_SOFA_WOHNZIMMER);
         ROOM_WOHNZIMMER.addReceiver(RECEIVER_ECKLAMPE_WOHNZIMMER);
         ROOM_WOHNZIMMER.addReceiver(RECEIVER_VERSTAERKER_WOHNZIMMER);
 
-        ROOM_SCHLAFZIMMER.getReceivers().clear();
+        ROOM_SCHLAFZIMMER.getReceivers()
+                .clear();
         ROOM_SCHLAFZIMMER.addReceiver(RECEIVER_DECKE_SCHLAFZIMMER);
         ROOM_SCHLAFZIMMER.addReceiver(RECEIVER_FENSTER_SCHLAFZIMMER);
         ROOM_SCHLAFZIMMER.addReceiver(RECEIVER_NACHTTISCHE_SCHLAFZIMMER);
 
-        ROOM_KUECHE.getReceivers().clear();
+        ROOM_KUECHE.getReceivers()
+                .clear();
         ROOM_KUECHE.addReceiver(RECEIVER_ABZUGSHAUBE_KUECHE);
         ROOM_KUECHE.addReceiver(RECEIVER_ESSTISCH_KUECHE);
         ROOM_KUECHE.addReceiver(RECEIVER_ARBEITSFLAECHE_KUECHE);
         ROOM_KUECHE.addReceiver(RECEIVER_KAFFEEMASCHINE_KUECHE);
 
-        ROOM_KINDERZIMMER.getReceivers().clear();
+        ROOM_KINDERZIMMER.getReceivers()
+                .clear();
         ROOM_KINDERZIMMER.addReceiver(RECEIVER_DECKE_KINDERZIMMER);
         ROOM_KINDERZIMMER.addReceiver(RECEIVER_NACHTLICHT_KINDERZIMMER);
 
-        ROOM_GARTEN.getReceivers().clear();
+        ROOM_GARTEN.getReceivers()
+                .clear();
         ROOM_GARTEN.addReceiver(RECEIVER_TERRASSE_GARTEN);
         ROOM_GARTEN.addReceiver(RECEIVER_WEGBELEUCHTUNG_GARTEN);
         ROOM_GARTEN.addReceiver(RECEIVER_HINTERHAUS_GARTEN);
@@ -235,9 +281,12 @@ public class PlayStoreModeDataModel {
     public ArrayList<Timer> getTimers() {
         ArrayList<Timer> timers = new ArrayList<>();
 
-        ReceiverAction timerReceiverAction = new ReceiverAction(0, APARTMENT_HEIMAT.getName(),
-                ROOM_WOHNZIMMER, RECEIVER_ECKLAMPE_WOHNZIMMER,
-                RECEIVER_ECKLAMPE_WOHNZIMMER.getButton(OnButton.ID));
+        ReceiverAction timerReceiverAction = new ReceiverAction(0,
+                APARTMENT_HEIMAT.getId(),
+                ROOM_WOHNZIMMER.getId(),
+                RECEIVER_ECKLAMPE_WOHNZIMMER.getId(),
+                RECEIVER_ECKLAMPE_WOHNZIMMER.getButton(OnButton.ID)
+                        .getId());
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
         days.add(WeekdayTimer.Day.MONDAY);
         days.add(WeekdayTimer.Day.TUESDAY);
@@ -257,9 +306,12 @@ public class PlayStoreModeDataModel {
         timers.add(new WeekdayTimer(0, true, "Abendlicht", c, 0, days, actions));
 
 
-        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, APARTMENT_HEIMAT.getName(),
-                ROOM_KUECHE, RECEIVER_KAFFEEMASCHINE_KUECHE,
-                RECEIVER_ECKLAMPE_WOHNZIMMER.getButton(OnButton.ID));
+        ReceiverAction timerReceiverAction2 = new ReceiverAction(0,
+                APARTMENT_HEIMAT.getId(),
+                ROOM_KUECHE.getId(),
+                RECEIVER_KAFFEEMASCHINE_KUECHE.getId(),
+                RECEIVER_ECKLAMPE_WOHNZIMMER.getButton(OnButton.ID)
+                        .getId());
 
         ArrayList<Action> actions2 = new ArrayList<>();
         actions2.add(timerReceiverAction2);
@@ -284,6 +336,7 @@ public class PlayStoreModeDataModel {
      * Get a list of Stock Alarm Actions
      *
      * @param eventType Alarm Event Type
+     *
      * @return List of Actions for specified Event Type
      */
     public List<Action> getAlarmActions(AlarmClockConstants.Event eventType) {
@@ -291,14 +344,34 @@ public class PlayStoreModeDataModel {
 
         switch (eventType) {
             case ALARM_TRIGGERED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
                 break;
             case ALARM_SNOOZED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)
+                                .getId()));
                 break;
             case ALARM_DISMISSED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
                 break;
         }
 
@@ -309,6 +382,7 @@ public class PlayStoreModeDataModel {
      * Get a list of Stock Alarm Actions
      *
      * @param eventType Alarm Event Type
+     *
      * @return List of Actions for specified Event Type
      */
     public List<Action> getAlarmActions(SleepAsAndroidConstants.Event eventType) {
@@ -316,14 +390,34 @@ public class PlayStoreModeDataModel {
 
         switch (eventType) {
             case ALARM_TRIGGERED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
                 break;
             case ALARM_SNOOZED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)
+                                .getId()));
                 break;
             case ALARM_DISMISSED:
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
-                actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
+                actions.add(new ReceiverAction(-1,
+                        APARTMENT_HEIMAT.getId(),
+                        ROOM_SCHLAFZIMMER.getId(),
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                        RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)
+                                .getId()));
                 break;
         }
 
@@ -334,12 +428,17 @@ public class PlayStoreModeDataModel {
         List<CallEvent> callEvents = new ArrayList<>();
 
         Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
-        Set<String> phoneNumbers = new HashSet<>();
+        Set<String>                               phoneNumbers    = new HashSet<>();
         phoneNumbers.add("0174 37 97 508");
         phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, phoneNumbers);
 
         List<Action> actions = new ArrayList<>();
-        actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
+        actions.add(new ReceiverAction(-1,
+                APARTMENT_HEIMAT.getId(),
+                ROOM_SCHLAFZIMMER.getId(),
+                RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
+                        .getId()));
 
         Map<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
         actionsMap.put(PhoneConstants.CallType.INCOMING, actions);

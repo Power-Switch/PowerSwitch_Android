@@ -18,23 +18,29 @@
 
 package eu.power_switch.database.table.action;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import eu.power_switch.database.table.scene.SceneTable;
 
 /**
  * TimerSceneAction table description
  */
 public class SceneActionTable {
 
-    public static final String TABLE_NAME = "scene_actions";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTION_ID = "action_id";
-    public static final String COLUMN_SCENE_ID = "scene_id";
+    public static final String TABLE_NAME          = "scene_actions";
+    public static final String COLUMN_ID           = "_id";
+    public static final String COLUMN_ACTION_ID    = "action_id";
+    public static final String COLUMN_APARTMENT_ID = "apartment_id";
+    public static final String COLUMN_SCENE_ID     = "scene_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTION_ID + " integer not null," +
-            COLUMN_SCENE_ID + " integer not null," +
+            COLUMN_ID               + " integer primary key autoincrement," +
+            COLUMN_ACTION_ID        + " integer not null," +
+            COLUMN_APARTMENT_ID     + " integer not null," +
+            COLUMN_SCENE_ID         + " integer not null," +
             "FOREIGN KEY(" + COLUMN_ACTION_ID + ") REFERENCES " +
                 ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID +
             ")" +
@@ -57,6 +63,32 @@ public class SceneActionTable {
             case 8:
                 onCreate(db);
                 break;
+            case 19:
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID + " integer not null DEFAULT -1");
+
+                //@formatter:off
+                String select = "SELECT " +
+                        TABLE_NAME + "." + COLUMN_ID + ", " +
+                        SceneTable.TABLE_NAME + "." + SceneTable.COLUMN_APARTMENT_ID +
+                        " FROM " +
+                        SceneTable.TABLE_NAME + " INNER JOIN " + TABLE_NAME +
+                        " ON " +
+                        SceneTable.TABLE_NAME +"." + SceneTable.COLUMN_ID + "=" +
+                        TABLE_NAME + "." + COLUMN_SCENE_ID + ";";
+                //@formatter:on
+
+                Cursor cursor = db.rawQuery(select, null);
+                if (cursor.moveToFirst()) {
+                    long actionId    = cursor.getLong(0);
+                    long apartmentId = cursor.getLong(1);
+
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_APARTMENT_ID, apartmentId);
+
+                    db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(actionId)});
+                }
+
+                cursor.close();
 
         }
     }

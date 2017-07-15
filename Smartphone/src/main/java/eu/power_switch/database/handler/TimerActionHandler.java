@@ -39,11 +39,11 @@ import eu.power_switch.timer.Timer;
 @Singleton
 class TimerActionHandler {
 
-    private ActionHandler actionHandler;
+    @Inject
+    ActionHandler actionHandler;
 
     @Inject
     TimerActionHandler() {
-        actionHandler = new ActionHandler();
     }
 
     /**

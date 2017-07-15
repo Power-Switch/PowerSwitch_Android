@@ -45,23 +45,20 @@ import eu.power_switch.obj.receiver.UniversalReceiver;
 @Singleton
 public class ReceiverReflectionMagic {
 
-    private Context                    context;
-    private ReceiverHandler            receiverHandler;
-    private MasterSlaveReceiverHandler masterSlaveReceiverHandler;
-    private DipHandler                 dipHandler;
-    private UniversalButtonHandler     universalButtonHandler;
-    private AutoPairHandler            autoPairHandler;
+    @Inject
+    Context context;
 
     @Inject
-    public ReceiverReflectionMagic(Context context) {
-        this.context = context;
+    MasterSlaveReceiverHandler masterSlaveReceiverHandler;
+    @Inject
+    DipHandler                 dipHandler;
+    @Inject
+    UniversalButtonHandler     universalButtonHandler;
+    @Inject
+    AutoPairHandler            autoPairHandler;
 
-        receiverHandler = new ReceiverHandler(this);
-        masterSlaveReceiverHandler = new MasterSlaveReceiverHandler();
-        dipHandler = new DipHandler();
-        universalButtonHandler = new UniversalButtonHandler();
-        autoPairHandler = new AutoPairHandler();
-
+    @Inject
+    public ReceiverReflectionMagic() {
     }
 
     /**
@@ -84,9 +81,8 @@ public class ReceiverReflectionMagic {
             positionInRoom = cursor.getInt(6);
         }
 
-        Long          lastActivatedButtonId = cursor.getLong(7);
-        int           repeatAmount          = cursor.getInt(8);
-        List<Gateway> associatedGateways    = receiverHandler.getAssociatedGateways(database, id);
+        Long lastActivatedButtonId = cursor.getLong(7);
+        int  repeatAmount          = cursor.getInt(8);
 
         Receiver receiver = null;
 
@@ -96,19 +92,19 @@ public class ReceiverReflectionMagic {
             case MASTER_SLAVE:
                 Character channelMaster = masterSlaveReceiverHandler.getMaster(database, id);
                 int channelSlave = masterSlaveReceiverHandler.getSlave(database, id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId, associatedGateways);
+                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId, null);
                 break;
             case DIPS:
                 LinkedList<Boolean> dips = dipHandler.getDips(database, id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId, associatedGateways);
+                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId, null);
                 break;
             case UNIVERSAL:
                 List<UniversalButton> buttons = universalButtonHandler.getUniversalButtons(database, id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId, associatedGateways);
+                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId, null);
                 break;
             case AUTOPAIR:
                 long seed = autoPairHandler.getSeed(database, id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId, associatedGateways);
+                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId, null);
                 break;
         }
 
@@ -116,6 +112,8 @@ public class ReceiverReflectionMagic {
 
         receiver.setPositionInRoom(positionInRoom);
         receiver.setLastActivatedButtonId(lastActivatedButtonId);
+
+        // Associated Gateways are set in ReceiverHandler!
 
         return receiver;
     }

@@ -53,7 +53,6 @@ class CallEventHandler {
     @Inject
     CallEventActionHandler      callEventActionHandler;
 
-
     @Inject
     CallEventHandler() {
     }

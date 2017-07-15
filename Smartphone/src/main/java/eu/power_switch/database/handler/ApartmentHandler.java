@@ -48,17 +48,17 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 @Singleton
 class ApartmentHandler {
 
-    private RoomHandler     roomHandler;
-    private GatewayHandler  gatewayHandler;
-    private GeofenceHandler geofenceHandler;
-    private SceneHandler    sceneHandler;
+    @Inject
+    RoomHandler     roomHandler;
+    @Inject
+    GatewayHandler  gatewayHandler;
+    @Inject
+    GeofenceHandler geofenceHandler;
+    @Inject
+    SceneHandler    sceneHandler;
 
     @Inject
     ApartmentHandler() {
-        roomHandler = new RoomHandler();
-        gatewayHandler = new GatewayHandler();
-        geofenceHandler = new GeofenceHandler();
-        sceneHandler = new SceneHandler();
     }
 
     /**

@@ -37,8 +37,8 @@ public class ApartmentGatewayRelationTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_APARTMENT_ID + " integer not null," +
-            COLUMN_GATEWAY_ID + " integer not null," +
+            COLUMN_APARTMENT_ID     + " integer not null," +
+            COLUMN_GATEWAY_ID       + " integer not null," +
             "FOREIGN KEY(" + COLUMN_APARTMENT_ID + ") REFERENCES " +
                 ApartmentTable.TABLE_NAME + "(" + ApartmentTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_GATEWAY_ID + ") REFERENCES " +

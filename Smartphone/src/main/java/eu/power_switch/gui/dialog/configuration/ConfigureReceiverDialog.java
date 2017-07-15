@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -66,6 +68,9 @@ import timber.log.Timber;
  * Created by Markus on 28.06.2015.
  */
 public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverConfigurationHolder> {
+
+    @Inject
+    ReceiverReflectionMagic receiverReflectionMagic;
 
     public static ConfigureReceiverDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);
@@ -164,9 +169,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         String    modelName    = getConfiguration().getModel();
 
         String        className = Receiver.receiverMap.get(modelName);
-        Receiver.Type type      = ReceiverReflectionMagic.getType(className);
+        Receiver.Type type      = receiverReflectionMagic.getType(className);
 
-        Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
+        Constructor<?> constructor = receiverReflectionMagic.getConstructor(className, type);
 
 
         long receiverId = -1;

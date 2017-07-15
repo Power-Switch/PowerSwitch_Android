@@ -42,11 +42,8 @@ import timber.log.Timber;
 @Singleton
 class SceneItemHandler {
 
-    private ReceiverHandler receiverHandler;
-
     @Inject
     SceneItemHandler() {
-        receiverHandler = new ReceiverHandler();
     }
 
     /**
@@ -70,24 +67,19 @@ class SceneItemHandler {
     private void add(@NonNull SQLiteDatabase database, Long sceneId, SceneItem item) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneItemTable.COLUMN_SCENE_ID, sceneId);
-        values.put(SceneItemTable.COLUMN_RECEIVER_ID,
-                item.getReceiver()
-                        .getId());
-        values.put(SceneItemTable.COLUMN_ACTIVE_BUTTON_ID,
-                item.getActiveButton()
-                        .getId());
+        values.put(SceneItemTable.COLUMN_RECEIVER_ID, item.getReceiverId());
+        values.put(SceneItemTable.COLUMN_ACTIVE_BUTTON_ID, item.getButtonId());
         database.insert(SceneItemTable.TABLE_NAME, null, values);
     }
 
     /**
      * Update all existing SceneItems related to a specific Receiver
      *
-     * @param receiverId ID of Receiver used in Scene(s)
+     * @param receiver Receiver used in Scene(s)
      */
-    protected void update(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
+    protected void update(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
         Cursor cursor = database.query(SceneItemTable.TABLE_NAME,
-                SceneItemTable.ALL_COLUMNS,
-                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiverId,
+                SceneItemTable.ALL_COLUMNS, SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiver.getId(),
                 null,
                 null,
                 null,
@@ -96,10 +88,9 @@ class SceneItemHandler {
         while (!cursor.isAfterLast()) {
             long sceneItemId = cursor.getLong(0);
             long buttonId    = cursor.getLong(3);
-            try {
-                Receiver receiver = receiverHandler.get(database, receiverId);
-                receiver.getButton(buttonId);
 
+            try {
+                receiver.getButton(buttonId);
                 // all is good, dont change sceneItem
             } catch (NoSuchElementException e) {
                 // sceneItem has reference to missing buttonId, remove sceneItem from scene
@@ -140,7 +131,7 @@ class SceneItemHandler {
                 null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            sceneItems.add(dbToSceneItem(database, cursor));
+            sceneItems.add(dbToSceneItem(cursor));
             cursor.moveToNext();
         }
 
@@ -184,13 +175,11 @@ class SceneItemHandler {
      *
      * @return SceneItem
      */
-    private SceneItem dbToSceneItem(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+    private SceneItem dbToSceneItem(Cursor c) throws Exception {
         long receiverId     = c.getLong(2);
         long activeButtonId = c.getLong(3);
 
-        Receiver receiver = receiverHandler.get(database, receiverId);
-
-        SceneItem sceneItem = new SceneItem(receiver, receiver.getButton(activeButtonId));
+        SceneItem sceneItem = new SceneItem(receiverId, activeButtonId);
         return sceneItem;
     }
 

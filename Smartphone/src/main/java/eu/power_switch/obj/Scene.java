@@ -75,7 +75,7 @@ public class Scene {
      * @param activeButton
      */
     public void addSceneItem(Receiver receiver, Button activeButton) {
-        sceneItems.add(new SceneItem(receiver, activeButton));
+        sceneItems.add(new SceneItem(receiver.getId(), activeButton.getId()));
     }
 
     /**
@@ -84,9 +84,10 @@ public class Scene {
      * @param receiver
      */
     public void addSceneItem(Receiver receiver) {
-        sceneItems.add(new SceneItem(receiver,
+        sceneItems.add(new SceneItem(receiver.getId(),
                 receiver.getButtons()
-                        .get(0)));
+                        .get(0)
+                        .getId()));
     }
 
     /**
