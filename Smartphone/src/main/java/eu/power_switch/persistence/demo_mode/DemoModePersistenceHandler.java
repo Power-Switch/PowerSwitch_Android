@@ -54,7 +54,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -71,7 +71,7 @@ import eu.power_switch.widget.SceneWidget;
  * Created by Markus on 30.07.2015.
  */
 @Singleton
-public class DemoModePersistanceHandler implements PersistanceHandler {
+public class DemoModePersistenceHandler implements PersistenceHandler {
 
     private Context context;
 
@@ -117,7 +117,7 @@ public class DemoModePersistanceHandler implements PersistanceHandler {
      * Default constructor
      */
     @Inject
-    public DemoModePersistanceHandler(Context context) {
+    public DemoModePersistenceHandler(Context context) {
         this.context = context;
 
         initApartments();

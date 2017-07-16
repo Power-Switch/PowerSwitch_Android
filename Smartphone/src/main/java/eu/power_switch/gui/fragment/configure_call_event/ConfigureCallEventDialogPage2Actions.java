@@ -134,7 +134,7 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
 
     private void initializeCallData(long callEventId) {
         try {
-            CallEvent callEvent = persistanceHandler.getCallEvent(callEventId);
+            CallEvent callEvent = persistenceHandler.getCallEvent(callEventId);
 
 
             actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));

@@ -92,8 +92,7 @@ import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -101,6 +100,13 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_AUTO_DISCOVER;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_SHOW_WIZARD;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_STARTUP_DEFAULT_TAB;
 
 /**
  * Main entry Activity for the app
@@ -147,7 +153,7 @@ public class MainActivity extends EventBusActivity {
     HolidaySpecialHandler holidaySpecialHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     /**
      * Add class to Backstack
@@ -232,12 +238,12 @@ public class MainActivity extends EventBusActivity {
         // Load first Fragment
         try {
             Fragment fragment;
-            long     apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            long     apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
             if (apartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                int defaultTab = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
+                int defaultTab = smartphonePreferencesHandler.get(KEY_STARTUP_DEFAULT_TAB);
                 fragment = RoomSceneTabFragment.newInstance(defaultTab);
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
@@ -254,21 +260,21 @@ public class MainActivity extends EventBusActivity {
         navigationDrawer.setSelection(drawerPositionStack.peek());
         initHistoryDrawer(navigationDrawer);
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
+        if (smartphonePreferencesHandler.get(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
             new AlertDialog.Builder(this).setTitle(R.string.title_sendAnonymousCrashData)
                     .setMessage(R.string.message_sendAnonymousCrashData)
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, true);
-                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(KEY_SEND_ANONYMOUS_CRASH_DATA, true);
+                            smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .setNegativeButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
-                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(KEY_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .show();
@@ -286,7 +292,7 @@ public class MainActivity extends EventBusActivity {
                     .show();
         }
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
+        if (smartphonePreferencesHandler.get(KEY_SHOULD_SHOW_WIZARD)) {
             // TODO: enable Wizard when finished
 //            startActivity(WizardActivity.getLaunchIntent(this));
         } else {
@@ -301,7 +307,7 @@ public class MainActivity extends EventBusActivity {
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        boolean autoDiscoverEnabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
+        boolean autoDiscoverEnabled = smartphonePreferencesHandler.get(KEY_AUTO_DISCOVER);
 
         if (autoDiscoverEnabled && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
             new AsyncTask<Void, Void, AsyncTaskResult<Gateway>>() {
@@ -326,7 +332,7 @@ public class MainActivity extends EventBusActivity {
                         List<Gateway> foundGateways = result.getResult();
 
                         try {
-                            if (foundGateways.isEmpty() && persistanceHandler.getAllGateways()
+                            if (foundGateways.isEmpty() && persistenceHandler.getAllGateways()
                                     .isEmpty()) {
                                 statusMessageHandler.showInfoMessage(getActivity(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                             } else {
@@ -335,11 +341,11 @@ public class MainActivity extends EventBusActivity {
                                         continue;
                                     }
                                     try {
-                                        persistanceHandler.addGateway(gateway);
+                                        persistenceHandler.addGateway(gateway);
                                         statusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
-                                            persistanceHandler.enableGateway(e.getIdOfExistingGateway());
+                                            persistenceHandler.enableGateway(e.getIdOfExistingGateway());
                                             statusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Timber.e(e1);
@@ -408,7 +414,7 @@ public class MainActivity extends EventBusActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            int defaultTab = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
+                            int defaultTab = smartphonePreferencesHandler.get(KEY_STARTUP_DEFAULT_TAB);
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
                                     RoomSceneTabFragment.newInstance(defaultTab));
@@ -773,7 +779,7 @@ public class MainActivity extends EventBusActivity {
                                     @Override
                                     protected Exception doInBackground(Void... params) {
                                         try {
-                                            persistanceHandler.clearHistory();
+                                            persistenceHandler.clearHistory();
                                         } catch (Exception e) {
                                             return e;
                                         }
@@ -841,7 +847,7 @@ public class MainActivity extends EventBusActivity {
             protected Exception doInBackground(Void... params) {
                 try {
                     historyItems.clear();
-                    historyItems.addAll(persistanceHandler.getHistory());
+                    historyItems.addAll(persistenceHandler.getHistory());
 
                     return null;
                 } catch (Exception e) {

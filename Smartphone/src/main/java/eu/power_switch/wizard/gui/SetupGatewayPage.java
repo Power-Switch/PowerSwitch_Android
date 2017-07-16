@@ -118,7 +118,7 @@ public class SetupGatewayPage extends ConfigurationPage {
 
                 for (Gateway gateway : gateways) {
                     try {
-                        persistanceHandler.addGateway(gateway);
+                        persistenceHandler.addGateway(gateway);
                     } catch (GatewayAlreadyExistsException e) {
                         Timber.w("Wizard: ignoring found gateway that already exists in database");
                     } catch (Exception e) {

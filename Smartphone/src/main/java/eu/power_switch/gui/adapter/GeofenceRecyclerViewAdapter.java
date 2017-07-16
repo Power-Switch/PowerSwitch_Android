@@ -37,7 +37,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
@@ -50,18 +50,18 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     private GeofenceApiHandler   geofenceApiHandler;
     private ArrayList<Geofence>  geofences;
     private Context              context;
-    private PersistanceHandler   persistanceHandler;
+    private PersistenceHandler   persistenceHandler;
     private StatusMessageHandler statusMessageHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler,
-                                       PersistanceHandler persistanceHandler, StatusMessageHandler statusMessageHandler) {
+                                       PersistenceHandler persistenceHandler, StatusMessageHandler statusMessageHandler) {
         this.geofences = geofences;
         this.context = context;
         this.geofenceApiHandler = geofenceApiHandler;
-        this.persistanceHandler = persistanceHandler;
+        this.persistenceHandler = persistenceHandler;
         this.statusMessageHandler = statusMessageHandler;
     }
 
@@ -106,10 +106,10 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            persistanceHandler.enableGeofence(geofence.getId());
+                            persistenceHandler.enableGeofence(geofence.getId());
                             geofenceApiHandler.addGeofence(geofence);
                         } else {
-                            persistanceHandler.disableGeofence(geofence.getId());
+                            persistenceHandler.disableGeofence(geofence.getId());
                             geofenceApiHandler.removeGeofence(geofence.getId());
                         }
                         geofence.setActive(isChecked);

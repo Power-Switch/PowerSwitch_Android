@@ -128,7 +128,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                         getConfiguration().getSnapshot(),
                         actionsMap,
                         Geofence.STATE_NONE);
-                long geofenceId = persistanceHandler.addGeofence(newGeofence);
+                long geofenceId = persistenceHandler.addGeofence(newGeofence);
                 // update ID of Geofence
                 newGeofence.setId(geofenceId);
 
@@ -143,7 +143,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                         getConfiguration().getSnapshot(),
                         actionsMap,
                         existingGeofence.getState());
-                persistanceHandler.updateGeofence(updatedGeofence);
+                persistenceHandler.updateGeofence(updatedGeofence);
 
                 geofenceApiHandler.removeGeofence(existingGeofence.getId());
                 if (existingGeofence.isActive()) {
@@ -153,7 +153,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
         } else {
             // apartment geofence
 
-            Apartment apartment = persistanceHandler.getApartment(apartmentId);
+            Apartment apartment = persistenceHandler.getApartment(apartmentId);
             Apartment updatedApartment;
 
             if (apartment.getGeofence() == null) {
@@ -192,10 +192,10 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
             }
 
             // update apartment in database
-            persistanceHandler.updateApartment(updatedApartment);
+            persistenceHandler.updateApartment(updatedApartment);
 
             // reload from database to get correct geofence ID
-            apartment = persistanceHandler.getApartment(apartmentId);
+            apartment = persistenceHandler.getApartment(apartmentId);
             if (apartment.getGeofence()
                     .isActive()) {
                 geofenceApiHandler.addGeofence(apartment.getGeofence());
@@ -217,7 +217,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            persistanceHandler.deleteGeofence(getConfiguration().getGeofence()
+                            persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
                                     .getId());
                             geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
                                     .getId());

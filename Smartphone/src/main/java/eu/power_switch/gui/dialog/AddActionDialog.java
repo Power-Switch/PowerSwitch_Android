@@ -60,7 +60,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;
@@ -118,7 +118,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
     ProgressBar progressScene;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Getter
     @Setter
@@ -321,7 +321,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                 apartmentNames.clear();
 
                 try {
-                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistanceHandler.getAllApartments();
+                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistenceHandler.getAllApartments();
                     for (Apartment apartment : availableApartments) {
                         apartmentNames.add(apartment.getName());
                     }
@@ -542,7 +542,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
 
     private Apartment getSelectedApartment() {
         try {
-            return persistanceHandler.getApartment(spinner_apartment.getSelectedItem()
+            return persistenceHandler.getApartment(spinner_apartment.getSelectedItem()
                     .toString());
         } catch (Exception e) {
             Timber.e(e);
@@ -631,7 +631,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                 Timber.d(spinner_scene.getSelectedItem()
                         .toString());
 
-                Scene selectedScene = persistanceHandler.getScene(spinner_scene.getSelectedItem()
+                Scene selectedScene = persistenceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
                 action = new SceneAction(-1, currentApartment.getId(), selectedScene.getId());

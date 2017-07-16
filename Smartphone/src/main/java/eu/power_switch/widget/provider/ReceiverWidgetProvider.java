@@ -42,11 +42,13 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
 
 /**
  * This class is responsible for updating existing Receiver widgets
@@ -54,7 +56,7 @@ import timber.log.Timber;
 public class ReceiverWidgetProvider extends AppWidgetProvider {
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
@@ -84,13 +86,13 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
             try {
-                ReceiverWidget receiverWidget = persistanceHandler.getReceiverWidget(appWidgetId);
+                ReceiverWidget receiverWidget = persistenceHandler.getReceiverWidget(appWidgetId);
                 try {
-                    Room room = persistanceHandler.getRoom(receiverWidget.getRoomId());
+                    Room room = persistenceHandler.getRoom(receiverWidget.getRoomId());
                     try {
-                        Receiver receiver = persistanceHandler.getReceiver(receiverWidget.getReceiverId());
+                        Receiver receiver = persistenceHandler.getReceiver(receiverWidget.getReceiverId());
 
-                        Apartment apartment = persistanceHandler.getApartment(room.getApartmentId());
+                        Apartment apartment = persistenceHandler.getApartment(room.getApartmentId());
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
                                 apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
@@ -113,7 +115,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                                             .length(),
                                     0);
                             buttonView.setTextViewText(R.id.button_widget_universal, s);
-                            boolean highlightLastButton = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                            boolean highlightLastButton = smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                             if (highlightLastButton && receiver.getLastActivatedButtonId()
                                     .equals(button.getId())) {
                                 buttonView.setTextColor(R.id.button_widget_universal, ContextCompat.getColor(context, R.color.color_light_blue_a700));
@@ -161,7 +163,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
         Timber.d("Deleting Receiver Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             try {
-                persistanceHandler.deleteReceiverWidget(appWidgetId);
+                persistenceHandler.deleteReceiverWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

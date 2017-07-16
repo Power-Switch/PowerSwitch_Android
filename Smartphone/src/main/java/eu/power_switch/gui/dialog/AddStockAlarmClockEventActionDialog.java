@@ -76,9 +76,9 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
     @Override
     protected void addCurrentSelection() {
         try {
-            ArrayList<Action> actions = new ArrayList<>(persistanceHandler.getAlarmActions(currentEventType));
+            ArrayList<Action> actions = new ArrayList<>(persistenceHandler.getAlarmActions(currentEventType));
             actions.add(getCurrentSelection());
-            persistanceHandler.setAlarmActions(currentEventType, actions);
+            persistenceHandler.setAlarmActions(currentEventType, actions);
             statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getActivity(), e);

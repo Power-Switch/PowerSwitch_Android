@@ -59,7 +59,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.TutorialConstants;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -116,7 +116,7 @@ public class NfcFragment extends EventBusFragment {
     NfcHandler nfcHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private View      rootView;
     private Apartment currentApartment;
@@ -327,7 +327,7 @@ public class NfcFragment extends EventBusFragment {
                 apartmentNames.clear();
 
                 try {
-                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistanceHandler.getAllApartments();
+                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistenceHandler.getAllApartments();
                     for (Apartment apartment : availableApartments) {
                         apartmentNames.add(apartment.getName());
                     }
@@ -548,7 +548,7 @@ public class NfcFragment extends EventBusFragment {
 
     private Apartment getSelectedApartment() {
         try {
-            return persistanceHandler.getApartment(spinner_apartment.getSelectedItem()
+            return persistenceHandler.getApartment(spinner_apartment.getSelectedItem()
                     .toString());
         } catch (Exception e) {
             Timber.e(e);
@@ -635,7 +635,7 @@ public class NfcFragment extends EventBusFragment {
                 Timber.d(spinner_scene.getSelectedItem()
                         .toString());
 
-                Scene selectedScene = persistanceHandler.getScene(spinner_scene.getSelectedItem()
+                Scene selectedScene = persistenceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
                 action = new SceneAction(-1, currentApartment.getId(), selectedScene.getId());

@@ -43,12 +43,13 @@ import eu.power_switch.R;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Fragment holding the room and scene Fragments in a TabLayout
@@ -71,7 +72,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
     LinearLayout linearLayout_currentApartmentInfo;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private CustomTabAdapter customTabAdapter;
     private int     currentTab   = 0;
@@ -157,11 +158,11 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            long currentApartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            long currentApartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 textView_currentApartmentInfo.setText(" - ");
             } else {
-                String apartmentName = persistanceHandler.getApartmentName(currentApartmentId);
+                String apartmentName = persistenceHandler.getApartmentName(currentApartmentId);
                 textView_currentApartmentInfo.setText(apartmentName);
             }
         } catch (Exception e) {

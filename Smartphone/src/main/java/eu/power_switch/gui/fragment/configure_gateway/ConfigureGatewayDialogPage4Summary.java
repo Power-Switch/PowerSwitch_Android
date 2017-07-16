@@ -125,7 +125,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
                     .get(i);
 
             try {
-                apartmentsText += persistanceHandler.getApartmentName(apartmentId);
+                apartmentsText += persistenceHandler.getApartmentName(apartmentId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -159,7 +159,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                 for (SceneItem sceneItem : scene.getSceneItems()) {
                     map.put(sceneItem.getReceiverId(), sceneItem);
 
-                    Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
+                    Receiver receiver = persistenceHandler.getReceiver(sceneItem.getReceiverId());
 
                     boolean roomFound = false;
                     for (Room room : checkedReceivers) {
@@ -171,7 +171,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                     }
 
                     if (!roomFound) {
-                        Room room = persistanceHandler.getRoom(receiver.getRoomId());
+                        Room room = persistenceHandler.getRoom(receiver.getRoomId());
                         room.getReceivers()
                                 .clear();
                         room.addReceiver(receiver);

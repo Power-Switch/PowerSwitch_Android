@@ -221,7 +221,7 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
             linearLayoutOfRoomGateways.removeAllViews();
             linearLayoutOfOtherGateways.removeAllViews();
             gatewayCheckboxList.clear();
-            for (Gateway gateway : persistanceHandler.getAllGateways()) {
+            for (Gateway gateway : persistenceHandler.getAllGateways()) {
                 LinearLayout gatewayLayout;
                 // room association is more important than apartment, so it is checked first!
                 Apartment parentApartment = getConfiguration().getParentApartment();

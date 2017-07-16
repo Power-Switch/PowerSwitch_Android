@@ -42,7 +42,7 @@ import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
@@ -63,7 +63,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
     Button buttonSave;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private List<Apartment> apartmentList = new ArrayList<>();
     private List<Scene>     sceneList     = new ArrayList<>();
@@ -115,7 +115,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return persistanceHandler.getAllApartments();
+                    return persistenceHandler.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -148,7 +148,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Scene> doInBackground(Void... params) {
                 try {
-                    return persistanceHandler.getAllScenes();
+                    return persistenceHandler.getAllScenes();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -201,7 +201,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
                 // save new widget data to database
                 SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
                 try {
-                    persistanceHandler.addSceneWidget(sceneWidget);
+                    persistenceHandler.addSceneWidget(sceneWidget);
                 } catch (Exception e) {
                     Timber.e(e);
                 }

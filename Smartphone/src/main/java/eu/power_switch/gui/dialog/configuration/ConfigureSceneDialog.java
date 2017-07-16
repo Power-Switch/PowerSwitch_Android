@@ -35,10 +35,11 @@ import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Nam
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create or modify a Scene
@@ -103,15 +104,15 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                     .getId();
         }
 
-        long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+        long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
         Scene newScene = new Scene(sceneId, apartmentId,
                 getConfiguration().getName());
         newScene.addSceneItems(getConfiguration().getSceneItems());
 
         if (getConfiguration().getScene() == null) {
-            persistanceHandler.addScene(newScene);
+            persistenceHandler.addScene(newScene);
         } else {
-            persistanceHandler.updateScene(newScene);
+            persistenceHandler.updateScene(newScene);
         }
 
         // notify scenes fragment
@@ -134,7 +135,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            persistanceHandler.deleteScene(getConfiguration().getScene()
+                            persistenceHandler.deleteScene(getConfiguration().getScene()
                                     .getId());
 
                             // notify scenes fragment

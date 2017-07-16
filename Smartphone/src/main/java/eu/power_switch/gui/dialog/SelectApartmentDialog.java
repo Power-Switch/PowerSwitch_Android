@@ -36,8 +36,9 @@ import eu.power_switch.R;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog used to quickly select and activate an Apartment
@@ -50,7 +51,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
     ListView listViewApartments;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private ArrayList<String> apartmentNames = new ArrayList<>();
 
@@ -68,7 +69,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    onApartmentClicked(persistanceHandler.getApartment(apartmentNames.get(position)));
+                    onApartmentClicked(persistenceHandler.getApartment(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
                     statusMessageHandler.showErrorMessage(getActivity(), e);
@@ -101,7 +102,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            apartmentNames.addAll(persistanceHandler.getAllApartmentNames());
+            apartmentNames.addAll(persistenceHandler.getAllApartmentNames());
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getActivity(), e);
         }
@@ -115,7 +116,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
      * @param apartment the selected Apartment
      */
     protected void onApartmentClicked(Apartment apartment) {
-        smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+        smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, apartment.getId());
         ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }

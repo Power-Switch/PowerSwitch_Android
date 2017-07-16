@@ -44,10 +44,13 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATION_DURATION;
 
 /**
  * * Adapter to visualize Scene items in RecyclerView
@@ -58,7 +61,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private final RecyclerViewFragment         recyclerViewFragment;
     private final ArrayList<Scene>             scenes;
     private final FragmentActivity             fragmentActivity;
-    private final PersistanceHandler           persistanceHandler;
+    private final PersistenceHandler           persistenceHandler;
     private final ActionHandler                actonHandler;
     private final SmartphonePreferencesHandler smartphonePreferencesHandler;
 
@@ -66,13 +69,13 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private OnItemLongClickListener onItemLongClickListener;
 
     public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes,
-                                    ActionHandler actionHandler, PersistanceHandler persistanceHandler,
+                                    ActionHandler actionHandler, PersistenceHandler persistenceHandler,
                                     SmartphonePreferencesHandler smartphonePreferencesHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
         this.actonHandler = actionHandler;
-        this.persistanceHandler = persistanceHandler;
+        this.persistenceHandler = persistenceHandler;
         this.smartphonePreferencesHandler = smartphonePreferencesHandler;
     }
 
@@ -125,8 +128,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         holder.buttonActivateScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    long duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+                if (smartphonePreferencesHandler.get(KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    int duration = smartphonePreferencesHandler.get(KEY_VIBRATION_DURATION);
                     VibrationHandler.vibrate(fragmentActivity, duration);
                 }
 
@@ -155,7 +158,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             Receiver receiver;
             try {
-                receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
+                receiver = persistenceHandler.getReceiver(sceneItem.getReceiverId());
             } catch (Exception e) {
                 throw new RuntimeException();
             }

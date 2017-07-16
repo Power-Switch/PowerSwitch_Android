@@ -30,7 +30,7 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.PhoneConstants;
 import timber.log.Timber;
 
@@ -45,7 +45,7 @@ public class CallEventReceiver extends DaggerBroadcastReceiver {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private Context mContext;
     private Intent  mIntent;
@@ -99,7 +99,7 @@ public class CallEventReceiver extends DaggerBroadcastReceiver {
     };
 
     private void executeCallEvents(String incomingNumber) throws Exception {
-        List<CallEvent> callEvents = persistanceHandler.getCallEvents(incomingNumber);
+        List<CallEvent> callEvents = persistenceHandler.getCallEvents(incomingNumber);
 
         if (callEvents.isEmpty()) {
             Timber.w("List of CallEvents was empty for phone number: " + incomingNumber);

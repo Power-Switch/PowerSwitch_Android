@@ -33,7 +33,7 @@ import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import timber.log.Timber;
 
 /**
@@ -47,7 +47,7 @@ public class GeofenceIntentService extends DaggerIntentService {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -117,19 +117,19 @@ public class GeofenceIntentService extends DaggerIntentService {
             try {
                 Long geofenceId = Long.valueOf(googleGeofence.getRequestId());
 
-                eu.power_switch.google_play_services.geofence.Geofence geofence = persistanceHandler.getGeofence(geofenceId);
+                eu.power_switch.google_play_services.geofence.Geofence geofence = persistenceHandler.getGeofence(geofenceId);
                 if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
                     actionHandler.execute(geofence, eventType);
 
                     switch (eventType) {
                         case ENTER:
-                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
+                            persistenceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
                             break;
                         case EXIT:
-                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
+                            persistenceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
                             break;
                         default:
-                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
+                            persistenceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
                             break;
                     }
                 }

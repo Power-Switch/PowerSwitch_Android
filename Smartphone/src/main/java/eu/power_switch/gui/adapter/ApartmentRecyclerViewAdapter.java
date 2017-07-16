@@ -37,6 +37,8 @@ import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+
 /**
  * Adapter to visualize Gateway items in RecyclerView
  * <p/>
@@ -80,7 +82,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         holder.active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+                smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                 for (Apartment currentApartment : apartments) {
                     if (currentApartment.getId()

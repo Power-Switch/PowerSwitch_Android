@@ -52,7 +52,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.application.ApplicationHelper;
@@ -68,6 +68,9 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_LOG_DESTINATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+
 /**
  * Entry Point for the Application
  * <p/>
@@ -80,7 +83,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     private Handler                         mHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
@@ -168,7 +171,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
         // Configure Log4J Logger
         boolean internalFileLoggingOnly;
-        Integer logDestinationType = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
+        Integer logDestinationType = smartphonePreferencesHandler.get(KEY_LOG_DESTINATION);
         if (logDestinationType.equals(Integer.valueOf(getString(R.string.value_internal)))) {
             internalFileLoggingOnly = true;
         } else {
@@ -189,7 +192,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean crashReportingEnabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
+        boolean crashReportingEnabled = smartphonePreferencesHandler.get(KEY_SEND_ANONYMOUS_CRASH_DATA);
         boolean enableFabric          = crashReportingEnabled || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {
@@ -231,7 +234,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
                     if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
                         try {
-                            persistanceHandler.disableGeofences();
+                            persistenceHandler.disableGeofences();
                             Timber.d("Disabled all Geofences because of missing location permission");
                         } catch (Exception e) {
                             Timber.e(e);
@@ -259,19 +262,19 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
                     Thread.sleep(5000);
 //                    mHandler.obtainMessage(0, "Logging database...").sendToTarget();
 
-                    for (Apartment apartment : persistanceHandler.getAllApartments()) {
+                    for (Apartment apartment : persistenceHandler.getAllApartments()) {
                         Timber.d(apartment.toString());
                     }
 
-                    for (Timer timer : persistanceHandler.getAllTimers()) {
+                    for (Timer timer : persistenceHandler.getAllTimers()) {
                         Timber.d(timer.toString());
                     }
 
-                    for (Geofence geofence : persistanceHandler.getAllGeofences()) {
+                    for (Geofence geofence : persistenceHandler.getAllGeofences()) {
                         Timber.d(geofence.toString());
                     }
 
-                    for (Gateway gateway : persistanceHandler.getAllGateways()) {
+                    for (Gateway gateway : persistenceHandler.getAllGateways()) {
                         Timber.d(gateway.toString() + "\n");
                     }
                 } catch (Exception e) {

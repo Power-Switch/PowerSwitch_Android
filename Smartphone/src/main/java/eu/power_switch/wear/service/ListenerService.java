@@ -41,7 +41,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
@@ -58,7 +58,7 @@ public class ListenerService extends WearableListenerService {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -116,7 +116,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room     room     = persistanceHandler.getRoom(roomId);
+                Room     room     = persistenceHandler.getRoom(roomId);
                 Receiver receiver = room.getReceiver(receiverId);
                 Button   button   = receiver.getButton(buttonId);
 
@@ -129,7 +129,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room room = persistanceHandler.getRoom(roomId);
+                Room room = persistenceHandler.getRoom(roomId);
 
                 actionHandler.execute(room, buttonId);
             } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
@@ -137,7 +137,7 @@ public class ListenerService extends WearableListenerService {
                 int  stop    = messageData.indexOf(";;");
                 Long sceneId = Long.valueOf(messageData.substring(start, stop));
 
-                Scene scene = persistanceHandler.getScene(sceneId);
+                Scene scene = persistenceHandler.getScene(sceneId);
 
                 actionHandler.execute(scene);
             }

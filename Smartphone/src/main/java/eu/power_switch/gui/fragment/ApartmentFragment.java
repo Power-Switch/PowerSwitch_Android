@@ -46,12 +46,14 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.wear.service.UtilityService;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Created by Markus on 25.12.2015.
@@ -99,7 +101,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 try {
                     final Apartment apartment = apartments.get(position);
 
-                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+                    smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                     for (Apartment currentApartment : apartments) {
                         if (currentApartment.getId()
@@ -171,7 +173,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         menu.findItem(R.id.create_apartment)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_apartment)
                     .setVisible(false)
@@ -212,7 +214,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
 
     @Override
     public List<Apartment> loadListData() throws Exception {
-        return persistanceHandler.getAllApartments();
+        return persistenceHandler.getAllApartments();
     }
 
     @Override
@@ -224,7 +226,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

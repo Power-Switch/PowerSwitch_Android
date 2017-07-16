@@ -52,10 +52,11 @@ import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing all settings related to Gateways
@@ -116,7 +117,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistanceHandler, statusMessageHandler, gateways);
+        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistenceHandler, statusMessageHandler, gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -184,11 +185,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
                         // save new Gateway if it doesn't exist already
                         try {
-                            persistanceHandler.addGateway(newGateway);
+                            persistenceHandler.addGateway(newGateway);
                             newGatewaysCount++;
                         } catch (GatewayAlreadyExistsException e) {
                             existingGatewaysCount++;
-                            persistanceHandler.enableGateway(e.getIdOfExistingGateway());
+                            persistenceHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
                             statusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
@@ -217,7 +218,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     }
 
     private void updateUI() {
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {
@@ -256,7 +257,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         menu.findItem(R.id.search_gateways)
                 .setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_gateway)
                     .setVisible(false)
@@ -276,7 +277,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
     @Override
     public List<Gateway> loadListData() throws Exception {
-        return persistanceHandler.getAllGateways();
+        return persistenceHandler.getAllGateways();
     }
 
     @Override

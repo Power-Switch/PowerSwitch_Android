@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -48,7 +48,7 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     AndroidAlarmHandler androidAlarmHandler;
@@ -84,7 +84,7 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
         try {
             long id = Long.valueOf(intent.getData()
                     .getHost());
-            Timer timer = persistanceHandler.getTimer(id);
+            Timer timer = persistenceHandler.getTimer(id);
 
             Calendar currentTime = Calendar.getInstance();
             if (Build.VERSION.SDK_INT < 19) {
@@ -134,7 +134,7 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
 
     private void reinitializeAlarms(Context context) {
         try {
-            for (Timer timer : persistanceHandler.getAllTimers(true)) {
+            for (Timer timer : persistenceHandler.getAllTimers(true)) {
                 androidAlarmHandler.cancelAlarm(timer);
                 androidAlarmHandler.createAlarm(timer);
             }

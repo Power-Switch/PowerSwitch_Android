@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
@@ -46,7 +46,7 @@ import timber.log.Timber;
 public class SceneWidgetProvider extends AppWidgetProvider {
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     /**
      * Forces an Update of all Scene Widgets
@@ -73,11 +73,11 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
 
             try {
-                SceneWidget sceneWidget = persistanceHandler.getSceneWidget(appWidgetId);
+                SceneWidget sceneWidget = persistenceHandler.getSceneWidget(appWidgetId);
                 // update UI
                 try {
-                    Scene     scene     = persistanceHandler.getScene(sceneWidget.getSceneId());
-                    Apartment apartment = persistanceHandler.getApartment(scene.getApartmentId());
+                    Scene     scene     = persistenceHandler.getScene(sceneWidget.getSceneId());
+                    Apartment apartment = persistenceHandler.getApartment(scene.getApartmentId());
 
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                     // set button action
@@ -111,7 +111,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
             try {
-                persistanceHandler.deleteSceneWidget(appWidgetId);
+                persistenceHandler.deleteSceneWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

@@ -142,7 +142,7 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
 
     private void initializeCallData(long callEventId) {
         try {
-            CallEvent callEvent = persistanceHandler.getCallEvent(callEventId);
+            CallEvent callEvent = persistenceHandler.getCallEvent(callEventId);
 
             phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
         } catch (Exception e) {

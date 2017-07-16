@@ -36,9 +36,10 @@ import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHol
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to configure (create/edit) an Apartment
@@ -82,7 +83,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     @Override
     protected void initializeFromExistingData(Bundle args) {
         try {
-            getConfiguration().setExistingApartments(persistanceHandler.getAllApartments());
+            getConfiguration().setExistingApartments(persistenceHandler.getAllApartments());
         } catch (Exception e) {
             dismiss();
             statusMessageHandler.showErrorMessage(getContext(), e);
@@ -118,7 +119,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     .getId();
         }
         if (apartmentId == -1) {
-            boolean isActive = persistanceHandler.getAllApartmentNames()
+            boolean isActive = persistenceHandler.getAllApartmentNames()
                     .size() <= 0;
             Apartment newApartment = new Apartment((long) -1,
                     isActive,
@@ -126,13 +127,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     getConfiguration().getAssociatedGateways(),
                     null);
 
-            long newId = persistanceHandler.addApartment(newApartment);
+            long newId = persistenceHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
             if (isActive) {
-                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
+                smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
-            Apartment apartment = persistanceHandler.getApartment(apartmentId);
+            Apartment apartment = persistenceHandler.getApartment(apartmentId);
             if (apartment.getGeofence() != null) {
                 apartment.getGeofence()
                         .setName(getConfiguration().getName());
@@ -144,7 +145,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     getConfiguration().getAssociatedGateways(),
                     apartment.getGeofence());
 
-            persistanceHandler.updateApartment(updatedApartment);
+            persistenceHandler.updateApartment(updatedApartment);
         }
 
         ApartmentFragment.notifyActiveApartmentChanged(getActivity());
@@ -161,23 +162,23 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                         try {
                             Long existingApartmentId = getConfiguration().getApartment()
                                     .getId();
-                            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)
+                            if (smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID)
                                     .equals(
                                     existingApartmentId)) {
-                                persistanceHandler.deleteApartment(existingApartmentId);
+                                persistenceHandler.deleteApartment(existingApartmentId);
 
                                 // update current Apartment selection
-                                List<Apartment> apartments = persistanceHandler.getAllApartments();
+                                List<Apartment> apartments = persistenceHandler.getAllApartments();
                                 if (apartments.isEmpty()) {
-                                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID,
                                             SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
-                                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID,
                                             apartments.get(0)
                                                     .getId());
                                 }
                             } else {
-                                persistanceHandler.deleteApartment(existingApartmentId);
+                                persistenceHandler.deleteApartment(existingApartmentId);
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());

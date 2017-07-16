@@ -33,7 +33,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import timber.log.Timber;
 
 /**
@@ -53,7 +53,7 @@ public class HiddenReceiverActivity extends DaggerActivity {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -122,7 +122,7 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     Long buttonId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = persistanceHandler.getApartment(apartmentId);
+                    Apartment apartment = persistenceHandler.getApartment(apartmentId);
                     Room      room      = apartment.getRoom(roomId);
                     Receiver  receiver  = room.getReceiver(receiverId);
                     Button    button    = receiver.getButton(buttonId);
@@ -141,7 +141,7 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     String buttonName = content.substring(start, stop);
 
-                    Apartment apartment = persistanceHandler.getApartment(apartmentId);
+                    Apartment apartment = persistenceHandler.getApartment(apartmentId);
                     Room      room      = apartment.getRoom(roomId);
 
                     actionHandler.execute(room, buttonName);
@@ -154,7 +154,7 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     Long sceneId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = persistanceHandler.getApartment(apartmentId);
+                    Apartment apartment = persistenceHandler.getApartment(apartmentId);
                     Scene     scene     = apartment.getScene(sceneId);
 
                     actionHandler.execute(scene);

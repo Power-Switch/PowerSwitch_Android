@@ -90,7 +90,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
         Gateway gateway = getConfiguration().getGateway();
         if (gateway != null) {
             try {
-                List<Apartment> associatedApartments = persistanceHandler.getAssociatedApartments(gateway.getId());
+                List<Apartment> associatedApartments = persistenceHandler.getAssociatedApartments(gateway.getId());
 
                 for (CheckBox checkBox : apartmentCheckboxList) {
                     Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);
@@ -116,7 +116,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            List<Apartment> apartments = persistanceHandler.getAllApartments();
+            List<Apartment> apartments = persistenceHandler.getAllApartments();
             for (Apartment apartment : apartments) {
                 @SuppressLint("InflateParams") LinearLayout apartmentLayout = (LinearLayout) inflater.inflate(R.layout.apartment_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every

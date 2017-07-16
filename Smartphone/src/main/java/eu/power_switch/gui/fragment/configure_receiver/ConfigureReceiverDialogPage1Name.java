@@ -61,8 +61,9 @@ import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * "Name" Fragment used in Configure Receiver Dialog
@@ -252,8 +253,8 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         try {
             // Get Rooms
             roomList.clear();
-            long       apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            List<Room> rooms       = persistanceHandler.getRooms(apartmentId);
+            long       apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            List<Room> rooms       = persistenceHandler.getRooms(apartmentId);
             for (Room room : rooms) {
                 roomList.add(room.getName());
             }
@@ -296,7 +297,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
         if (!currentReceiverName.equalsIgnoreCase(originalName)) {
             try {
-                Room selectedRoom = persistanceHandler.getRoom(currentRoomName);
+                Room selectedRoom = persistenceHandler.getRoom(currentRoomName);
                 if (getConfiguration().receiverNameAlreadyExists(selectedRoom)) {
                     floatingName.setError(getString(R.string.receiver_already_exists));
                     return false;

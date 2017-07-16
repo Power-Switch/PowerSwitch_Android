@@ -60,13 +60,15 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_BACKUP_PATH;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment holding a list of all Backups
@@ -240,7 +242,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     }
 
     private void updateUI() {
-        String backupPath = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+        String backupPath = smartphonePreferencesHandler.get(KEY_BACKUP_PATH);
         textViewBackupPath.setText(backupPath);
 
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
@@ -311,7 +313,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         menu.findItem(R.id.create_backup)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_backup)
                     .setVisible(false)
@@ -322,7 +324,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

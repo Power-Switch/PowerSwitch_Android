@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -46,7 +46,7 @@ import timber.log.Timber;
 public class RoomWidgetProvider extends AppWidgetProvider {
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     /**
      * Forces an Update of all Room Widgets
@@ -73,10 +73,10 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
 
             try {
-                RoomWidget roomWidget = persistanceHandler.getRoomWidget(appWidgetId);
+                RoomWidget roomWidget = persistenceHandler.getRoomWidget(appWidgetId);
                 try {
-                    Room      room      = persistanceHandler.getRoom(roomWidget.getRoomId());
-                    Apartment apartment = persistanceHandler.getApartment(room.getApartmentId());
+                    Room      room      = persistenceHandler.getRoom(roomWidget.getRoomId());
+                    Apartment apartment = persistenceHandler.getApartment(room.getApartmentId());
 
                     // update UI
                     remoteViews.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
@@ -111,7 +111,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
         Timber.d("Deleting Room Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             try {
-                persistanceHandler.deleteRoomWidget(appWidgetId);
+                persistenceHandler.deleteRoomWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

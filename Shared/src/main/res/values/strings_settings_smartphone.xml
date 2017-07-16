@@ -87,6 +87,8 @@
     <string name="key_vibrationDuration">vibrationDuration</string>
     <string name="title_vibrationDuration">Vibration duration</string>
 
+    <string name="key_currentApartmentId">currentApartmentId</string>
+
     <!-- Notifications -->
 
     <string name="key_showGeofenceNotifications">showGeofenceNotifications</string>
@@ -130,6 +132,9 @@
     <string name="key_backupPath">backupPath</string>
     <string name="title_backupPath">Backup Path</string>
 
+    <string name="key_stockAlarmClockEnabled">STOCK_ALARM_CLOCK_ENABLED_KEY</string>
+    <string name="key_sleepAsAndroidEnabled">SLEEP_AS_ANDROID_ENABLED_KEY</string>
+
     <!-- Theme -->
     <string-array name="theme_names">
         <item>@string/theme_dark_blue</item>
@@ -170,6 +175,8 @@
     <string name="tutorial_was_reset">Tutorial was reset</string>
 
     <!-- Logs -->
+    <string name="key_shouldAskSendAnonymousCrashData">shouldAskSendAnonymousCrashData</string>
+
     <string name="key_sendAnonymousCrashData">sendAnonymousCrashData</string>
     <string name="title_sendAnonymousCrashData">Automatic Crash Reporting</string>
     <string name="summary_sendAnonymousCrashData_enabled">Send anonymous crash data automatically</string>

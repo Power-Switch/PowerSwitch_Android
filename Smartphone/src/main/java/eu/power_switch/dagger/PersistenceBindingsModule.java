@@ -22,8 +22,8 @@ import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.sqlite.handler.SqlitePersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.sqlite.handler.SqlitePersistenceHandler;
 
 /**
  * Created by Markus on 12.07.2017.
@@ -33,6 +33,6 @@ public abstract class PersistenceBindingsModule {
 
     @Binds
     @Singleton
-    public abstract PersistanceHandler providePersistenceHandler(SqlitePersistanceHandler sqlitePersistanceHandler);
+    public abstract PersistenceHandler providePersistenceHandler(SqlitePersistenceHandler sqlitePersistanceHandler);
 
 }

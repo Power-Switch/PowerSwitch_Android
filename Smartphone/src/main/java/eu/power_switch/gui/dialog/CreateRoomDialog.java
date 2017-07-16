@@ -46,9 +46,10 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.wear.service.UtilityService;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create a new Room
@@ -61,7 +62,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
     TextInputLayout floatingName;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private Dialog             dialog;
     private int                defaultTextColor;
@@ -78,8 +79,8 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         try {
-            long       apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            List<Room> rooms       = persistanceHandler.getRooms(apartmentId);
+            long       apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            List<Room> rooms       = persistenceHandler.getRooms(apartmentId);
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());
@@ -111,9 +112,9 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+                    long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
 
-                    persistanceHandler.addRoom(new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>()));
+                    persistenceHandler.addRoom(new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>()));
 
                     ConfigureReceiverDialogPage1Name.notifyRoomAdded(getRoomName());
 

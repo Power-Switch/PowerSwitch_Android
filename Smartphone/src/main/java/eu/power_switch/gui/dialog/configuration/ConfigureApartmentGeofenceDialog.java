@@ -87,7 +87,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            persistanceHandler.deleteGeofence(getConfiguration().getGeofence()
+                            persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
                                     .getId());
                             geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
                                     .getId());

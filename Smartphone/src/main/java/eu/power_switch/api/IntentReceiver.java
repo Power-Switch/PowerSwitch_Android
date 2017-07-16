@@ -36,7 +36,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
 
@@ -49,7 +49,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -90,7 +90,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
                 // Receiver:<ReceiverName>
                 // Button:<ButtonName>
 
-                Room room = persistanceHandler.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
+                Room room = persistenceHandler.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
                 Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER)
                         .trim());
@@ -106,7 +106,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
                 // Where ButtonName is the name of the Button that is
                 // pressed for each Receiver in the specified Room
 
-                Apartment apartment = persistanceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = persistenceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
@@ -118,7 +118,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
                 // Expects the following Extras:
                 // Scene:<SceneName>
 
-                Apartment apartment = persistanceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = persistenceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
                         .trim());
@@ -178,7 +178,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
                                 buttonName = context.getString(R.string.off);
                             }
 
-                            Room     room     = persistanceHandler.getRoomCaseInsensitive(roomName);
+                            Room     room     = persistenceHandler.getRoomCaseInsensitive(roomName);
                             Receiver receiver = room.getReceiverCaseInsensitive(switchName);
                             Button   button   = receiver.getButtonCaseInsensitive(buttonName);
 
@@ -209,7 +209,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
                                 buttonName = context.getString(R.string.off);
                             }
 
-                            Room room = persistanceHandler.getRoomCaseInsensitive(roomName);
+                            Room room = persistenceHandler.getRoomCaseInsensitive(roomName);
 
                             actionHandler.execute(room, buttonName);
                         } catch (Exception e) {

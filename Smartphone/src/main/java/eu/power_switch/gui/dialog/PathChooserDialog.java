@@ -49,8 +49,9 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialog;
 import eu.power_switch.gui.treeview.FolderTreeNode;
 import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
 import eu.power_switch.gui.treeview.TreeItemFolder;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_BACKUP_PATH;
 
 /**
  * Dialog used to select a Path on SDCard
@@ -87,7 +88,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
         View contentView = inflater.inflate(R.layout.dialog_path_chooser, container);
         ButterKnife.bind(viewHolder, contentView);
 
-        currentPath = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+        currentPath = smartphonePreferencesHandler.get(KEY_BACKUP_PATH);
 
         viewHolder.textViewCurrentPath.setText(currentPath);
 
@@ -139,7 +140,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_BACKUP_PATH, currentPath);
+        smartphonePreferencesHandler.set(KEY_BACKUP_PATH, currentPath);
 
         notifyBackupPathChanged();
     }

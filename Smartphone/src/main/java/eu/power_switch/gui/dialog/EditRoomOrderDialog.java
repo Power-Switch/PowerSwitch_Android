@@ -90,7 +90,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
         apartmentId = arguments.getLong(APARTMENT_ID_KEY);
 
         try {
-            List<Room> rooms = persistanceHandler.getRooms(apartmentId);
+            List<Room> rooms = persistenceHandler.getRooms(apartmentId);
             this.rooms.addAll(rooms);
 
             roomNameRecyclerViewAdapter.notifyDataSetChanged();
@@ -123,7 +123,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             // save room order
             for (int position = 0; position < rooms.size(); position++) {
                 Room room = rooms.get(position);
-                persistanceHandler.setPositionOfRoom(room.getId(), (long) position);
+                persistenceHandler.setPositionOfRoom(room.getId(), (long) position);
             }
 
             // notify rooms fragment

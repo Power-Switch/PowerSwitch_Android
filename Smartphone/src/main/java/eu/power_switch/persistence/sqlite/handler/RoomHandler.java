@@ -38,6 +38,8 @@ import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandl
 import eu.power_switch.persistence.sqlite.table.room.RoomGatewayRelationTable;
 import eu.power_switch.persistence.sqlite.table.room.RoomTable;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_AUTO_COLLAPSE_ROOMS;
+
 /**
  * Provides database methods for managing Rooms
  */
@@ -217,7 +219,7 @@ class RoomHandler {
 
         if (cursor.moveToFirst()) {
             room = dbToRoom(database, cursor);
-            boolean collapse = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+            boolean collapse = smartphonePreferencesHandler.get(KEY_AUTO_COLLAPSE_ROOMS);
             room.setCollapsed(collapse);
         } else {
             cursor.close();
@@ -246,7 +248,7 @@ class RoomHandler {
                 RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+        boolean autoCollapseRooms = smartphonePreferencesHandler.get(KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(database, cursor);
@@ -293,7 +295,7 @@ class RoomHandler {
         Cursor     cursor = database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+        boolean autoCollapseRooms = smartphonePreferencesHandler.get(KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(database, cursor);

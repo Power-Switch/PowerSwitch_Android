@@ -150,7 +150,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
 
         if (timer != null) {
             if (getConfiguration().getTimer() == null) {
-                long newId = persistanceHandler.addTimer(timer);
+                long newId = persistenceHandler.addTimer(timer);
                 // update id (because the alarm is based on it's id)
                 timer.setId(newId);
             } else {
@@ -158,7 +158,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                 androidAlarmHandler.cancelAlarm(timer);
 
                 // update in db
-                persistanceHandler.updateTimer(timer);
+                persistenceHandler.updateTimer(timer);
             }
 
             if (timer.isActive()) {
@@ -181,7 +181,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                         try {
                             androidAlarmHandler.cancelAlarm(getConfiguration().getTimer());
 
-                            persistanceHandler.deleteTimer(getConfiguration().getTimer()
+                            persistenceHandler.deleteTimer(getConfiguration().getTimer()
                                     .getId());
 
                             // notify scenes fragment

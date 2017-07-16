@@ -41,8 +41,9 @@ import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to edit a Room
@@ -84,9 +85,9 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            apartment = persistanceHandler.getApartment(apartmentId);
-            gateways = persistanceHandler.getAllGateways();
+            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            apartment = persistenceHandler.getApartment(apartmentId);
+            gateways = persistenceHandler.getAllGateways();
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -135,7 +136,7 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
             previouslyCheckedGateways.addAll(getCheckedGateways());
 
-            gateways = persistanceHandler.getAllGateways();
+            gateways = persistenceHandler.getAllGateways();
 
             String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);

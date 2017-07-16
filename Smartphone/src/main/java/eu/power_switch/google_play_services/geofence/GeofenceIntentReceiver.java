@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import timber.log.Timber;
 
 /**
@@ -41,7 +41,7 @@ public class GeofenceIntentReceiver extends DaggerBroadcastReceiver {
     GeofenceApiHandler geofenceApiHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -94,7 +94,7 @@ public class GeofenceIntentReceiver extends DaggerBroadcastReceiver {
 
 //                geofenceApiHandler.removeAllGeofences();
                 try {
-                    List<Geofence> geofences = persistanceHandler.getAllGeofences(true);
+                    List<Geofence> geofences = persistenceHandler.getAllGeofences(true);
                     for (Geofence geofence : geofences) {
                         geofenceApiHandler.addGeofence(geofence);
                     }

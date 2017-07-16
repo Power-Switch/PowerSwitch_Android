@@ -55,11 +55,12 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.handler.ReceiverReflectionMagic;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create or modify a Receiver
@@ -99,8 +100,8 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
-            long      apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            Apartment apartment   = persistanceHandler.getApartment(apartmentId);
+            long      apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            Apartment apartment   = persistenceHandler.getApartment(apartmentId);
             getConfiguration().setParentApartment(apartment);
         } catch (Exception e) {
             dismiss();
@@ -111,7 +112,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
             // init dialog using existing receiver
 
             try {
-                Room room = persistanceHandler.getRoom(receiver.getRoomId());
+                Room room = persistenceHandler.getRoom(receiver.getRoomId());
 
                 getConfiguration().setParentRoom(room);
                 getConfiguration().setParentRoomName(room.getName());
@@ -225,9 +226,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
 
         if (receiverId == -1) {
-            persistanceHandler.addReceiver(receiver);
+            persistenceHandler.addReceiver(receiver);
         } else {
-            persistanceHandler.updateReceiver(receiver);
+            persistenceHandler.updateReceiver(receiver);
         }
 
         RoomsFragment.notifyReceiverChanged();
@@ -248,7 +249,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            persistanceHandler.deleteReceiver(getConfiguration().getReceiver()
+                            persistenceHandler.deleteReceiver(getConfiguration().getReceiver()
                                     .getId());
 
                             // notify rooms fragment

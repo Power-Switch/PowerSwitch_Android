@@ -47,7 +47,7 @@ import eu.power_switch.widget.SceneWidget;
 /**
  * Created by Markus on 15.07.2017.
  */
-public interface PersistanceHandler {
+public interface PersistenceHandler {
 
     /**
      * Add Apartment to Database

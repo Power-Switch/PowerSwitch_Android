@@ -280,7 +280,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = persistenceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         statusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -308,7 +308,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = persistenceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         statusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -335,7 +335,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = persistenceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         statusMessageHandler.showNoActiveGatewayMessage(getActivity());

@@ -26,6 +26,8 @@ import eu.power_switch.R;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_THEME;
+
 /**
  * Created by Markus on 25.07.2016.
  */
@@ -37,7 +39,7 @@ public class SmartphoneThemeHelper {
      * @param activity Activity to apply theme on
      */
     public static void applyTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
-        int theme = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_THEME);
+        int theme = smartphonePreferencesHandler.get(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.getApplicationContext()
@@ -78,7 +80,7 @@ public class SmartphoneThemeHelper {
      * @param activity Activity to apply theme on
      */
     public static void applyDialogTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
-        int theme = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_THEME);
+        int theme = smartphonePreferencesHandler.get(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.getApplicationContext()
@@ -116,7 +118,7 @@ public class SmartphoneThemeHelper {
      * @param dialogFragment Fragment to apply theme on
      */
     public static void applyDialogTheme(DialogFragment dialogFragment, SmartphonePreferencesHandler smartphonePreferencesHandler) {
-        int theme = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_THEME);
+        int theme = smartphonePreferencesHandler.get(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
                 dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);

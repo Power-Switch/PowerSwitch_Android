@@ -29,7 +29,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import lombok.Getter;
 
 /**
@@ -63,17 +63,17 @@ public abstract class Action {
      * Create a human readable text for an action
      *
      * @param action
-     * @param persistanceHandler
+     * @param persistenceHandler
      *
      * @return
      */
-    public static String createReadableString(Action action, PersistanceHandler persistanceHandler) {
+    public static String createReadableString(Action action, PersistenceHandler persistenceHandler) {
         // TODO: this is a huge performance monster :(
         try {
             StringBuilder s = new StringBuilder();
             if (action instanceof ReceiverAction) {
                 ReceiverAction receiverAction = (ReceiverAction) action;
-                Apartment      apartment      = persistanceHandler.getApartment(receiverAction.getApartmentId());
+                Apartment      apartment      = persistenceHandler.getApartment(receiverAction.getApartmentId());
                 Room           room           = apartment.getRoom(receiverAction.getRoomId());
                 Receiver       receiver       = room.getReceiver(receiverAction.getReceiverId());
                 Button         button         = receiver.getButton(receiverAction.getButtonId());
@@ -88,7 +88,7 @@ public abstract class Action {
                         .append(button.getName());
             } else if (action instanceof RoomAction) {
                 RoomAction roomAction = (RoomAction) action;
-                Apartment  apartment  = persistanceHandler.getApartment(roomAction.getApartmentId());
+                Apartment  apartment  = persistenceHandler.getApartment(roomAction.getApartmentId());
                 Room       room       = apartment.getRoom(roomAction.getRoomId());
 
                 s.append(apartment.getName())
@@ -98,7 +98,7 @@ public abstract class Action {
                         .append(roomAction.getButtonName());
             } else if (action instanceof SceneAction) {
                 SceneAction sceneAction = (SceneAction) action;
-                Apartment   apartment   = persistanceHandler.getApartment(sceneAction.getApartmentId());
+                Apartment   apartment   = persistenceHandler.getApartment(sceneAction.getApartmentId());
                 Scene       scene       = apartment.getScene(sceneAction.getSceneId());
 
                 s.append(apartment.getName())

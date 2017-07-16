@@ -31,12 +31,13 @@ import java.util.Date;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime
@@ -124,7 +125,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
 
             textViewErrorDescription.setText(LogHelper.getStackTraceText(throwable));
 
-            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
+            if (smartphonePreferencesHandler.get(KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
                 textView_automaticCrashReportingDisabledInfo.setVisibility(View.GONE);
             } else {

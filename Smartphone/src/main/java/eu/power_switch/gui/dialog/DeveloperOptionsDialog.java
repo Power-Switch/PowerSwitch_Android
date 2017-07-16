@@ -40,8 +40,9 @@ import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Hidden Dialog Menu to access developer options
@@ -90,7 +91,7 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(View v) {
                 MaterialShowcaseView.resetAll(getContext());
-                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
+                smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
             }
         });
 

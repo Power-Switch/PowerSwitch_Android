@@ -48,11 +48,12 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
 
 /**
  * Configuration Activity for Receiver widgets
@@ -69,7 +70,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
     android.widget.Button buttonSave;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private List<Apartment> apartmentList = new ArrayList<>();
 
@@ -133,7 +134,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return persistanceHandler.getAllApartments();
+                    return persistenceHandler.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -223,7 +224,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
 
                 // save new widget data to database
                 ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(), selectedReceiver.getId());
-                persistanceHandler.addReceiverWidget(receiverWidget);
+                persistenceHandler.addReceiverWidget(receiverWidget);
                 // When the configuration is complete, get an instance of
                 // the AppWidgetManager by calling getInstance(Context):
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureReceiverWidgetActivity.this);
@@ -249,7 +250,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                             0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    boolean highlightLastButton = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                    boolean highlightLastButton = smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                     if (highlightLastButton && selectedReceiver.getLastActivatedButtonId()
                             .equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,

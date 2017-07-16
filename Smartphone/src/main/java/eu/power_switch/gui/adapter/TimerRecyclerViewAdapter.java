@@ -36,11 +36,13 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AndroidAlarmHandler;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_AUTO_COLLAPSE_TIMERS;
 
 /**
  * Adapter to visualize Timer items in RecyclerView
@@ -48,7 +50,7 @@ import eu.power_switch.timer.alarm.AndroidAlarmHandler;
  * Created by Markus on 27.07.2015.
  */
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
-    private final PersistanceHandler           persistanceHandler;
+    private final PersistenceHandler           persistenceHandler;
     private final AndroidAlarmHandler          androidAlarmHandler;
     private final ArrayList<Timer>             timers;
     private final Context                      context;
@@ -58,12 +60,12 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public TimerRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, AndroidAlarmHandler androidAlarmHandler,
+    public TimerRecyclerViewAdapter(Context context, PersistenceHandler persistenceHandler, AndroidAlarmHandler androidAlarmHandler,
                                     SmartphonePreferencesHandler smartphonePreferencesHandler, StatusMessageHandler statusMessageHandler,
                                     ArrayList<Timer> timers) {
         this.timers = timers;
         this.context = context;
-        this.persistanceHandler = persistanceHandler;
+        this.persistenceHandler = persistenceHandler;
         this.androidAlarmHandler = androidAlarmHandler;
         this.smartphonePreferencesHandler = smartphonePreferencesHandler;
         this.statusMessageHandler = statusMessageHandler;
@@ -159,10 +161,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            persistanceHandler.enableTimer(timer.getId());
+                            persistenceHandler.enableTimer(timer.getId());
                             androidAlarmHandler.createAlarm(timer);
                         } else {
-                            persistanceHandler.disableTimer(timer.getId());
+                            persistenceHandler.disableTimer(timer.getId());
                             androidAlarmHandler.cancelAlarm(timer);
                         }
                         timer.setActive(isChecked);
@@ -180,7 +182,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         try {
             for (Action action : timer.getActions()) {
 
-                String readableString = Action.createReadableString(action, persistanceHandler);
+                String readableString = Action.createReadableString(action, persistenceHandler);
 
                 AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
 
@@ -193,7 +195,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
 
         // collapse timer
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS)) {
+        if (smartphonePreferencesHandler.get(KEY_AUTO_COLLAPSE_TIMERS)) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

@@ -26,7 +26,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.event.HistoryUpdatedEvent;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.log.LogHelper;
 import timber.log.Timber;
 
@@ -44,13 +44,13 @@ public class HistoryHelper {
                 .post(new HistoryUpdatedEvent());
     }
 
-    public static void add(PersistanceHandler persistanceHandler, HistoryItem historyItem) throws Exception {
-        persistanceHandler.addHistoryItem(historyItem);
+    public static void add(PersistenceHandler persistenceHandler, HistoryItem historyItem) throws Exception {
+        persistenceHandler.addHistoryItem(historyItem);
         notifyHistoryChanged();
     }
 
-    public static void add(Context context, PersistanceHandler persistanceHandler, Exception e) throws Exception {
-        persistanceHandler.addHistoryItem(new HistoryItem((long) -1,
+    public static void add(Context context, PersistenceHandler persistenceHandler, Exception e) throws Exception {
+        persistenceHandler.addHistoryItem(new HistoryItem((long) -1,
                 Calendar.getInstance(),
                 context.getString(R.string.unknown_error),
                 LogHelper.getStackTraceText(e)));

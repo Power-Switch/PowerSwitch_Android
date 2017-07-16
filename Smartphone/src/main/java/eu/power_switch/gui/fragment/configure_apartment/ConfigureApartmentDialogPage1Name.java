@@ -182,7 +182,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            List<Gateway> gateways = persistanceHandler.getAllGateways();
+            List<Gateway> gateways = persistenceHandler.getAllGateways();
             for (Gateway gateway : gateways) {
                 @SuppressLint("InflateParams") LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every

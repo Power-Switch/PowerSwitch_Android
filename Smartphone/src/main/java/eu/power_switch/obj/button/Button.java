@@ -21,7 +21,7 @@ package eu.power_switch.obj.button;
 import android.content.Context;
 
 import eu.power_switch.R;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import lombok.Getter;
 import lombok.ToString;
@@ -69,7 +69,7 @@ public class Button {
      * @param buttonId ID of Button
      * @return Name of Button
      */
-    public static String getName(Context context, PersistanceHandler persistanceHandler, Long buttonId) {
+    public static String getName(Context context, PersistenceHandler persistenceHandler, Long buttonId) {
         try {
             if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
                 return context.getString(R.string.on);
@@ -82,7 +82,7 @@ public class Button {
             } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
                 return context.getString(R.string.down);
             } else {
-                return persistanceHandler.getButton(buttonId)
+                return persistenceHandler.getButton(buttonId)
                         .getName();
             }
         } catch (Exception e) {

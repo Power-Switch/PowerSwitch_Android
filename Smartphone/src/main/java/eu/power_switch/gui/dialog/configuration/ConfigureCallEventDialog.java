@@ -118,7 +118,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            persistanceHandler.deleteCallEvent(callEventId);
+                            persistenceHandler.deleteCallEvent(callEventId);
 
                             // notify scenes fragment
                             CallEventsFragment.notifyCallEventsChanged();

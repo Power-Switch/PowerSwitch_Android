@@ -57,8 +57,9 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
@@ -95,8 +96,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         super.onCreateView(inflater, container, savedInstanceState);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            existingScenes = persistanceHandler.getScenes(apartmentId);
+            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            existingScenes = persistenceHandler.getScenes(apartmentId);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -189,8 +190,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            for (Room room : persistanceHandler.getRooms(apartmentId)) {
+            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            for (Room room : persistenceHandler.getRooms(apartmentId)) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);
                 roomLayout.setPadding(0, 8, 0, 8);
@@ -253,7 +254,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
 
                 ArrayList<Receiver> activeReceivers = new ArrayList<>();
                 for (SceneItem sceneItem : scene.getSceneItems()) {
-                    Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
+                    Receiver receiver = persistenceHandler.getReceiver(sceneItem.getReceiverId());
                     activeReceivers.add(receiver);
                 }
 

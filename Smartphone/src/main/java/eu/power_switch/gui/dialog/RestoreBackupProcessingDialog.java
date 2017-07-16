@@ -91,7 +91,7 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
                     onFinishedSuccess();
 
                     DeveloperPreferencesHandler.forceRefresh();
-                    smartphonePreferencesHandler.forceRefresh();
+                    smartphonePreferencesHandler.forceRefreshCache();
                     WearablePreferencesHandler.forceRefresh();
 
                     // restart app to apply

@@ -41,7 +41,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import lombok.Getter;
 
 /**
@@ -54,7 +54,7 @@ import lombok.Getter;
 public abstract class RecyclerViewFragment<T> extends EventBusFragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
 
     @Inject
-    protected PersistanceHandler persistanceHandler;
+    protected PersistenceHandler persistenceHandler;
 
     @BindView(R.id.layoutLoading)
     LinearLayout layoutLoading;

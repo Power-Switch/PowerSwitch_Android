@@ -35,7 +35,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
 
@@ -50,7 +50,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -72,7 +72,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
             if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras.containsKey(
                     ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = persistanceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = persistenceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
@@ -84,7 +84,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
                 actionHandler.execute(receiver, button);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = persistanceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = persistenceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
@@ -94,7 +94,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
                 actionHandler.execute(room, buttonName);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
 
-                Apartment apartment = persistanceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = persistenceHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
                         .trim());

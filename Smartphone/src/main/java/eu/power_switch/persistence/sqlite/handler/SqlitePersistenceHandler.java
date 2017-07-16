@@ -42,7 +42,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.sqlite.Database;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
@@ -63,7 +63,7 @@ import timber.log.Timber;
  * accessed via this class.
  */
 @Singleton
-public final class SqlitePersistanceHandler implements PersistanceHandler {
+public final class SqlitePersistenceHandler implements PersistenceHandler {
 
     @Inject
     ApartmentHandler            apartmentHandler;
@@ -119,7 +119,7 @@ public final class SqlitePersistanceHandler implements PersistanceHandler {
     private Lock lock;
 
     @Inject
-    public SqlitePersistanceHandler(Database database) {
+    public SqlitePersistenceHandler(Database database) {
         this.dbHelper = database;
         lock = new ReentrantLock();
     }

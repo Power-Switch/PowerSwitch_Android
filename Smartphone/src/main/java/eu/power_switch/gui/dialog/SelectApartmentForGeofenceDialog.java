@@ -33,7 +33,7 @@ public class SelectApartmentForGeofenceDialog extends SelectApartmentDialog {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            for (Apartment apartment : persistanceHandler.getAllApartments()) {
+            for (Apartment apartment : persistenceHandler.getAllApartments()) {
                 if (apartment.getGeofence() == null) {
                     apartmentNames.add(apartment.getName());
                 }

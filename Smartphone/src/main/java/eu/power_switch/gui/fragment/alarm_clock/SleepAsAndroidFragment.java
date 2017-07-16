@@ -60,10 +60,12 @@ import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
-import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SLEEP_AS_ANDROID_ENABLED;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -91,7 +93,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     Switch               switchOnOff;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     private ArrayList<Action> actions = new ArrayList<>();
 
@@ -107,13 +109,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        boolean enabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED);
+        boolean enabled = smartphonePreferencesHandler.get(KEY_SLEEP_AS_ANDROID_ENABLED);
         switchOnOff.setChecked(enabled);
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED, isChecked);
+                    smartphonePreferencesHandler.set(KEY_SLEEP_AS_ANDROID_ENABLED, isChecked);
                 }
             }
         });
@@ -150,7 +152,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    persistanceHandler.setAlarmActions(currentEventType, actions);
+                                    persistenceHandler.setAlarmActions(currentEventType, actions);
                                     statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed,
                                             Snackbar.LENGTH_LONG);
@@ -219,7 +221,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -261,7 +263,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         menu.findItem(R.id.add_action)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.add_action)
                     .setVisible(false)
@@ -292,7 +294,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
 
     @Override
     public List<Action> loadListData() throws Exception {
-        return persistanceHandler.getAlarmActions(currentEventType);
+        return persistenceHandler.getAlarmActions(currentEventType);
     }
 
     @Override

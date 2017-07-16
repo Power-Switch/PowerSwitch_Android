@@ -46,7 +46,7 @@ import eu.power_switch.R;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;
@@ -75,7 +75,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     ImageButton imageButtonNext;
 
     @Inject
-    protected PersistanceHandler persistanceHandler;
+    protected PersistenceHandler persistenceHandler;
 
     @Getter
     @Setter

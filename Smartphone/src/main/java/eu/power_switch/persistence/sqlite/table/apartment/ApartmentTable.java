@@ -23,6 +23,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+
 /**
  * Apartment table description
  */
@@ -59,7 +61,7 @@ public class ApartmentTable {
             values.put(COLUMN_POSITION, 0);
             db.insert(TABLE_NAME, null, values);
 
-            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, (long) 0);
+            smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, (long) 0);
         }
     }
 }

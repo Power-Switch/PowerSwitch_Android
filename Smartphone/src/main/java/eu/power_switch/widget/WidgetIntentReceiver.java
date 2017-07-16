@@ -34,11 +34,14 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATION_DURATION;
 
 /**
  * Intent Receiver for Widgets
@@ -52,7 +55,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
     ActionHandler actionHandler;
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
@@ -148,8 +151,8 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
             if (intent.getAction()
                     .equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 // vibrate
-                if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    long duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+                if (smartphonePreferencesHandler.get(KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    int duration = smartphonePreferencesHandler.get(KEY_VIBRATION_DURATION);
                     VibrationHandler.vibrate(context, duration);
                 }
 
@@ -172,7 +175,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String receiverName  = extras.getString(WidgetConstants.KEY_RECEIVER);
                 String buttonName    = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Apartment apartment = persistanceHandler.getApartment(apartmentName);
+                Apartment apartment = persistenceHandler.getApartment(apartmentName);
                 Room      room      = apartment.getRoom(roomName);
                 Receiver  receiver  = room.getReceiver(receiverName);
                 Button    button    = receiver.getButton(buttonName);
@@ -184,7 +187,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String roomName      = extras.getString(WidgetConstants.KEY_ROOM);
                 String buttonName    = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Apartment apartment = persistanceHandler.getApartment(apartmentName);
+                Apartment apartment = persistenceHandler.getApartment(apartmentName);
                 Room      room      = apartment.getRoom(roomName);
 
                 actionHandler.execute(room, buttonName);
@@ -192,7 +195,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
                 String sceneName     = extras.getString(WidgetConstants.KEY_SCENE);
 
-                Apartment apartment = persistanceHandler.getApartment(apartmentName);
+                Apartment apartment = persistenceHandler.getApartment(apartmentName);
                 Scene     scene     = apartment.getScene(sceneName);
 
                 actionHandler.execute(scene);

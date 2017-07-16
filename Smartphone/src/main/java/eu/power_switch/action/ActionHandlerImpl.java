@@ -46,7 +46,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
@@ -60,6 +60,10 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS;
+
 /**
  * Created by Markus on 05.12.2015.
  */
@@ -69,18 +73,18 @@ public class ActionHandlerImpl implements ActionHandler {
     private Context                      context;
     private NetworkHandler               networkHandler;
     private NotificationHandler          notificationHandler;
-    private PersistanceHandler           persistanceHandler;
+    private PersistenceHandler           persistenceHandler;
     private SmartphonePreferencesHandler smartphonePreferencesHandler;
     private StatusMessageHandler         statusMessageHandler;
 
     @Inject
     public ActionHandlerImpl(Context context, NetworkHandler networkHandler, NotificationHandler notificationHandler,
-                             PersistanceHandler persistanceHandler, SmartphonePreferencesHandler smartphonePreferencesHandler,
+                             PersistenceHandler persistenceHandler, SmartphonePreferencesHandler smartphonePreferencesHandler,
                              StatusMessageHandler statusMessageHandler) {
         this.context = context;
         this.networkHandler = networkHandler;
         this.notificationHandler = notificationHandler;
-        this.persistanceHandler = persistanceHandler;
+        this.persistenceHandler = persistenceHandler;
         this.smartphonePreferencesHandler = smartphonePreferencesHandler;
         this.statusMessageHandler = statusMessageHandler;
     }
@@ -96,7 +100,7 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeReceiverAction(receiver, button);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
@@ -109,7 +113,7 @@ public class ActionHandlerImpl implements ActionHandler {
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -117,7 +121,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeReceiverAction(@NonNull Receiver receiver, @NonNull Button button) throws Exception {
-        Apartment apartment = persistanceHandler.getContainingApartment(receiver);
+        Apartment apartment = persistenceHandler.getContainingApartment(receiver);
         Room      room      = apartment.getRoom(receiver.getRoomId());
 
         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
@@ -167,9 +171,9 @@ public class ActionHandlerImpl implements ActionHandler {
 
         // set on object, as well as in database
         receiver.setLastActivatedButtonId(button.getId());
-        persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+        persistenceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -188,14 +192,14 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeRoomAction(room, buttonName);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -213,16 +217,15 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeRoomAction(room, buttonId);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.room_action_history_text,
-                                    room.getName(),
-                                    Button.getName(context, persistanceHandler, buttonId))));
+                                    room.getName(), Button.getName(context, persistenceHandler, buttonId))));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -230,7 +233,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, @NonNull String buttonName) throws Exception {
-        Apartment apartment = persistanceHandler.getContainingApartment(room);
+        Apartment apartment = persistenceHandler.getContainingApartment(room);
 
         List<Gateway> gateways;
         if (!room.getAssociatedGateways()
@@ -283,7 +286,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
                             // set on object, as well as in database
                             receiver.setLastActivatedButtonId(button.getId());
-                            persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                            persistenceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
                         } catch (ActionNotSupportedException e) {
                             Timber.e("Action not supported by Receiver!", e);
                             statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
@@ -305,7 +308,7 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -314,7 +317,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, long buttonId) throws Exception {
-        Apartment apartment = persistanceHandler.getContainingApartment(room);
+        Apartment apartment = persistenceHandler.getContainingApartment(room);
 
         List<Gateway> gateways;
         if (!room.getAssociatedGateways()
@@ -375,7 +378,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
                 // set on object, as well as in database
                 receiver.setLastActivatedButtonId(button.getId());
-                persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                persistenceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
             } catch (NoSuchElementException e) {
                 // ignore if Receiver doesnt support this action
             }
@@ -388,7 +391,7 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -406,12 +409,12 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeScene(scene);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.scene_action_history_text, scene.getName())));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -419,7 +422,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeScene(@NonNull Scene scene) throws Exception {
-        Apartment apartment = persistanceHandler.getContainingApartment(scene);
+        Apartment apartment = persistenceHandler.getContainingApartment(scene);
 
         if (apartment.getAssociatedGateways()
                 .isEmpty()) {
@@ -444,8 +447,8 @@ public class ActionHandlerImpl implements ActionHandler {
 
         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (SceneItem sceneItem : scene.getSceneItems()) {
-            Receiver receiver = persistanceHandler.getReceiver(sceneItem.getReceiverId());
-            Room     room     = persistanceHandler.getRoom(receiver.getRoomId());
+            Receiver receiver = persistenceHandler.getReceiver(sceneItem.getReceiverId());
+            Room     room     = persistenceHandler.getRoom(receiver.getRoomId());
             Button   button   = receiver.getButton(sceneItem.getButtonId());
 
             List<Gateway> gateways;
@@ -472,14 +475,14 @@ public class ActionHandlerImpl implements ActionHandler {
                     // set on object, as well as in database
                     // TODO: why set in on the object? o.O
                     receiver.setLastActivatedButtonId(sceneItem.getButtonId());
-                    persistanceHandler.setLastActivatedButtonId(sceneItem.getReceiverId(), sceneItem.getButtonId());
+                    persistenceHandler.setLastActivatedButtonId(sceneItem.getReceiverId(), sceneItem.getButtonId());
                 }
             }
         }
 
         networkHandler.send(networkPackages);
 
-        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -497,16 +500,16 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeActions(timer.getActions());
 
-            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.get(KEY_SHOW_TIMER_NOTIFICATIONS)) {
                 notificationHandler.createNotification("Timer", "Timer \"" + timer.getName() + "\" executed");
             }
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.timer_action_history_text, timer.getName())));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -521,17 +524,17 @@ public class ActionHandlerImpl implements ActionHandler {
     @Override
     public void execute(@NonNull SleepAsAndroidConstants.Event event) {
         try {
-            List<Action> actions = persistanceHandler.getAlarmActions(event);
+            List<Action> actions = persistenceHandler.getAlarmActions(event);
             executeActions(actions);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -546,17 +549,17 @@ public class ActionHandlerImpl implements ActionHandler {
     @Override
     public void execute(@NonNull AlarmClockConstants.Event event) {
         try {
-            List<Action> actions = persistanceHandler.getAlarmActions(event);
+            List<Action> actions = persistenceHandler.getAlarmActions(event);
             executeActions(actions);
 
-            HistoryHelper.add(persistanceHandler,
+            HistoryHelper.add(persistenceHandler,
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.alarm_clock_action_history_text, event.toString())));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -593,14 +596,14 @@ public class ActionHandlerImpl implements ActionHandler {
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
-            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.get(KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
                 notificationHandler.createNotification(context.getString(R.string.geofence), notificationMessage);
             }
-            HistoryHelper.add(persistanceHandler, historyItem);
+            HistoryHelper.add(persistenceHandler, historyItem);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -621,11 +624,11 @@ public class ActionHandlerImpl implements ActionHandler {
             HistoryItem historyItem = new HistoryItem((long) -1,
                     Calendar.getInstance(),
                     context.getString(R.string.geofence_enter_action_history_text, callEvent.getName()));
-            HistoryHelper.add(persistanceHandler, historyItem);
+            HistoryHelper.add(persistenceHandler, historyItem);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
-                HistoryHelper.add(context, persistanceHandler, e);
+                HistoryHelper.add(context, persistenceHandler, e);
             } catch (Exception e1) {
                 Timber.e(e1);
             }
@@ -641,7 +644,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_RECEIVER:
                     ReceiverAction receiverAction = (ReceiverAction) action;
 
-                    apartment = persistanceHandler.getApartment(receiverAction.getApartmentId());
+                    apartment = persistenceHandler.getApartment(receiverAction.getApartmentId());
                     room = apartment.getRoom(receiverAction.getRoomId());
                     Receiver receiver = room.getReceiver(receiverAction.getReceiverId());
                     Button button = receiver.getButton(receiverAction.getButtonId());
@@ -651,7 +654,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_ROOM:
                     RoomAction roomAction = (RoomAction) action;
 
-                    apartment = persistanceHandler.getApartment(roomAction.getApartmentId());
+                    apartment = persistenceHandler.getApartment(roomAction.getApartmentId());
                     room = apartment.getRoom(roomAction.getRoomId());
 
                     executeRoomAction(room, roomAction.getButtonName());
@@ -659,7 +662,7 @@ public class ActionHandlerImpl implements ActionHandler {
                 case Action.ACTION_TYPE_SCENE:
                     SceneAction sceneAction = (SceneAction) action;
 
-                    apartment = persistanceHandler.getApartment(sceneAction.getApartmentId());
+                    apartment = persistenceHandler.getApartment(sceneAction.getApartmentId());
                     Scene scene = apartment.getScene(sceneAction.getSceneId());
 
                     executeScene(scene);

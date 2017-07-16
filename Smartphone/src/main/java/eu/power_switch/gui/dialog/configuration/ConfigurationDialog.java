@@ -43,7 +43,7 @@ import eu.power_switch.R;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;
@@ -58,7 +58,7 @@ import timber.log.Timber;
 public abstract class ConfigurationDialog extends EventBusSupportDialogFragment {
 
     @Inject
-    protected PersistanceHandler persistanceHandler;
+    protected PersistenceHandler persistenceHandler;
 
     @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;

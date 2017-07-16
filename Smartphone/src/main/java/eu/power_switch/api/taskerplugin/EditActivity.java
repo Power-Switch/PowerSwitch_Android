@@ -64,7 +64,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
@@ -81,7 +81,7 @@ import timber.log.Timber;
 public class EditActivity extends AbstractPluginActivity {
 
     @Inject
-    PersistanceHandler persistanceHandler;
+    PersistenceHandler persistenceHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -181,7 +181,7 @@ public class EditActivity extends AbstractPluginActivity {
         radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
 
         try {
-            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistanceHandler.getAllApartments();
+            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistenceHandler.getAllApartments();
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
             }
@@ -744,7 +744,7 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private Apartment getSelectedApartment() throws Exception {
-        return persistanceHandler.getApartment(getApartmentName());
+        return persistenceHandler.getApartment(getApartmentName());
     }
 
     private Room getSelectedRoom() throws Exception {
