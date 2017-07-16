@@ -91,6 +91,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
             @Override
             public RecyclerViewUpdateResult<T> loadInBackground() {
                 try {
+                    // TODO: find a way to improve first load performance and remove this workaround
                     // workaround to prevent animation lag by delaying data loading as long as
                     // the fragment transition animation duration
                     Thread.sleep(pageAnimationDuration);
