@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
 /**
@@ -54,6 +55,11 @@ public abstract class ButterKnifeFragment extends DaggerFragment {
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (this instanceof RecyclerViewFragment) {
+            // don't use hardware layer for fragments which animate views while transition is running
+            return super.onCreateAnimation(transit, enter, nextAnim);
+        }
+
         Animation animation = super.onCreateAnimation(transit, enter, nextAnim);
 
         if (animation == null && nextAnim != 0) {
