@@ -61,11 +61,11 @@ import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SLEEP_AS_ANDROID_ENABLED;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -109,13 +109,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        boolean enabled = smartphonePreferencesHandler.get(KEY_SLEEP_AS_ANDROID_ENABLED);
+        boolean enabled = smartphonePreferencesHandler.getValue(KEY_SLEEP_AS_ANDROID_ENABLED);
         switchOnOff.setChecked(enabled);
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    smartphonePreferencesHandler.set(KEY_SLEEP_AS_ANDROID_ENABLED, isChecked);
+                    smartphonePreferencesHandler.setValue(KEY_SLEEP_AS_ANDROID_ENABLED, isChecked);
                 }
             }
         });
@@ -221,7 +221,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -263,7 +263,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         menu.findItem(R.id.add_action)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.add_action)
                     .setVisible(false)

@@ -47,10 +47,10 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.SHOW_ROOM_ALL_ON_OFF;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView
@@ -122,8 +122,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (smartphonePreferencesHandler.get(KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    int duration = smartphonePreferencesHandler.get(KEY_VIBRATION_DURATION);
+                if (smartphonePreferencesHandler.getValue(KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    int duration = smartphonePreferencesHandler.getValue(KEY_VIBRATION_DURATION);
                     VibrationHandler.vibrate(fragmentActivity, duration);
                 }
 
@@ -156,7 +156,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (smartphonePreferencesHandler.get(KEY_SHOW_ROOM_ALL_ON_OFF)) {
+        if (smartphonePreferencesHandler.getValue(SHOW_ROOM_ALL_ON_OFF)) {
             holder.buttonAllOn.setVisibility(View.VISIBLE);
             holder.buttonAllOff.setVisibility(View.VISIBLE);
         } else {
@@ -230,7 +230,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
                 final int     accentColor         = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
-                final boolean highlightLastButton = smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                final boolean highlightLastButton = smartphonePreferencesHandler.getValue(HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                 if (highlightLastButton && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
                     buttonView.setTextColor(accentColor);
                 }
@@ -238,8 +238,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                     @Override
                     public void onClick(final View v) {
-                        if (smartphonePreferencesHandler.get(KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                            int duration = smartphonePreferencesHandler.get(KEY_VIBRATION_DURATION);
+                        if (smartphonePreferencesHandler.getValue(KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                            int duration = smartphonePreferencesHandler.getValue(KEY_VIBRATION_DURATION);
                             VibrationHandler.vibrate(fragmentActivity, duration);
                         }
 

@@ -49,7 +49,7 @@ import eu.power_switch.tutorial.TutorialHelper;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Fragment holding the room and scene Fragments in a TabLayout
@@ -158,7 +158,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            long currentApartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long currentApartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 textView_currentApartmentInfo.setText(" - ");
             } else {

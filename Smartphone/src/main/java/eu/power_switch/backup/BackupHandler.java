@@ -48,8 +48,6 @@ import eu.power_switch.shared.exception.backup.RemoveBackupException;
 import eu.power_switch.shared.exception.backup.RestoreBackupException;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_BACKUP_PATH;
-
 /**
  * Database Handler to access/modify Backups stored on device or external storage
  */
@@ -177,7 +175,7 @@ public class BackupHandler {
                 dst.mkdirs();
             }
 
-            dst = new File(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX);
+            dst = new File(getBackupPath() + File.separator + name + BACKUP_FILE_SUFFIX);
             if (dst.exists()) {
                 if (force) {
                     // remove existing backup
@@ -195,7 +193,7 @@ public class BackupHandler {
             }
 
             try {
-                ZipHelper.createZip(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
+                ZipHelper.createZip(getBackupPath() + File.separator + name + BACKUP_FILE_SUFFIX,
                         BACKUP_PASSWORD,
                         onZipProgressChangedListener,
                         context.getFilesDir()
@@ -217,9 +215,9 @@ public class BackupHandler {
      */
     public void removeBackup(@NonNull String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            File backupFolder = new File(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + name);
+            File backupFolder = new File(getBackupPath() + File.separator + name);
 
-            File backupZipFile = new File(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX);
+            File backupZipFile = new File(getBackupPath() + File.separator + name + BACKUP_FILE_SUFFIX);
 
             if (backupFolder.exists() || backupZipFile.exists()) {
                 deleteRecursive(backupFolder);
@@ -243,8 +241,8 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(@NonNull String oldName, @NonNull String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldZipFile = new File(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + oldName + BACKUP_FILE_SUFFIX);
-        File newFolder  = new File(smartphonePreferencesHandler.get(KEY_BACKUP_PATH) + File.separator + newName + BACKUP_FILE_SUFFIX);
+        File oldZipFile = new File(getBackupPath() + File.separator + oldName + BACKUP_FILE_SUFFIX);
+        File newFolder  = new File(getBackupPath() + File.separator + newName + BACKUP_FILE_SUFFIX);
 
         if (!oldZipFile.exists()) {
             throw new BackupNotFoundException();
@@ -343,6 +341,6 @@ public class BackupHandler {
     }
 
     private String getBackupPath() {
-        return smartphonePreferencesHandler.get(KEY_BACKUP_PATH);
+        return smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.BACKUP_PATH);
     }
 }

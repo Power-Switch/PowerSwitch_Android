@@ -68,9 +68,6 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_LOG_DESTINATION;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
-
 /**
  * Entry Point for the Application
  * <p/>
@@ -171,7 +168,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
         // Configure Log4J Logger
         boolean internalFileLoggingOnly;
-        Integer logDestinationType = smartphonePreferencesHandler.get(KEY_LOG_DESTINATION);
+        Integer logDestinationType = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
         if (logDestinationType.equals(Integer.valueOf(getString(R.string.value_internal)))) {
             internalFileLoggingOnly = true;
         } else {
@@ -192,7 +189,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean crashReportingEnabled = smartphonePreferencesHandler.get(KEY_SEND_ANONYMOUS_CRASH_DATA);
+        boolean crashReportingEnabled = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
         boolean enableFabric          = crashReportingEnabled || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {

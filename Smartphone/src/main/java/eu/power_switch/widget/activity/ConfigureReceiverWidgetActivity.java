@@ -49,11 +49,10 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
-
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
 
 /**
  * Configuration Activity for Receiver widgets
@@ -250,7 +249,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                             0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    boolean highlightLastButton = smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                    boolean highlightLastButton = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                     if (highlightLastButton && selectedReceiver.getLastActivatedButtonId()
                             .equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,

@@ -63,7 +63,7 @@ import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHold
 import eu.power_switch.obj.Room;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * "Name" Fragment used in Configure Receiver Dialog
@@ -253,7 +253,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         try {
             // Get Rooms
             roomList.clear();
-            long       apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long       apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             List<Room> rooms       = persistenceHandler.getRooms(apartmentId);
             for (Room room : rooms) {
                 roomList.add(room.getName());

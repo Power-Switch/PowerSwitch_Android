@@ -42,7 +42,7 @@ import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Hidden Dialog Menu to access developer options
@@ -91,7 +91,7 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(View v) {
                 MaterialShowcaseView.resetAll(getContext());
-                smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
+                smartphonePreferencesHandler.setValue(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
             }
         });
 

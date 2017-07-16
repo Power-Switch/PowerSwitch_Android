@@ -50,7 +50,7 @@ import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -198,7 +198,7 @@ public class UtilityService extends DaggerIntentService {
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
                 Timber.d("Getting Data from Database to send to Wearable...");
 
-                long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+                long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
                 if (apartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
                     List<Apartment> apartments = persistenceHandler.getAllApartments();
 

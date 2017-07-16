@@ -60,9 +60,8 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS;
 
 /**
  * Created by Markus on 05.12.2015.
@@ -173,7 +172,7 @@ public class ActionHandlerImpl implements ActionHandler {
         receiver.setLastActivatedButtonId(button.getId());
         persistenceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
-        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -308,7 +307,7 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -391,7 +390,7 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -482,7 +481,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         networkHandler.send(networkPackages);
 
-        if (smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -500,7 +499,7 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeActions(timer.getActions());
 
-            if (smartphonePreferencesHandler.get(KEY_SHOW_TIMER_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.getValue(KEY_SHOW_TIMER_NOTIFICATIONS)) {
                 notificationHandler.createNotification("Timer", "Timer \"" + timer.getName() + "\" executed");
             }
 
@@ -596,7 +595,7 @@ public class ActionHandlerImpl implements ActionHandler {
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
-            if (smartphonePreferencesHandler.get(KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.getValue(KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
                 notificationHandler.createNotification(context.getString(R.string.geofence), notificationMessage);
             }
             HistoryHelper.add(persistenceHandler, historyItem);

@@ -57,11 +57,11 @@ import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.AlarmClockConstants.Event;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_STOCK_ALARM_CLOCK_ENABLED;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED;
 
 /**
  * Fragment containing all settings related to stock alarm clock event handling
@@ -97,13 +97,13 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        boolean enabled = smartphonePreferencesHandler.get(KEY_STOCK_ALARM_CLOCK_ENABLED);
+        boolean enabled = smartphonePreferencesHandler.getValue(KEY_STOCK_ALARM_CLOCK_ENABLED);
         switchOnOff.setChecked(enabled);
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    smartphonePreferencesHandler.set(KEY_STOCK_ALARM_CLOCK_ENABLED, isChecked);
+                    smartphonePreferencesHandler.setValue(KEY_STOCK_ALARM_CLOCK_ENABLED, isChecked);
                 }
             }
         });
@@ -199,7 +199,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -232,7 +232,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         menu.findItem(R.id.add_action)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.add_action)
                     .setVisible(false)

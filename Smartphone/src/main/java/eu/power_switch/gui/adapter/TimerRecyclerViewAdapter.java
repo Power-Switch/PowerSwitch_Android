@@ -42,7 +42,7 @@ import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AndroidAlarmHandler;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_TIMERS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS;
 
 /**
  * Adapter to visualize Timer items in RecyclerView
@@ -195,7 +195,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
 
         // collapse timer
-        if (smartphonePreferencesHandler.get(KEY_AUTO_COLLAPSE_TIMERS)) {
+        if (smartphonePreferencesHandler.getValue(KEY_AUTO_COLLAPSE_TIMERS)) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

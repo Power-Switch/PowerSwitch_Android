@@ -101,12 +101,12 @@ import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_AUTO_DISCOVER;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_SHOW_WIZARD;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_STARTUP_DEFAULT_TAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.GATEWAY_AUTO_DISCOVERY;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.STARTUP_DEFAULT_TAB;
 
 /**
  * Main entry Activity for the app
@@ -238,12 +238,12 @@ public class MainActivity extends EventBusActivity {
         // Load first Fragment
         try {
             Fragment fragment;
-            long     apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long     apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             if (apartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                int defaultTab = smartphonePreferencesHandler.get(KEY_STARTUP_DEFAULT_TAB);
+                int defaultTab = smartphonePreferencesHandler.getValue(STARTUP_DEFAULT_TAB);
                 fragment = RoomSceneTabFragment.newInstance(defaultTab);
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
@@ -260,21 +260,21 @@ public class MainActivity extends EventBusActivity {
         navigationDrawer.setSelection(drawerPositionStack.peek());
         initHistoryDrawer(navigationDrawer);
 
-        if (smartphonePreferencesHandler.get(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
+        if (smartphonePreferencesHandler.getValue(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
             new AlertDialog.Builder(this).setTitle(R.string.title_sendAnonymousCrashData)
                     .setMessage(R.string.message_sendAnonymousCrashData)
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            smartphonePreferencesHandler.set(KEY_SEND_ANONYMOUS_CRASH_DATA, true);
-                            smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.setValue(KEY_SEND_ANONYMOUS_CRASH_DATA, true);
+                            smartphonePreferencesHandler.setValue(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .setNegativeButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            smartphonePreferencesHandler.set(KEY_SEND_ANONYMOUS_CRASH_DATA, false);
-                            smartphonePreferencesHandler.set(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.setValue(KEY_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.setValue(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .show();
@@ -292,7 +292,7 @@ public class MainActivity extends EventBusActivity {
                     .show();
         }
 
-        if (smartphonePreferencesHandler.get(KEY_SHOULD_SHOW_WIZARD)) {
+        if (smartphonePreferencesHandler.getValue(KEY_SHOULD_SHOW_WIZARD)) {
             // TODO: enable Wizard when finished
 //            startActivity(WizardActivity.getLaunchIntent(this));
         } else {
@@ -307,7 +307,7 @@ public class MainActivity extends EventBusActivity {
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        boolean autoDiscoverEnabled = smartphonePreferencesHandler.get(KEY_AUTO_DISCOVER);
+        boolean autoDiscoverEnabled = smartphonePreferencesHandler.getValue(GATEWAY_AUTO_DISCOVERY);
 
         if (autoDiscoverEnabled && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
             new AsyncTask<Void, Void, AsyncTaskResult<Gateway>>() {
@@ -414,7 +414,7 @@ public class MainActivity extends EventBusActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            int defaultTab = smartphonePreferencesHandler.get(KEY_STARTUP_DEFAULT_TAB);
+                            int defaultTab = smartphonePreferencesHandler.getValue(STARTUP_DEFAULT_TAB);
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
                                     RoomSceneTabFragment.newInstance(defaultTab));

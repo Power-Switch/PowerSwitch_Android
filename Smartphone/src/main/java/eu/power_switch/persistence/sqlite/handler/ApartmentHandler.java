@@ -42,7 +42,7 @@ import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGatewayRelati
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentTable;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Provides database methods for managing Apartments
@@ -475,7 +475,7 @@ class ApartmentHandler {
 
         Geofence geofence = geofenceHandler.get(database, getAssociatedGeofenceId(database, apartmentId));
 
-        long    activeApartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+        long    activeApartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
         boolean isActive          = apartmentId.equals(activeApartmentId);
 
         Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);

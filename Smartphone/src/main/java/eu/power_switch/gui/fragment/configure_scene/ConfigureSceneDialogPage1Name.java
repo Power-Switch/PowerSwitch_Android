@@ -59,7 +59,8 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.ThemeHelper;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
@@ -96,7 +97,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         super.onCreateView(inflater, container, savedInstanceState);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             existingScenes = persistenceHandler.getScenes(apartmentId);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getContentView(), e);
@@ -190,7 +191,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             for (Room room : persistenceHandler.getRooms(apartmentId)) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);

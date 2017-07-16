@@ -50,6 +50,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SmsEventRecyclerViewAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.sms.SmsEvent;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -57,8 +58,6 @@ import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
-
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment holding the Sms Event list
@@ -208,7 +207,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         menu.findItem(R.id.create_sms_event)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_sms_event)
                     .setVisible(false)
@@ -228,7 +227,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

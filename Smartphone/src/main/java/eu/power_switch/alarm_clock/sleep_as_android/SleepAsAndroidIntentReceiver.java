@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import timber.log.Timber;
@@ -50,7 +49,7 @@ public class SleepAsAndroidIntentReceiver extends DaggerBroadcastReceiver {
         Timber.d("Received intent: ", intent);
 
         try {
-            boolean enabled = smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_SLEEP_AS_ANDROID_ENABLED);
+            boolean enabled = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED);
             if (!enabled) {
                 return;
             }

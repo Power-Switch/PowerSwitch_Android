@@ -37,8 +37,7 @@ import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistenceHandler;
-
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
 /**
  * Dialog used to quickly select and activate an Apartment
@@ -116,7 +115,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
      * @param apartment the selected Apartment
      */
     protected void onApartmentClicked(Apartment apartment) {
-        smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, apartment.getId());
+        smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB, apartment.getId());
         ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }

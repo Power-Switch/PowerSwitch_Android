@@ -48,8 +48,6 @@ import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-
 /**
  * This class is responsible for updating existing Receiver widgets
  */
@@ -115,7 +113,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                                             .length(),
                                     0);
                             buttonView.setTextViewText(R.id.button_widget_universal, s);
-                            boolean highlightLastButton = smartphonePreferencesHandler.get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                            boolean highlightLastButton = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                             if (highlightLastButton && receiver.getLastActivatedButtonId()
                                     .equals(button.getId())) {
                                 buttonView.setTextColor(R.id.button_widget_universal, ContextCompat.getColor(context, R.color.color_light_blue_a700));

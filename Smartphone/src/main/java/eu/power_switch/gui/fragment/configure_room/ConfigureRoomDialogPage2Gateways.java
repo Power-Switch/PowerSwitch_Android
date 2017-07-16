@@ -43,7 +43,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to edit a Room
@@ -85,7 +85,7 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         try {
-            long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             apartment = persistenceHandler.getApartment(apartmentId);
             gateways = persistenceHandler.getAllGateways();
         } catch (Exception e) {

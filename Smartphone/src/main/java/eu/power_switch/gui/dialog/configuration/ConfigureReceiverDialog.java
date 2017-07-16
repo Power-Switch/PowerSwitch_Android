@@ -60,7 +60,7 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create or modify a Receiver
@@ -100,7 +100,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
-            long      apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long      apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             Apartment apartment   = persistenceHandler.getApartment(apartmentId);
             getConfiguration().setParentApartment(apartment);
         } catch (Exception e) {

@@ -40,8 +40,8 @@ import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
 
 /**
  * Intent Receiver for Widgets
@@ -151,8 +151,8 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
             if (intent.getAction()
                     .equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 // vibrate
-                if (smartphonePreferencesHandler.get(KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    int duration = smartphonePreferencesHandler.get(KEY_VIBRATION_DURATION);
+                if (smartphonePreferencesHandler.getValue(KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    int duration = smartphonePreferencesHandler.getValue(KEY_VIBRATION_DURATION);
                     VibrationHandler.vibrate(context, duration);
                 }
 

@@ -37,7 +37,7 @@ import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime
@@ -125,7 +125,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
 
             textViewErrorDescription.setText(LogHelper.getStackTraceText(throwable));
 
-            if (smartphonePreferencesHandler.get(KEY_SEND_ANONYMOUS_CRASH_DATA)) {
+            if (smartphonePreferencesHandler.getValue(KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
                 textView_automaticCrashReportingDisabledInfo.setVisibility(View.GONE);
             } else {

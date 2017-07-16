@@ -35,8 +35,6 @@ import eu.power_switch.persistence.sqlite.table.history.HistoryTable;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KeekpHistoryDuration;
-
 /**
  * Handler for History related Database actions
  * <p/>
@@ -92,7 +90,7 @@ class HistoryHandler {
     private void deleteOldEntries(@NonNull SQLiteDatabase database) throws Exception {
         Calendar calendar = Calendar.getInstance();
 
-        int duration = smartphonePreferencesHandler.get(KeekpHistoryDuration);
+        int duration = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEEP_HISTORY_DURATION);
         switch (duration) {
             case SettingsConstants.KEEP_HISTORY_FOREVER:
                 // dont delete anything

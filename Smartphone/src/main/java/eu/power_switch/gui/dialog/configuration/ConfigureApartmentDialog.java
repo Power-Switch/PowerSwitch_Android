@@ -39,7 +39,7 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to configure (create/edit) an Apartment
@@ -130,7 +130,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             long newId = persistenceHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
             if (isActive) {
-                smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID, newId);
+                smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
             Apartment apartment = persistenceHandler.getApartment(apartmentId);
@@ -162,7 +162,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                         try {
                             Long existingApartmentId = getConfiguration().getApartment()
                                     .getId();
-                            if (smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID)
+                            if (smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID)
                                     .equals(
                                     existingApartmentId)) {
                                 persistenceHandler.deleteApartment(existingApartmentId);
@@ -170,10 +170,10 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                                 // update current Apartment selection
                                 List<Apartment> apartments = persistenceHandler.getAllApartments();
                                 if (apartments.isEmpty()) {
-                                    smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
                                             SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
-                                    smartphonePreferencesHandler.set(KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
                                             apartments.get(0)
                                                     .getId());
                                 }

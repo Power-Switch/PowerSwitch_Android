@@ -46,7 +46,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state
@@ -463,7 +463,7 @@ public class StatusMessageHandler {
      * @param duration duration of toast
      */
     public void showInfoToast(final Context context, final String message, final int duration) {
-        boolean backgroundToasts = smartphonePreferencesHandler.get(KEY_SHOW_TOAST_IN_BACKGROUND);
+        boolean backgroundToasts = smartphonePreferencesHandler.getValue(KEY_SHOW_TOAST_IN_BACKGROUND);
         if (!backgroundToasts) {
             Timber.w("Toast suppressed (disabled): " + message);
             return;

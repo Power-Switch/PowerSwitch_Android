@@ -56,13 +56,12 @@ import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
-
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing a List of all Apartment related Geofences
@@ -260,7 +259,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         menu.findItem(R.id.create_geofence)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_geofence)
                     .setVisible(false)
@@ -277,7 +276,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.get(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

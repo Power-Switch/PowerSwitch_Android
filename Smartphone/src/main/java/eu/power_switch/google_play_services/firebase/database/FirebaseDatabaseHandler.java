@@ -43,9 +43,9 @@ public class FirebaseDatabaseHandler {
 //     * @param key
 //     * @param value
 //     */
-//    public void setValue(String key, Object value) {
+//    public void set(String key, Object value) {
 //        DatabaseReference myRef = database.getReference(key);
-//        myRef.setValue(value);
+//        myRef.set(value);
 //    }
 
 }

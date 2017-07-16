@@ -19,139 +19,130 @@
 package eu.power_switch.persistence.shared_preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.CheckResult;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 
-import java.util.Map;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import eu.power_switch.R;
+import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.persistence.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import timber.log.Timber;
-
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Preference handler used to store general app settings
  */
 @Singleton
-public class SmartphonePreferencesHandler {
+public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
 
-    // setting keys
-    private SharedPreferences sharedPreferences;
-    private Map<String, ?>    cachedValues;
+    public static final PreferenceItem GATEWAY_AUTO_DISCOVERY = new SmartphonePreferenceItem<>(R.string.key_autodiscover, true);
 
-    private Context context;
+    public static final PreferenceItem BACKUP_PATH = new SmartphonePreferenceItem<>(R.string.key_backupPath,
+            Environment.getExternalStorageDirectory()
+                    .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
+
+    public static final PreferenceItem STARTUP_DEFAULT_TAB = new SmartphonePreferenceItem<>(R.string.key_startupDefaultTab,
+            SettingsConstants.ROOMS_TAB_INDEX);
+
+    public static final PreferenceItem SHOW_ROOM_ALL_ON_OFF            = new SmartphonePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
+    public static final PreferenceItem HIGHLIGHT_LAST_ACTIVATED_BUTTON = new SmartphonePreferenceItem<>(R.string.key_highlightLastActivatedButton,
+            false);
+    public static final PreferenceItem USE_OPTIONS_MENU_INSTEAD_OF_FAB = new SmartphonePreferenceItem<>(R.string.key_useOptionsMenuInsteadOfFab,
+            false);
+    public static final PreferenceItem KEY_AUTO_COLLAPSE_ROOMS         = new SmartphonePreferenceItem<>(R.string.key_autoCollapseRooms, false);
+    public static final PreferenceItem KEY_AUTO_COLLAPSE_TIMERS        = new SmartphonePreferenceItem<>(R.string.key_autoCollapseTimers, false);
+    public static final PreferenceItem KEY_THEME                       = new SmartphonePreferenceItem<>(R.string.key_theme,
+            SettingsConstants.THEME_DARK_BLUE);
+    public static final PreferenceItem KEY_USE_COMPACT_DRAWER          = new SmartphonePreferenceItem<>(R.string.key_useCompactDrawer, false);
+    public static final PreferenceItem KEY_VIBRATE_ON_BUTTON_PRESS     = new SmartphonePreferenceItem<>(R.string.key_vibrateOnButtonPress, true);
+    public static final PreferenceItem KEY_VIBRATION_DURATION          = new SmartphonePreferenceItem<>(R.string.key_vibrationDuration,
+            SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+    public static final PreferenceItem KEY_CURRENT_APARTMENT_ID        = new SmartphonePreferenceItem<>(R.string.key_currentApartmentId,
+            SettingsConstants.INVALID_APARTMENT_ID);
+    public static final PreferenceItem KEEP_HISTORY_DURATION           = new SmartphonePreferenceItem<>(R.string.key_keepHistoryDuration,
+            SettingsConstants.KEEP_HISTORY_FOREVER);
+    public static final PreferenceItem KEY_SLEEP_AS_ANDROID_ENABLED    = new SmartphonePreferenceItem<>(R.string.key_sleepAsAndroidEnabled, true);
+    public static final PreferenceItem KEY_STOCK_ALARM_CLOCK_ENABLED   = new SmartphonePreferenceItem<>(R.string.key_stockAlarmClockEnabled, true);
+    public static final PreferenceItem KEY_SHOW_TOAST_IN_BACKGROUND    = new SmartphonePreferenceItem<>(R.string.key_showBackgroundActionToast, true);
+    public static final PreferenceItem KEY_SEND_ANONYMOUS_CRASH_DATA   = new SmartphonePreferenceItem<>(R.string.key_sendAnonymousCrashData, true);
+
+    public static final PreferenceItem KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = new SmartphonePreferenceItem<>(R.string.key_shouldAskSendAnonymousCrashData,
+            true);
+
+    public static final PreferenceItem KEY_LOG_DESTINATION             = new SmartphonePreferenceItem<>(R.string.key_logDestination, 0);
+    public static final PreferenceItem KEY_SHOW_GEOFENCE_NOTIFICATIONS = new SmartphonePreferenceItem<>(R.string.key_showGeofenceNotifications, true);
+    public static final PreferenceItem KEY_SHOW_TIMER_NOTIFICATIONS    = new SmartphonePreferenceItem<>(R.string.key_showTimerNotifications, true);
+    public static final PreferenceItem KEY_SHOULD_SHOW_WIZARD          = new SmartphonePreferenceItem<>(R.string.key_shouldShowWizard, true);
+    public static final PreferenceItem KEY_LAUNCHER_ICON               = new SmartphonePreferenceItem<>(R.string.key_launcher_icon, 0);
 
     @Inject
     public SmartphonePreferencesHandler(Context context) {
-        this.context = context;
-
-        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-        forceRefreshCache();
-
-        // doesnt work when logger isnt initialized yet
-        for (SmartphonePreferenceItem preferenceItem : SmartphonePreferenceItem.values()) {
-            Timber.d(preferenceItem.getKey(context) + ": " + get(preferenceItem));
-        }
+        super(context);
     }
 
-    /**
-     * Forces an update of the cached values
-     */
-    public void forceRefreshCache() {
-        cachedValues = sharedPreferences.getAll();
+    @Override
+    @NonNull
+    protected String getSharedPreferencesName() {
+        return SettingsConstants.SHARED_PREFS_NAME;
+    }
+
+    @Override
+    @NonNull
+    protected List<PreferenceItem> getAllPreferenceItems() {
+        List<PreferenceItem> allPreferences = new ArrayList<>();
+        allPreferences.add(GATEWAY_AUTO_DISCOVERY);
+        allPreferences.add(BACKUP_PATH);
+        allPreferences.add(STARTUP_DEFAULT_TAB);
+        allPreferences.add(SHOW_ROOM_ALL_ON_OFF);
+        allPreferences.add(HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        allPreferences.add(USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        allPreferences.add(KEY_AUTO_COLLAPSE_ROOMS);
+        allPreferences.add(KEY_AUTO_COLLAPSE_TIMERS);
+        allPreferences.add(KEY_THEME);
+        allPreferences.add(KEY_USE_COMPACT_DRAWER);
+        allPreferences.add(KEY_VIBRATE_ON_BUTTON_PRESS);
+        allPreferences.add(KEY_VIBRATION_DURATION);
+        allPreferences.add(KEY_CURRENT_APARTMENT_ID);
+        allPreferences.add(KEEP_HISTORY_DURATION);
+        allPreferences.add(KEY_SLEEP_AS_ANDROID_ENABLED);
+        allPreferences.add(KEY_STOCK_ALARM_CLOCK_ENABLED);
+        allPreferences.add(KEY_SHOW_TOAST_IN_BACKGROUND);
+        allPreferences.add(KEY_SEND_ANONYMOUS_CRASH_DATA);
+        allPreferences.add(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
+        allPreferences.add(KEY_LOG_DESTINATION);
+        allPreferences.add(KEY_SHOW_GEOFENCE_NOTIFICATIONS);
+        allPreferences.add(KEY_SHOW_TIMER_NOTIFICATIONS);
+        allPreferences.add(KEY_SHOULD_SHOW_WIZARD);
+        allPreferences.add(KEY_LAUNCHER_ICON);
+
+        return allPreferences;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getValue(@NonNull PreferenceItem preferenceItem) throws ClassCastException {
+        // special treatment for this key, to make playstore mode possible
+        if (KEY_CURRENT_APARTMENT_ID.equals(preferenceItem) && DeveloperPreferencesHandler.getPlayStoreMode()) {
+            DemoModePersistenceHandler demoModePersistanceHandler = new DemoModePersistenceHandler(context);
+            try {
+                Long value = demoModePersistanceHandler.getAllApartments()
+                        .get(0)
+                        .getId();
+                return (T) value;
+            } catch (Exception e) {
+                throw new RuntimeException("Error fetching apartment id for demo mode");
+            }
+        }
+
+        return super.getValue(preferenceItem);
     }
 
     public String getPublicKeyString() {
         return SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
     }
-
-    /**
-     * Get a settings value by key
-     * <p>
-     * Note: Be sure to assign the return value of this method to variable with your expected return type.
-     *
-     * @param preferenceItem Key of setting
-     * @param <T>            expected type of return value (optional)
-     *
-     * @return settings value
-     */
-    @SuppressWarnings("unchecked")
-    @CheckResult
-    public <T> T get(@NonNull SmartphonePreferenceItem preferenceItem) throws ClassCastException {
-        String key = preferenceItem.getKey(context);
-
-        Object value = cachedValues.get(key);
-
-        // if no value was set, return preference default
-        if (value == null) {
-            value = preferenceItem.getDefaultValue();
-            // save default value in file
-            set(preferenceItem, value);
-        } else {
-            // special treatment for this key, to make playstore mode possible
-            if (KEY_CURRENT_APARTMENT_ID.equals(preferenceItem) && DeveloperPreferencesHandler.getPlayStoreMode()) {
-                DemoModePersistenceHandler demoModePersistanceHandler = new DemoModePersistenceHandler(context);
-                try {
-                    value = demoModePersistanceHandler.getAllApartments()
-                            .get(0)
-                            .getId();
-                } catch (Exception e) {
-                    throw new RuntimeException("Error fetching apartment id for demo mode");
-                }
-            }
-        }
-
-        Timber.v("retrieving value \"" + value + "\" for key \"" + key + "\"");
-
-        return (T) preferenceItem.getType()
-                .cast(value);
-    }
-
-    /**
-     * Set a settings value by key
-     *
-     * @param preferenceItem the preference to set a new value for
-     * @param newValue       new value
-     */
-    public void set(@NonNull SmartphonePreferenceItem preferenceItem, @NonNull Object newValue) {
-        String key = preferenceItem.getKey(context);
-
-        // check if the passed in type matches the expected one
-        if (!newValue.getClass()
-                .isAssignableFrom(preferenceItem.getType())) {
-            throw new IllegalArgumentException("Invalid type! Should be " + preferenceItem.getType()
-                    .getCanonicalName() + " but was " + newValue.getClass()
-                    .getCanonicalName());
-        }
-
-        Timber.d("setting new value \"" + newValue + "\" for key \"" + key + "\"");
-
-        // store the new value
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (newValue instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) newValue);
-        } else if (newValue instanceof String) {
-            editor.putString(key, (String) newValue);
-        } else if (newValue instanceof Integer) {
-            editor.putInt(key, (Integer) newValue);
-        } else if (newValue instanceof Float) {
-            editor.putFloat(key, (Float) newValue);
-        } else if (newValue instanceof Long) {
-            editor.putLong(key, (Long) newValue);
-        } else {
-            throw new IllegalArgumentException("Can't save objects of type " + newValue.getClass()
-                    .getCanonicalName());
-        }
-
-        editor.apply();
-
-        forceRefreshCache();
-    }
-
 }

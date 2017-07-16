@@ -49,7 +49,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.wear.service.UtilityService;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create a new Room
@@ -79,7 +79,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         try {
-            long       apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+            long       apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             List<Room> rooms       = persistenceHandler.getRooms(apartmentId);
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
@@ -112,7 +112,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    long apartmentId = smartphonePreferencesHandler.get(KEY_CURRENT_APARTMENT_ID);
+                    long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
 
                     persistenceHandler.addRoom(new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>()));
 
