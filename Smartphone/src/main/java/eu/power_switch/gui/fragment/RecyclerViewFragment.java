@@ -69,11 +69,14 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
     RecyclerView recyclerView;
 
     private Loader dataLoader;
+    private int    pageAnimationDuration;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        pageAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime);
 
         // use loaderManager of fragment, so unique ID across app is not required (only across this fragment)
         dataLoader = getLoaderManager().initLoader(0, null, this);
@@ -88,6 +91,10 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
             @Override
             public RecyclerViewUpdateResult<T> loadInBackground() {
                 try {
+                    // workaround to prevent animation lag by delaying data loading as long as
+                    // the fragment transition animation duration
+                    Thread.sleep(pageAnimationDuration);
+
                     return new RecyclerViewUpdateResult<>(loadListData());
                 } catch (Exception e) {
                     return new RecyclerViewUpdateResult<>(e);
@@ -112,7 +119,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
     }
 
     @Override
-    public void onLoadFinished(Loader<RecyclerViewUpdateResult<T>> loader, RecyclerViewUpdateResult<T> result) {
+    public void onLoadFinished(Loader<RecyclerViewUpdateResult<T>> loader, final RecyclerViewUpdateResult<T> result) {
         if (result.isSuccess()) {
             if (result.getElements()
                     .size() == 0) {

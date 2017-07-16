@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment.phone;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -80,10 +81,14 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 

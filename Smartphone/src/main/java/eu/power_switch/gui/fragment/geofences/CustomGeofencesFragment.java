@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment.geofences;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -84,10 +85,14 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
 
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(),
                 geofences,

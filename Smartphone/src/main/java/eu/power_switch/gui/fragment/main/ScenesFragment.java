@@ -19,6 +19,7 @@
 package eu.power_switch.gui.fragment.main;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -79,10 +80,14 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
 
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this,
                 getActivity(),

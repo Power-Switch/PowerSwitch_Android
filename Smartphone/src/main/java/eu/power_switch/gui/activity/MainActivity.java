@@ -202,6 +202,7 @@ public class MainActivity extends EventBusActivity {
                                 android.R.anim.slide_in_left,
                                 android.R.anim.slide_out_right)
                         .replace(R.id.mainContentFrameLayout, fragment)
+                        .setAllowOptimization(true)
                         .addToBackStack(fragment.getTag())
                         .commit();
 

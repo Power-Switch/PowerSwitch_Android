@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -86,10 +87,14 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
 
         smsEventRecyclerViewAdapter = new SmsEventRecyclerViewAdapter(getActivity(), smsEvents);
         getRecyclerView().setAdapter(smsEventRecyclerViewAdapter);
@@ -130,7 +135,9 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
             showEmpty();
             statusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
-                    PermissionConstants.REQUEST_CODE_SMS_PERMISSION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
+                    PermissionConstants.REQUEST_CODE_SMS_PERMISSION,
+                    Manifest.permission.RECEIVE_SMS,
+                    Manifest.permission.READ_CONTACTS);
         } else {
             refreshSmsEvents();
         }

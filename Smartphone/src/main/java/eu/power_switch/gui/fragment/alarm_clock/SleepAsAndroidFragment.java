@@ -20,6 +20,7 @@ package eu.power_switch.gui.fragment.alarm_clock;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -95,10 +96,14 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     private ArrayList<Action> actions = new ArrayList<>();
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
