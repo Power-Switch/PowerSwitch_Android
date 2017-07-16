@@ -47,8 +47,8 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.call.CallEvent;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
@@ -169,10 +169,10 @@ public class ActionHandlerImpl implements ActionHandler {
         receiver.setLastActivatedButtonId(button.getId());
         persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -305,7 +305,7 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -388,10 +388,10 @@ public class ActionHandlerImpl implements ActionHandler {
             networkHandler.send(networkPackages);
         }
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -479,7 +479,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         networkHandler.send(networkPackages);
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -497,7 +497,7 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeActions(timer.getActions());
 
-            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
                 notificationHandler.createNotification("Timer", "Timer \"" + timer.getName() + "\" executed");
             }
 
@@ -593,7 +593,7 @@ public class ActionHandlerImpl implements ActionHandler {
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
-            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
                 notificationHandler.createNotification(context.getString(R.string.geofence), notificationMessage);
             }
             HistoryHelper.add(persistanceHandler, historyItem);

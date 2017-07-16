@@ -27,7 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
 import eu.power_switch.R;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.wizard.config.ConfigurationHolder;
 
 /**

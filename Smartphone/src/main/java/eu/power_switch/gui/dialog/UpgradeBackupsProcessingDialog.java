@@ -34,7 +34,7 @@ import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.backup.ZipHelper;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -74,7 +74,8 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
             @Override
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
-                    File backupDir = new File(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+                    String backupPath = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+                    File   backupDir  = new File(backupPath);
 
                     FileFilter backupFileFilter = new FileFilter() {
                         @Override
@@ -94,7 +95,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                             publishProgress(0, i, listFiles.length);
 
                             File oldBackup = listFiles[i];
-                            File target    = new File(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
+                            File target    = new File(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
                             if (target.exists()) {
                                 target.delete();
                             }

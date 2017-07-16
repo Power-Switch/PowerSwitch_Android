@@ -52,7 +52,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;
@@ -206,7 +206,8 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
         menu.findItem(R.id.create_geofence)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_geofence)
                     .setVisible(false)
                     .setEnabled(false);
@@ -216,7 +217,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

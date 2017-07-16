@@ -53,8 +53,8 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.log.TimberHelper;
@@ -168,7 +168,8 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
         // Configure Log4J Logger
         boolean internalFileLoggingOnly;
-        if (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION).equals(Integer.valueOf(getString(R.string.value_internal)))) {
+        Integer logDestinationType = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
+        if (logDestinationType.equals(Integer.valueOf(getString(R.string.value_internal)))) {
             internalFileLoggingOnly = true;
         } else {
             internalFileLoggingOnly = false;
@@ -188,7 +189,8 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean enableFabric = smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
+        boolean crashReportingEnabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
+        boolean enableFabric          = crashReportingEnabled || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {
             Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(

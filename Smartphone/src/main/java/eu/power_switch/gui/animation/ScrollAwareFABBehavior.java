@@ -54,7 +54,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      * @param floatingActionButton FAB
      */
     private void animateOut(final FloatingActionButton floatingActionButton) {
-//        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+//        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
 //            return;
 //        }
 
@@ -110,7 +110,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     //
     private void animateIn(FloatingActionButton floatingActionButton) {
-//        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+//        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
 //            return;
 //        }
 

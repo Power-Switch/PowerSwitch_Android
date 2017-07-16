@@ -93,8 +93,8 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.PhoneHelper;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
@@ -231,11 +231,13 @@ public class MainActivity extends EventBusActivity {
         // Load first Fragment
         try {
             Fragment fragment;
-            if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) == SettingsConstants.INVALID_APARTMENT_ID) {
+            long     apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            if (apartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                fragment = RoomSceneTabFragment.newInstance(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+                int defaultTab = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
+                fragment = RoomSceneTabFragment.newInstance(defaultTab);
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
             lastFragmentClasses.push(fragment.getClass());
@@ -251,7 +253,7 @@ public class MainActivity extends EventBusActivity {
         navigationDrawer.setSelection(drawerPositionStack.peek());
         initHistoryDrawer(navigationDrawer);
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
             new AlertDialog.Builder(this).setTitle(R.string.title_sendAnonymousCrashData)
                     .setMessage(R.string.message_sendAnonymousCrashData)
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
@@ -283,7 +285,8 @@ public class MainActivity extends EventBusActivity {
                     .show();
         }
 
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
+            // TODO: enable Wizard when finished
 //            startActivity(WizardActivity.getLaunchIntent(this));
         } else {
             startGatewayAutoDiscovery();
@@ -297,7 +300,9 @@ public class MainActivity extends EventBusActivity {
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
+        boolean autoDiscoverEnabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
+
+        if (autoDiscoverEnabled && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
             new AsyncTask<Void, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
@@ -402,9 +407,10 @@ public class MainActivity extends EventBusActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
+                            int defaultTab = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
-                                    RoomSceneTabFragment.newInstance(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+                                    RoomSceneTabFragment.newInstance(defaultTab));
                             return true;
                         } catch (Exception e) {
                             statusMessageHandler.showErrorMessage(getActivity(), e);

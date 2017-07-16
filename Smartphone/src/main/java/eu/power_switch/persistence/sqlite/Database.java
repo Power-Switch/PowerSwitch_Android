@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.table.action.ActionTable;
 import eu.power_switch.persistence.sqlite.table.action.ReceiverActionTable;
 import eu.power_switch.persistence.sqlite.table.action.RoomActionTable;
@@ -58,7 +59,6 @@ import eu.power_switch.persistence.sqlite.table.timer.TimerWeekdayTable;
 import eu.power_switch.persistence.sqlite.table.widget.ReceiverWidgetTable;
 import eu.power_switch.persistence.sqlite.table.widget.RoomWidgetTable;
 import eu.power_switch.persistence.sqlite.table.widget.SceneWidgetTable;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * This Class is responsible for initializing and upgrading all Database tables

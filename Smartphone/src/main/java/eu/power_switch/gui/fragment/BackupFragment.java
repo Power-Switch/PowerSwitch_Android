@@ -59,7 +59,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
@@ -235,7 +235,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     }
 
     private void updateUI() {
-        textViewBackupPath.setText(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        String backupPath = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+        textViewBackupPath.setText(backupPath);
 
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
             showEmpty();
@@ -305,7 +306,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         menu.findItem(R.id.create_backup)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_backup)
                     .setVisible(false)
                     .setEnabled(false);
@@ -315,7 +317,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

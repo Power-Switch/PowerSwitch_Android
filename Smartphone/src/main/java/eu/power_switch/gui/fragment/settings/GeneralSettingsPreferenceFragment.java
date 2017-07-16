@@ -51,10 +51,10 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -122,7 +122,7 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
 
         mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
-        startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+        startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
 
         autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
         autodiscover.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_DISCOVER);
@@ -166,7 +166,7 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
 
         vibrationDuration = (SliderPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
         vibrationDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION);
-        vibrationDuration.setSummary(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
+        vibrationDuration.setSummary(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
 
         showGeofenceNotifications = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS);
         showGeofenceNotifications.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
@@ -181,12 +181,13 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
         keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
         keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
-        keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
+        keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
 
         final Fragment fragment = this;
         backupPath = findPreference(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
         backupPath.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH);
-        backupPath.setSummary(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        String summary = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+        backupPath.setSummary(summary);
         backupPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -216,12 +217,12 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
         theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
         themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
-        theme.setSummary(themeMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
+        theme.setSummary(themeMap.get(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_THEME)));
 
         launcherIcon = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON);
         launcherIcon.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON);
         launcherIconMap = getListPreferenceEntryValueMap(R.array.entryValues_launcher_icon, R.array.entries_launcher_icon);
-        launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
+        launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
 
         resetTutorial = findPreference(getString(R.string.key_resetTutorial));
         resetTutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -259,7 +260,7 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         logDestination = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
         logDestination.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION);
         logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
-        logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
+        logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
 
         sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
         sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

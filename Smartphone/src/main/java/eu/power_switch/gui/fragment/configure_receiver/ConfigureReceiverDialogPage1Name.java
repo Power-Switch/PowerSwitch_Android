@@ -61,7 +61,7 @@ import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -252,7 +252,8 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         try {
             // Get Rooms
             roomList.clear();
-            List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            long       apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            List<Room> rooms       = persistanceHandler.getRooms(apartmentId);
             for (Room room : rooms) {
                 roomList.add(room.getName());
             }

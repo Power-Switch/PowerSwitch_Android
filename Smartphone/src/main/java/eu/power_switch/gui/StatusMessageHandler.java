@@ -41,7 +41,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
@@ -84,8 +84,7 @@ public class StatusMessageHandler {
         if (MainActivity.isInForeground()) {
             if (view instanceof RecyclerView) {
                 RecyclerView recyclerView = (RecyclerView) view;
-                showSnackbar(recyclerView,
-                        context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable,
+                showSnackbar(recyclerView, context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable,
                         duration);
             } else {
                 showSnackbar(view, context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable, duration);
@@ -111,7 +110,9 @@ public class StatusMessageHandler {
                                 int duration) {
         if (MainActivity.isInForeground()) {
             showSnackbar(MainActivity.getMainAppView(),
-                    context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable,
+                    context.getString(messageResourceId),
+                    context.getString(actionButtonMessageResourceId),
+                    runnable,
                     duration);
         } else {
             showInfoToast(context, context.getString(messageResourceId), duration);
@@ -460,7 +461,8 @@ public class StatusMessageHandler {
      * @param duration duration of toast
      */
     public void showInfoToast(final Context context, final String message, final int duration) {
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
+        boolean backgroundToasts = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND);
+        if (!backgroundToasts) {
             Timber.w("Toast suppressed (disabled): " + message);
             return;
         }

@@ -16,11 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.settings;
+package eu.power_switch.persistence.shared_preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.support.annotation.CheckResult;
 import android.support.annotation.Nullable;
 
 import java.io.File;
@@ -34,6 +35,7 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.persistence.demo_mode.DemoModePersistanceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import lombok.Getter;
 import timber.log.Timber;
 
 /**
@@ -41,6 +43,25 @@ import timber.log.Timber;
  */
 @Singleton
 public class SmartphonePreferencesHandler {
+
+    @Getter
+    public enum PreferenceValue {
+
+        // TODO: use enum instead of string constants
+
+        ShowRoomAllOnOff(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
+
+        private final String key;
+        private final Class  type;
+        private final Object defaultValue;
+
+        <T> PreferenceValue(String key, T defaultValue) {
+            this.key = key;
+            this.type = defaultValue.getClass();
+            this.defaultValue = defaultValue;
+        }
+
+    }
 
     // default values
     public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF                 = true;
@@ -193,14 +214,18 @@ public class SmartphonePreferencesHandler {
 
     /**
      * Get a settings value by key
+     * <p>
+     * Note: Be sure to assign the return value of this method to variable with your expected return type.
      *
      * @param settingsKey Key of setting
      * @param <T>         expected type of return value
      *
      * @return settings value
      */
-    public <T> T get(String settingsKey) throws ClassCastException {
-        // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
+    @SuppressWarnings("unchecked")
+    @CheckResult
+    public <T extends Comparable<? super T>> T get(String settingsKey) throws ClassCastException {
+        Timber.v("retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);
 

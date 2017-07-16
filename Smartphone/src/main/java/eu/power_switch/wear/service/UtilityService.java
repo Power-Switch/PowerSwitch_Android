@@ -44,7 +44,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.wearable.CommunicationHelper;
@@ -196,10 +196,11 @@ public class UtilityService extends DaggerIntentService {
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
                 Timber.d("Getting Data from Database to send to Wearable...");
 
-                if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
+                long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+                if (apartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
                     List<Apartment> apartments = persistanceHandler.getAllApartments();
 
-                    Apartment activeApartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                    Apartment activeApartment = persistanceHandler.getApartment(apartmentId);
 
                     List<Room> rooms = activeApartment.getRooms();
 

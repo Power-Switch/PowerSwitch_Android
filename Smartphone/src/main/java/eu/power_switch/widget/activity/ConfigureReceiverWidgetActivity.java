@@ -49,7 +49,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;
@@ -249,7 +249,8 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                             0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && selectedReceiver.getLastActivatedButtonId()
+                    boolean highlightLastButton = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                    if (highlightLastButton && selectedReceiver.getLastActivatedButtonId()
                             .equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,
                                 ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));

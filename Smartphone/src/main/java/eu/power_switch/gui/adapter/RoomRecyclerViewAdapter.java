@@ -42,7 +42,7 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
@@ -117,9 +117,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(fragmentActivity,
-                            smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    long duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+                    VibrationHandler.vibrate(fragmentActivity, duration);
                 }
 
                 android.widget.Button buttonView = (android.widget.Button) v;
@@ -151,12 +151,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
-            holder.buttonAllOn.setVisibility(View.GONE);
-            holder.buttonAllOff.setVisibility(View.GONE);
-        } else {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
             holder.buttonAllOn.setVisibility(View.VISIBLE);
             holder.buttonAllOff.setVisibility(View.VISIBLE);
+        } else {
+            holder.buttonAllOn.setVisibility(View.GONE);
+            holder.buttonAllOff.setVisibility(View.GONE);
         }
 
         updateReceiverViews(holder, room);
@@ -224,17 +224,18 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final ColorStateList        defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
-                final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
-                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
+                final int     accentColor         = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
+                final boolean highlightLastButton = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                if (highlightLastButton && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
                     buttonView.setTextColor(accentColor);
                 }
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
                     @Override
                     public void onClick(final View v) {
-                        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                            VibrationHandler.vibrate(fragmentActivity,
-                                    smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                            long duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+                            VibrationHandler.vibrate(fragmentActivity, duration);
                         }
 
                         new AsyncTask<Void, Void, Void>() {
@@ -247,7 +248,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                             @Override
                             protected void onPostExecute(Void aVoid) {
-                                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                                if (highlightLastButton) {
                                     for (android.widget.Button button : buttonViews) {
                                         if (button != v) {
                                             button.setTextColor(defaultTextColor);

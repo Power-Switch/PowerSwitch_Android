@@ -34,9 +34,9 @@ import javax.inject.Singleton;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.table.room.RoomGatewayRelationTable;
 import eu.power_switch.persistence.sqlite.table.room.RoomTable;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Provides database methods for managing Rooms
@@ -212,12 +212,13 @@ class RoomHandler {
      */
     @NonNull
     protected Room get(@NonNull SQLiteDatabase database, Long id) throws Exception {
-        Room   room   = null;
+        Room   room;
         Cursor cursor = database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             room = dbToRoom(database, cursor);
-            room.setCollapsed(smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
+            boolean collapse = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+            room.setCollapsed(collapse);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -245,7 +246,7 @@ class RoomHandler {
                 RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+        boolean autoCollapseRooms = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(database, cursor);
@@ -292,7 +293,7 @@ class RoomHandler {
         Cursor     cursor = database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+        boolean autoCollapseRooms = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(database, cursor);

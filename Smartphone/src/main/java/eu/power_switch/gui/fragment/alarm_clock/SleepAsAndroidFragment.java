@@ -60,7 +60,7 @@ import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
 
@@ -102,7 +102,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        switchOnOff.setChecked(smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED));
+        boolean enabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED);
+        switchOnOff.setChecked(enabled);
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -213,7 +214,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -255,7 +256,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         menu.findItem(R.id.add_action)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        if (!useOptionsMenuOnly) {
             menu.findItem(R.id.add_action)
                     .setVisible(false)
                     .setEnabled(false);

@@ -31,7 +31,7 @@ import java.util.Date;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHelper;
@@ -124,7 +124,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
 
             textViewErrorDescription.setText(LogHelper.getStackTraceText(throwable));
 
-            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
+            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
                 textView_automaticCrashReportingDisabledInfo.setVisibility(View.GONE);
             } else {

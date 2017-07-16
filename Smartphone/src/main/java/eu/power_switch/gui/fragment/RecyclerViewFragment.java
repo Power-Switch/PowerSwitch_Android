@@ -42,6 +42,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistanceHandler;
+import lombok.Getter;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -63,6 +64,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
     @BindView(R.id.layoutError)
     LinearLayout layoutError;
 
+    @Getter
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -189,10 +191,6 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         } else if (layoutManager instanceof GridLayoutManager) {
             ((GridLayoutManager) layoutManager).setSpanCount(getSpanCount());
         }
-    }
-
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
     }
 
     /**

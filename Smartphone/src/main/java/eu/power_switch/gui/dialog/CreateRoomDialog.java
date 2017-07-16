@@ -47,7 +47,7 @@ import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 
 /**
@@ -78,7 +78,8 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         try {
-            List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            long       apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            List<Room> rooms       = persistanceHandler.getRooms(apartmentId);
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());
@@ -110,12 +111,9 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    persistanceHandler.addRoom(new Room(null,
-                            smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
-                            getRoomName(),
-                            0,
-                            false,
-                            new ArrayList<Gateway>()));
+                    long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+
+                    persistanceHandler.addRoom(new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>()));
 
                     ConfigureReceiverDialogPage1Name.notifyRoomAdded(getRoomName());
 

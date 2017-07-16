@@ -37,10 +37,10 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentTable;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Provides database methods for managing Apartments
@@ -473,7 +473,8 @@ class ApartmentHandler {
 
         Geofence geofence = geofenceHandler.get(database, getAssociatedGeofenceId(database, apartmentId));
 
-        boolean isActive = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
+        long    activeApartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+        boolean isActive          = apartmentId.equals(activeApartmentId);
 
         Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);
         return apartment;

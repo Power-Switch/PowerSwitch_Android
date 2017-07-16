@@ -38,8 +38,8 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
 /**
  * Created by Markus on 30.06.2017.

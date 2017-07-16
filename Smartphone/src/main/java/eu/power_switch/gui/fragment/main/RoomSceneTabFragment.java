@@ -44,7 +44,7 @@ import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import timber.log.Timber;
@@ -157,7 +157,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            long currentApartmentId = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            long currentApartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 textView_currentApartmentInfo.setText(" - ");
             } else {

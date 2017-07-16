@@ -45,7 +45,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
 /**
  * Dialog to edit a Room
@@ -136,7 +136,8 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
 
                 receivers.addAll(room.getReceivers());
 
-                List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                long       apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+                List<Room> rooms       = persistanceHandler.getRooms(apartmentId);
                 roomNames = new LinkedList<>();
                 for (Room currentRoom : rooms) {
                     roomNames.add(currentRoom.getName());

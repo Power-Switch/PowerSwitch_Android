@@ -20,6 +20,7 @@ package eu.power_switch.shared.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import java.util.HashMap;
@@ -141,7 +142,9 @@ public class WearablePreferencesHandler {
      *
      * @return value
      */
-    public static <T> T get(String settingsKey) throws ClassCastException {
+    @SuppressWarnings("unchecked")
+    @CheckResult
+    public static <T extends Comparable<? super T>> T get(String settingsKey) throws ClassCastException {
         // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);

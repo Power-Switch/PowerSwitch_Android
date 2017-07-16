@@ -30,8 +30,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.history.HistoryItem;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.table.history.HistoryTable;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
@@ -90,7 +90,8 @@ class HistoryHandler {
     private void deleteOldEntries(@NonNull SQLiteDatabase database) throws Exception {
         Calendar calendar = Calendar.getInstance();
 
-        switch (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)) {
+        int duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
+        switch (duration) {
             case SettingsConstants.KEEP_HISTORY_FOREVER:
                 // dont delete anything
                 return;

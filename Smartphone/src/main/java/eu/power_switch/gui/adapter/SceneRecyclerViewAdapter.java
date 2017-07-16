@@ -45,7 +45,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
@@ -125,9 +125,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         holder.buttonActivateScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(fragmentActivity,
-                            smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    long duration = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+                    VibrationHandler.vibrate(fragmentActivity, duration);
                 }
 
                 new AsyncTask<Void, Void, Void>() {

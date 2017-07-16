@@ -55,8 +55,8 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.persistence.sqlite.handler.ReceiverReflectionMagic;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
@@ -99,7 +99,8 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
-            Apartment apartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            long      apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            Apartment apartment   = persistanceHandler.getApartment(apartmentId);
             getConfiguration().setParentApartment(apartment);
         } catch (Exception e) {
             dismiss();

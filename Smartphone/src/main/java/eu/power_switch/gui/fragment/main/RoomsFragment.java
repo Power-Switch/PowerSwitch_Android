@@ -53,7 +53,7 @@ import eu.power_switch.gui.dialog.EditRoomOrderDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
@@ -122,7 +122,8 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
                     }
 
-                    if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+                    long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+                    if (SettingsConstants.INVALID_APARTMENT_ID == apartmentId) {
                         new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
@@ -175,9 +176,11 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
             return true;
         }
 
+        long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
         switch (menuItem.getItemId()) {
             case R.id.create_receiver:
-                if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+
+                if (SettingsConstants.INVALID_APARTMENT_ID == apartmentId) {
                     new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
                             .show();
@@ -188,8 +191,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:
-                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(smartphonePreferencesHandler.<Long>get(
-                        SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(apartmentId);
                 editRoomOrderDialog.setTargetFragment(this, 0);
                 editRoomOrderDialog.show(getFragmentManager(), null);
                 break;
@@ -210,7 +212,8 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         menu.findItem(R.id.reorder_rooms)
                 .setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_receiver)
                     .setVisible(false)
                     .setEnabled(false);
@@ -221,7 +224,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);
@@ -240,7 +243,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
     @Override
     public List<Room> loadListData() throws Exception {
-        long currentApartmentId = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+        long currentApartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
         if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
             // Get Rooms and Receivers
             return persistanceHandler.getRooms(currentApartmentId);

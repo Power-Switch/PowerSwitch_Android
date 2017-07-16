@@ -36,7 +36,7 @@ import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHol
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
@@ -161,7 +161,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                         try {
                             Long existingApartmentId = getConfiguration().getApartment()
                                     .getId();
-                            if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(
+                            if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)
+                                    .equals(
                                     existingApartmentId)) {
                                 persistanceHandler.deleteApartment(existingApartmentId);
 

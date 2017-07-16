@@ -49,7 +49,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialog;
 import eu.power_switch.gui.treeview.FolderTreeNode;
 import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
 import eu.power_switch.gui.treeview.TreeItemFolder;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 /**

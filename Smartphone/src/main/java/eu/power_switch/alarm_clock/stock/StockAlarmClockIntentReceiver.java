@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import timber.log.Timber;
 
@@ -49,7 +49,8 @@ public class StockAlarmClockIntentReceiver extends DaggerBroadcastReceiver {
         Timber.d("Received intent: ", intent);
 
         try {
-            if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED)) {
+            boolean enabled = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED);
+            if (!enabled) {
                 return;
             }
 

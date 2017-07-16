@@ -30,7 +30,7 @@ import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import timber.log.Timber;
 

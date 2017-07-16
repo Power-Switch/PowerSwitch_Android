@@ -51,7 +51,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;
@@ -212,7 +212,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     }
 
     private void updateUI() {
-        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {
@@ -251,7 +251,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         menu.findItem(R.id.search_gateways)
                 .setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
 
-        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        boolean useOptionsMenuOnly = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        if (!useOptionsMenuOnly) {
             menu.findItem(R.id.create_gateway)
                     .setVisible(false)
                     .setEnabled(false);

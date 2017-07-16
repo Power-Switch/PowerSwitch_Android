@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.settings;
+package eu.power_switch.persistence.shared_preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

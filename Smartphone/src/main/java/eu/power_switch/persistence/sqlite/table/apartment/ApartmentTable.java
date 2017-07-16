@@ -21,7 +21,7 @@ package eu.power_switch.persistence.sqlite.table.apartment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
 /**
  * Apartment table description

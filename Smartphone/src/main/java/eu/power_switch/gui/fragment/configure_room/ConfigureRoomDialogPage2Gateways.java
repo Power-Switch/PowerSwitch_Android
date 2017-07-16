@@ -41,7 +41,7 @@ import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -84,7 +84,8 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         try {
-            apartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            long apartmentId = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            apartment = persistanceHandler.getApartment(apartmentId);
             gateways = persistanceHandler.getAllGateways();
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getContentView(), e);
