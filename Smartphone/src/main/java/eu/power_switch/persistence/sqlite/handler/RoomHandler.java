@@ -38,7 +38,7 @@ import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandl
 import eu.power_switch.persistence.sqlite.table.room.RoomGatewayRelationTable;
 import eu.power_switch.persistence.sqlite.table.room.RoomTable;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_AUTO_COLLAPSE_ROOMS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_ROOMS;
 
 /**
  * Provides database methods for managing Rooms

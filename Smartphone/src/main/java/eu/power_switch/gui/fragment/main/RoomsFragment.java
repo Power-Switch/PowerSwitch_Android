@@ -58,8 +58,8 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing a List of all Rooms and Receivers

@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Apartment table description

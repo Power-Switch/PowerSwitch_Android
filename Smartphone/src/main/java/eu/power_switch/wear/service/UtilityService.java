@@ -50,7 +50,7 @@ import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Created by Markus on 06.06.2015.

@@ -60,9 +60,9 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS;
 
 /**
  * Created by Markus on 05.12.2015.

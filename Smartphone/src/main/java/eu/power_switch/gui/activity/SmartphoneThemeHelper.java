@@ -26,7 +26,7 @@ import eu.power_switch.R;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_THEME;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_THEME;
 
 /**
  * Created by Markus on 25.07.2016.

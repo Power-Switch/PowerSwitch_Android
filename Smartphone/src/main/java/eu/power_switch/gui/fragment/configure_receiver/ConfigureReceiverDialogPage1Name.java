@@ -63,7 +63,7 @@ import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHold
 import eu.power_switch.obj.Room;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * "Name" Fragment used in Configure Receiver Dialog

@@ -56,7 +56,7 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing all settings related to Gateways

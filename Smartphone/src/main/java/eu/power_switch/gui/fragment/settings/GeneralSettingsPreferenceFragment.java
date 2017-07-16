@@ -51,8 +51,8 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
+import eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
@@ -64,6 +64,9 @@ import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.wizard.gui.WizardActivity;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_BACKUP_PATH;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KeekpHistoryDuration;
 
 /**
  * Created by Markus on 31.07.2016.
@@ -119,77 +122,78 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
 
     private void initializePreferenceItems() {
 
-        startupDefaultTab = (IntListPreference) findPreference(PreferenceItem.KEY_STARTUP_DEFAULT_TAB.getKey(getContext()));
-        startupDefaultTab.setDefaultValue(PreferenceItem.KEY_STARTUP_DEFAULT_TAB.getDefaultValue());
+        startupDefaultTab = (IntListPreference) findPreference(SmartphonePreferenceItem.KEY_STARTUP_DEFAULT_TAB.getKey(getContext()));
+        startupDefaultTab.setDefaultValue(SmartphonePreferenceItem.KEY_STARTUP_DEFAULT_TAB.getDefaultValue());
 
         mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
-        startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.get(PreferenceItem.KEY_STARTUP_DEFAULT_TAB)));
+        startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_STARTUP_DEFAULT_TAB)));
 
-        autodiscover = (SwitchPreference) findPreference(PreferenceItem.KEY_AUTO_DISCOVER.getKey(getContext()));
-        autodiscover.setDefaultValue(PreferenceItem.KEY_AUTO_DISCOVER.getDefaultValue());
+        autodiscover = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_AUTO_DISCOVER.getKey(getContext()));
+        autodiscover.setDefaultValue(SmartphonePreferenceItem.KEY_AUTO_DISCOVER.getDefaultValue());
         autodiscover.setSummaryOn(R.string.summary_autodiscover_enabled);
         autodiscover.setSummaryOff(R.string.summary_autodiscover_disabled);
 
-        autoCollapseRooms = (SwitchPreference) findPreference(PreferenceItem.KEY_AUTO_COLLAPSE_ROOMS.getKey(getContext()));
-        autoCollapseRooms.setDefaultValue(PreferenceItem.KEY_AUTO_COLLAPSE_ROOMS.getDefaultValue());
+        autoCollapseRooms = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_ROOMS.getKey(getContext()));
+        autoCollapseRooms.setDefaultValue(SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_ROOMS.getDefaultValue());
         autoCollapseRooms.setSummaryOn(R.string.summary_autoCollapseRooms_enabled);
         autoCollapseRooms.setSummaryOff(R.string.summary_autoCollapseRooms_disabled);
 
-        autoCollapseTimers = (SwitchPreference) findPreference(PreferenceItem.KEY_AUTO_COLLAPSE_TIMERS.getKey(getContext()));
-        autoCollapseTimers.setDefaultValue(PreferenceItem.KEY_AUTO_COLLAPSE_TIMERS.getDefaultValue());
+        autoCollapseTimers = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_TIMERS.getKey(getContext()));
+        autoCollapseTimers.setDefaultValue(SmartphonePreferenceItem.KEY_AUTO_COLLAPSE_TIMERS.getDefaultValue());
         autoCollapseTimers.setSummaryOn(R.string.summary_autoCollapseTimers_enabled);
         autoCollapseTimers.setSummaryOff(R.string.summary_autoCollapseTimers_disabled);
 
-        showRoomOnOff = (SwitchPreference) findPreference(PreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF.getKey(getContext()));
-        showRoomOnOff.setDefaultValue(PreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF.getDefaultValue());
+        showRoomOnOff = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF.getKey(getContext()));
+        showRoomOnOff.setDefaultValue(SmartphonePreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF.getDefaultValue());
         showRoomOnOff.setSummaryOn(R.string.summary_showRoomAllOnOff_enabled);
         showRoomOnOff.setSummaryOff(R.string.summary_showRoomAllOnOff_disabled);
 
-        hideFab = (SwitchPreference) findPreference(PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB.getKey(getContext()));
-        hideFab.setDefaultValue(PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB.getDefaultValue());
+        hideFab = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB.getKey(getContext()));
+        hideFab.setDefaultValue(SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB.getDefaultValue());
         hideFab.setSummaryOn(R.string.summary_useOptionsMenuInsteadOfFab_enabled);
         hideFab.setSummaryOff(R.string.summary_useOptionsMenuInsteadOfFab_disabled);
 
-        highlightLastActivatedButton = (SwitchPreference) findPreference(PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON.getKey(getContext()));
-        highlightLastActivatedButton.setDefaultValue(PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON.getDefaultValue());
+        highlightLastActivatedButton = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON.getKey(
+                getContext()));
+        highlightLastActivatedButton.setDefaultValue(SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON.getDefaultValue());
         highlightLastActivatedButton.setSummaryOn(R.string.summary_highlightLastActivatedButton_enabled);
         highlightLastActivatedButton.setSummaryOff(R.string.summary_highlightLastActivatedButton_disabled);
 
-        showBackgroundActionToast = (SwitchPreference) findPreference(PreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND.getKey(getContext()));
-        showBackgroundActionToast.setDefaultValue(PreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND.getDefaultValue());
+        showBackgroundActionToast = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND.getKey(getContext()));
+        showBackgroundActionToast.setDefaultValue(SmartphonePreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND.getDefaultValue());
         showBackgroundActionToast.setSummaryOn(R.string.summary_showBackgroundActionToast_enabled);
         showBackgroundActionToast.setSummaryOff(R.string.summary_showBackgroundActionToast_disabled);
 
-        vibrateOnButtonPress = (SwitchPreference) findPreference(PreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS.getKey(getContext()));
-        vibrateOnButtonPress.setDefaultValue(PreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS.getDefaultValue());
+        vibrateOnButtonPress = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS.getKey(getContext()));
+        vibrateOnButtonPress.setDefaultValue(SmartphonePreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS.getDefaultValue());
         vibrateOnButtonPress.setSummaryOn(R.string.summary_vibrateOnButtonPress_enabled);
         vibrateOnButtonPress.setSummaryOff(R.string.summary_vibrateOnButtonPress_disabled);
 
-        vibrationDuration = (SliderPreference) findPreference(PreferenceItem.KEY_VIBRATION_DURATION.getKey(getContext()));
-        vibrationDuration.setDefaultValue(PreferenceItem.KEY_VIBRATION_DURATION.getDefaultValue());
-        vibrationDuration.setSummary(smartphonePreferencesHandler.get(PreferenceItem.KEY_VIBRATION_DURATION) + " ms");
+        vibrationDuration = (SliderPreference) findPreference(SmartphonePreferenceItem.KEY_VIBRATION_DURATION.getKey(getContext()));
+        vibrationDuration.setDefaultValue(SmartphonePreferenceItem.KEY_VIBRATION_DURATION.getDefaultValue());
+        vibrationDuration.setSummary(smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_VIBRATION_DURATION) + " ms");
 
-        Object defaultValue = PreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS.getDefaultValue();
+        Object defaultValue = SmartphonePreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS.getDefaultValue();
 
-        showGeofenceNotifications = (SwitchPreference) findPreference(PreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS.getKey(getContext()));
+        showGeofenceNotifications = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_SHOW_GEOFENCE_NOTIFICATIONS.getKey(getContext()));
         showGeofenceNotifications.setDefaultValue(defaultValue);
         showGeofenceNotifications.setSummaryOn(R.string.summary_showGeofenceNotifications_enabled);
         showGeofenceNotifications.setSummaryOff(R.string.summary_showGeofenceNotifications_disabled);
 
-        showTimerNotifications = (SwitchPreference) findPreference(PreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS.getKey(getContext()));
-        showTimerNotifications.setDefaultValue(PreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS.getDefaultValue());
+        showTimerNotifications = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS.getKey(getContext()));
+        showTimerNotifications.setDefaultValue(SmartphonePreferenceItem.KEY_SHOW_TIMER_NOTIFICATIONS.getDefaultValue());
         showTimerNotifications.setSummaryOn(R.string.summary_showTimerNotifications_enabled);
         showTimerNotifications.setSummaryOff(R.string.summary_showTimerNotifications_disabled);
 
-        keepHistoryDuration = (IntListPreference) findPreference(PreferenceItem.KeekpHistoryDuration.getKey(getContext()));
-        keepHistoryDuration.setDefaultValue(PreferenceItem.KeekpHistoryDuration.getDefaultValue());
+        keepHistoryDuration = (IntListPreference) findPreference(KeekpHistoryDuration.getKey(getContext()));
+        keepHistoryDuration.setDefaultValue(KeekpHistoryDuration.getDefaultValue());
         keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
-        keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.get(PreferenceItem.KeekpHistoryDuration)));
+        keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.get(KeekpHistoryDuration)));
 
         final Fragment fragment = this;
-        backupPath = findPreference(PreferenceItem.KEY_BACKUP_PATH.getKey(getContext()));
-        backupPath.setDefaultValue(PreferenceItem.KEY_BACKUP_PATH.getDefaultValue());
-        String summary = smartphonePreferencesHandler.get(PreferenceItem.KEY_BACKUP_PATH);
+        backupPath = findPreference(KEY_BACKUP_PATH.getKey(getContext()));
+        backupPath.setDefaultValue(KEY_BACKUP_PATH.getDefaultValue());
+        String summary = smartphonePreferencesHandler.get(KEY_BACKUP_PATH);
         backupPath.setSummary(summary);
         backupPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -217,15 +221,15 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
             }
         });
 
-        theme = (IntListPreference) findPreference(PreferenceItem.KEY_THEME.getKey(getContext()));
-        theme.setDefaultValue(PreferenceItem.KEY_THEME.getDefaultValue());
+        theme = (IntListPreference) findPreference(SmartphonePreferenceItem.KEY_THEME.getKey(getContext()));
+        theme.setDefaultValue(SmartphonePreferenceItem.KEY_THEME.getDefaultValue());
         themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
-        theme.setSummary(themeMap.get(smartphonePreferencesHandler.get(PreferenceItem.KEY_THEME)));
+        theme.setSummary(themeMap.get(smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_THEME)));
 
-        launcherIcon = (IntListPreference) findPreference(PreferenceItem.KEY_LAUNCHER_ICON.getKey(getContext()));
-        launcherIcon.setDefaultValue(PreferenceItem.KEY_LAUNCHER_ICON.getDefaultValue());
+        launcherIcon = (IntListPreference) findPreference(SmartphonePreferenceItem.KEY_LAUNCHER_ICON.getKey(getContext()));
+        launcherIcon.setDefaultValue(SmartphonePreferenceItem.KEY_LAUNCHER_ICON.getDefaultValue());
         launcherIconMap = getListPreferenceEntryValueMap(R.array.entryValues_launcher_icon, R.array.entries_launcher_icon);
-        launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.get(PreferenceItem.KEY_LAUNCHER_ICON)));
+        launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_LAUNCHER_ICON)));
 
         resetTutorial = findPreference(getString(R.string.key_resetTutorial));
         resetTutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -255,15 +259,15 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
             }
         });
 
-        sendAnonymousCrashData = (SwitchPreference) findPreference(PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA.getKey(getContext()));
-        sendAnonymousCrashData.setDefaultValue(PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA.getDefaultValue());
+        sendAnonymousCrashData = (SwitchPreference) findPreference(SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA.getKey(getContext()));
+        sendAnonymousCrashData.setDefaultValue(SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA.getDefaultValue());
         sendAnonymousCrashData.setSummaryOn(R.string.summary_sendAnonymousCrashData_enabled);
         sendAnonymousCrashData.setSummaryOff(R.string.summary_sendAnonymousCrashData_disabled);
 
-        logDestination = (IntListPreference) findPreference(PreferenceItem.KEY_LOG_DESTINATION.getKey(getContext()));
-        logDestination.setDefaultValue(PreferenceItem.KEY_LOG_DESTINATION.getDefaultValue());
+        logDestination = (IntListPreference) findPreference(SmartphonePreferenceItem.KEY_LOG_DESTINATION.getKey(getContext()));
+        logDestination.setDefaultValue(SmartphonePreferenceItem.KEY_LOG_DESTINATION.getDefaultValue());
         logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
-        logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.get(PreferenceItem.KEY_LOG_DESTINATION)));
+        logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.get(SmartphonePreferenceItem.KEY_LOG_DESTINATION)));
 
         sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
         sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -393,7 +397,7 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         smartphonePreferencesHandler.forceRefreshCache();
 
-        PreferenceItem preferenceItem = PreferenceItem.fromKey(getContext(), key);
+        SmartphonePreferenceItem preferenceItem = SmartphonePreferenceItem.fromKey(getContext(), key);
 
         switch (preferenceItem) {
             case KeekpHistoryDuration:

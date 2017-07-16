@@ -29,7 +29,7 @@ import android.support.v7.app.AlertDialog;
 import eu.power_switch.R;
 import eu.power_switch.wizard.config.ConfigurationHolder;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_SHOW_WIZARD;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_SHOW_WIZARD;
 
 /**
  * Wizard main activity

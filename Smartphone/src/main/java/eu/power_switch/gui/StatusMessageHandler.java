@@ -46,7 +46,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_TOAST_IN_BACKGROUND;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state

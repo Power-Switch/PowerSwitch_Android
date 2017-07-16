@@ -37,7 +37,7 @@ import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime

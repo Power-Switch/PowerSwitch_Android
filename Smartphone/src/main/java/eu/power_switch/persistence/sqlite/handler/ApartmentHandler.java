@@ -42,7 +42,7 @@ import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGatewayRelati
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.persistence.sqlite.table.apartment.ApartmentTable;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Provides database methods for managing Apartments

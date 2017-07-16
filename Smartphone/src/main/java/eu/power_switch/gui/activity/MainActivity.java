@@ -101,12 +101,12 @@ import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_AUTO_DISCOVER;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOULD_SHOW_WIZARD;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_STARTUP_DEFAULT_TAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_AUTO_DISCOVER;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOULD_SHOW_WIZARD;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_STARTUP_DEFAULT_TAB;
 
 /**
  * Main entry Activity for the app

@@ -48,7 +48,7 @@ import eu.power_switch.shared.exception.backup.RemoveBackupException;
 import eu.power_switch.shared.exception.backup.RestoreBackupException;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_BACKUP_PATH;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_BACKUP_PATH;
 
 /**
  * Database Handler to access/modify Backups stored on device or external storage

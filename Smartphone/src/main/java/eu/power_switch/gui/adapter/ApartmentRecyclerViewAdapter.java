@@ -37,7 +37,7 @@ import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Adapter to visualize Gateway items in RecyclerView

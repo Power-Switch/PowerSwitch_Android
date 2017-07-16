@@ -68,8 +68,8 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_LOG_DESTINATION;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_LOG_DESTINATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Entry Point for the Application

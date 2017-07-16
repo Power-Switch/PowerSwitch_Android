@@ -64,8 +64,8 @@ import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SLEEP_AS_ANDROID_ENABLED;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SLEEP_AS_ANDROID_ENABLED;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling

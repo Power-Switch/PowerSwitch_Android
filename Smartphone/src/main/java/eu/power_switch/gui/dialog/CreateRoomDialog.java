@@ -49,7 +49,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.wear.service.UtilityService;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create a new Room

@@ -36,7 +36,7 @@ import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_BACKUP_PATH;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_BACKUP_PATH;
 
 /**
  * Backup Upgrade Dialog

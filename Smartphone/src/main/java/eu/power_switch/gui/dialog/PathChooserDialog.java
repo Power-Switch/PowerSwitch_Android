@@ -51,7 +51,7 @@ import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
 import eu.power_switch.gui.treeview.TreeItemFolder;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_BACKUP_PATH;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_BACKUP_PATH;
 
 /**
  * Dialog used to select a Path on SDCard

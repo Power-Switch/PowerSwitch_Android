@@ -35,7 +35,7 @@ import eu.power_switch.persistence.sqlite.table.history.HistoryTable;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KeekpHistoryDuration;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KeekpHistoryDuration;
 
 /**
  * Handler for History related Database actions

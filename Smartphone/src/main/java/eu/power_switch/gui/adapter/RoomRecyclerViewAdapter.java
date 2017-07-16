@@ -47,10 +47,10 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.PreferenceItem.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_SHOW_ROOM_ALL_ON_OFF;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.shared_preferences.SmartphonePreferenceItem.KEY_VIBRATION_DURATION;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView
