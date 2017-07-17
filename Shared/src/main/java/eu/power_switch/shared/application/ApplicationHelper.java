@@ -31,12 +31,15 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import timber.log.Timber;
 
 /**
  * Created by Markus on 08.08.2016.
  */
-public class ApplicationHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ApplicationHelper {
 
     /**
      * Get a text representation of application version name and build number
@@ -100,7 +103,8 @@ public class ApplicationHelper {
      * Launcher Icons
      */
     public enum LauncherIcon {
-        Material, Old;
+        Material,
+        Old;
 
         public static LauncherIcon valueOf(int ordinal) {
             for (LauncherIcon value : values()) {

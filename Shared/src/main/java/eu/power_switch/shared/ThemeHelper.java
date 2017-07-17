@@ -25,10 +25,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Markus on 07.03.2016.
  */
-public class ThemeHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ThemeHelper {
 
     /**
      * Get Color from Theme attribute

@@ -34,7 +34,7 @@ import eu.power_switch.event.WearableSettingsChangedEvent;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 
 /**

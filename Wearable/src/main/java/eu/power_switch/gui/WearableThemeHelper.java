@@ -24,7 +24,7 @@ import android.support.annotation.Nullable;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**

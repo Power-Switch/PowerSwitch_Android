@@ -32,7 +32,7 @@ import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 15.08.2015.

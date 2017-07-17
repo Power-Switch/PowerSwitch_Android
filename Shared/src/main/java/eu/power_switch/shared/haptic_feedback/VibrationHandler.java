@@ -22,21 +22,16 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class to handle everything related to the vibration motor
  * <p/>
  * Created by Markus on 11.10.2015.
  */
-public class VibrationHandler {
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private VibrationHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class VibrationHandler {
 
     /**
      * @param context      any suitable context

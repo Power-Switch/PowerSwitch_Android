@@ -30,7 +30,7 @@ import java.util.Collections;
 
 import eu.power_switch.gui.activity.ValueSelectorActivity;
 import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
  * SettingsItem for boolean type settings

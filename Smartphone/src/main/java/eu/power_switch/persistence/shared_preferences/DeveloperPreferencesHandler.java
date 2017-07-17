@@ -39,10 +39,10 @@ import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 @Singleton
 public class DeveloperPreferencesHandler extends PreferencesHandlerBase {
 
-    public static final PreferenceItem PLAY_STORE_MODE     = new DeveloperPreferenceItem<>(R.string.key_playStoreMode, false);
-    public static final PreferenceItem FORCE_ENABLE_FABRIC = new DeveloperPreferenceItem<>(R.string.key_forceEnableFabric, false);
-    public static final PreferenceItem FORCE_LANGUAGE      = new DeveloperPreferenceItem<>(R.string.key_forceLanguage, false);
-    public static final PreferenceItem LOCALE              = new DeveloperPreferenceItem<>(R.string.key_locale, Locale.GERMAN.toString());
+    public static final PreferenceItem<Boolean> PLAY_STORE_MODE     = new DeveloperPreferenceItem<>(R.string.key_playStoreMode, false);
+    public static final PreferenceItem<Boolean> FORCE_ENABLE_FABRIC = new DeveloperPreferenceItem<>(R.string.key_forceEnableFabric, false);
+    public static final PreferenceItem<Boolean> FORCE_LANGUAGE      = new DeveloperPreferenceItem<>(R.string.key_forceLanguage, false);
+    public static final PreferenceItem<String>  LOCALE              = new DeveloperPreferenceItem<>(R.string.key_locale, Locale.GERMAN.toString());
 
     @Inject
     public DeveloperPreferencesHandler(Context context) {

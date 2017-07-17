@@ -20,25 +20,20 @@ package eu.power_switch.shared.constants;
 
 import java.util.NoSuchElementException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Markus on 20.02.2016.
  */
-public class SleepAsAndroidConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class SleepAsAndroidConstants {
 
     public static final String PACKAGE_NAME = "com.urbandroid.sleep";
 
     private static final String ALARM_TRIGGERED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_START";
     private static final String ALARM_SNOOZED_INTENT   = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
     private static final String ALARM_DISMISSED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS";
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SleepAsAndroidConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
     // Sleep As Android
     public enum Event {

@@ -18,10 +18,14 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Markus on 29.02.2016.
  */
-public class DatabaseConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DatabaseConstants {
 
     /**
      * ID Constants used to identify static Buttons (not used for Universal Buttons)
@@ -33,14 +37,5 @@ public class DatabaseConstants {
     public static final long BUTTON_DOWN_ID = BUTTON_ON_ID - 4;
 
     public static final Integer INVALID_GATEWAY_PORT = -1;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private DatabaseConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
 }

@@ -23,12 +23,16 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Settings for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class SettingsConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class SettingsConstants {
 
     // SharedPreferences
     public static final String SHARED_PREFS_NAME = "eu.power_switch.prefs";
@@ -66,15 +70,6 @@ public class SettingsConstants {
     public static final String DJA_IOVJ                  = "VvWE9iYnB2NTNJMmJVeEFkSkZyUm9pWVNaa3BQV1hXb201dVN4UHdSQ2x5cVdDZXlmeFZTYlN6NGdSNFAwOVlyODlIMXFzNFBQdHRIZ2k1cDNsd2FVT2pwNzlGSVFZb1pmZ";
     public static final String JKD_COAP                  = "0K0RzZDlHS3EvbjYyLzMySFFydkJXcVVQK1FrOE1FNDUvYWM2UTh2YmNtdmlCV0h1T3hUSVB2d1RucU5mdzNpMjJXd1VTZVV0WHRReURLVVpZODJYVjJwY0ZoSGkydnpmWW";
     public static final int    GOOGLE_API_CLIENT_TIMEOUT = 10;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SettingsConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
     // Theme
     @IntDef({THEME_DARK_BLUE, THEME_DARK_RED, THEME_LIGHT_BLUE, THEME_LIGHT_RED, THEME_DAY_NIGHT_BLUE})

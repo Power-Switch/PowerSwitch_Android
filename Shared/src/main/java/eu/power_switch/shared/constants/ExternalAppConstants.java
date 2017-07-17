@@ -18,20 +18,15 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to ExternalAppConstants applications for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class ExternalAppConstants {
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private ExternalAppConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ExternalAppConstants {
 
 }

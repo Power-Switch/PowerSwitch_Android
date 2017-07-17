@@ -45,6 +45,8 @@ import eu.power_switch.shared.R;
 import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.permission.PermissionHelper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import timber.log.Timber;
 
 /**
@@ -52,21 +54,13 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 25.08.2015.
  */
-public class LogHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LogHelper {
 
     /**
      * Default E-Mail recipients
      */
     private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private LogHelper() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
     /**
      * Get all zip file containing all current log files

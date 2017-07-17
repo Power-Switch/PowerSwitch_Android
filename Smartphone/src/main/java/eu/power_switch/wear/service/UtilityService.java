@@ -47,7 +47,7 @@ import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 

@@ -26,7 +26,7 @@ import android.support.annotation.StringRes;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
  * Settings item used for settings list view

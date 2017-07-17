@@ -46,6 +46,8 @@ import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.StatusPrinter;
 import io.fabric.sdk.android.Fabric;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import timber.log.Timber;
 
 /**
@@ -53,7 +55,8 @@ import timber.log.Timber;
  * <p>
  * Created by Markus on 01.07.2017.
  */
-public class TimberHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TimberHelper {
 
     /**
      * Plants all logger trees based on passed in parameters

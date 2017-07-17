@@ -18,23 +18,18 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Markus on 22.12.2015.
  */
-public class PermissionConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PermissionConstants {
 
     public static final int REQUEST_CODE_STORAGE_PERMISSION  = 123;
     public static final int REQUEST_CODE_LOCATION_PERMISSION = 124;
     public static final int REQUEST_CODE_PHONE_PERMISSION    = 125;
     public static final int REQUEST_CODE_SMS_PERMISSION      = 126;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private PermissionConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
 }

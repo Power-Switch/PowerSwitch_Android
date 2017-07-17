@@ -18,12 +18,16 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Wearable app and communication for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class WearableConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class WearableConstants {
 
     public static final String ANDROID_WEAR_PACKAGE_NAME = "com.google.android.wearable.app";
 
@@ -66,12 +70,4 @@ public class WearableConstants {
     public static final String KEY_BUTTON_ID    = "[ButtonId]";
     public static final String KEY_SCENE_ID     = "[SceneId]";
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private WearableConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

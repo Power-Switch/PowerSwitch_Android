@@ -25,12 +25,15 @@ import com.google.android.gms.wearable.DataMap;
 import java.util.ArrayList;
 
 import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Markus on 25.07.2016.
  */
-public class CommunicationHelper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CommunicationHelper {
 
     /**
      * This method extracts settings data contained in a DataMap Array and saves it into the local PreferenceHandler.

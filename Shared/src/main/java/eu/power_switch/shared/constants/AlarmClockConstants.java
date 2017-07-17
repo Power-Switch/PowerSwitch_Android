@@ -22,13 +22,16 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import eu.power_switch.shared.Sets;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Class holding constants related to alarm clock features
  * <p/>
  * Created by Markus on 20.02.2016.
  */
-public class AlarmClockConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class AlarmClockConstants {
 
     public static final int STOCK_TAB_INDEX = 0;
     public static final int SAA_TAB_INDEX   = 1;
@@ -83,15 +86,6 @@ public class AlarmClockConstants {
             MOTOROLA_DISMISS_INTENT,
             LG_DISMISS_INTENT,
             NIGHT_CLOCK_DISMISS_INTENT);
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private AlarmClockConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
     public enum Event {
         ALARM_TRIGGERED(0), ALARM_SNOOZED(1), ALARM_DISMISSED(2);

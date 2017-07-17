@@ -42,45 +42,55 @@ import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 @Singleton
 public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
 
-    public static final PreferenceItem GATEWAY_AUTO_DISCOVERY = new SmartphonePreferenceItem<>(R.string.key_autodiscover, true);
+    public static final PreferenceItem<Boolean> GATEWAY_AUTO_DISCOVERY = new SmartphonePreferenceItem<>(R.string.key_autodiscover, true);
 
-    public static final PreferenceItem BACKUP_PATH = new SmartphonePreferenceItem<>(R.string.key_backupPath,
+    public static final PreferenceItem<String> BACKUP_PATH = new SmartphonePreferenceItem<>(R.string.key_backupPath,
             Environment.getExternalStorageDirectory()
                     .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
 
-    public static final PreferenceItem STARTUP_DEFAULT_TAB = new SmartphonePreferenceItem<>(R.string.key_startupDefaultTab,
+    public static final PreferenceItem<Integer> STARTUP_DEFAULT_TAB = new SmartphonePreferenceItem<>(R.string.key_startupDefaultTab,
             SettingsConstants.ROOMS_TAB_INDEX);
 
-    public static final PreferenceItem SHOW_ROOM_ALL_ON_OFF            = new SmartphonePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
-    public static final PreferenceItem HIGHLIGHT_LAST_ACTIVATED_BUTTON = new SmartphonePreferenceItem<>(R.string.key_highlightLastActivatedButton,
+    public static final PreferenceItem<Boolean> SHOW_ROOM_ALL_ON_OFF            = new SmartphonePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
+    public static final PreferenceItem<Boolean> HIGHLIGHT_LAST_ACTIVATED_BUTTON = new SmartphonePreferenceItem<>(R.string.key_highlightLastActivatedButton,
             false);
-    public static final PreferenceItem USE_OPTIONS_MENU_INSTEAD_OF_FAB = new SmartphonePreferenceItem<>(R.string.key_useOptionsMenuInsteadOfFab,
+    public static final PreferenceItem<Boolean> USE_OPTIONS_MENU_INSTEAD_OF_FAB = new SmartphonePreferenceItem<>(R.string.key_useOptionsMenuInsteadOfFab,
             false);
-    public static final PreferenceItem KEY_AUTO_COLLAPSE_ROOMS         = new SmartphonePreferenceItem<>(R.string.key_autoCollapseRooms, false);
-    public static final PreferenceItem KEY_AUTO_COLLAPSE_TIMERS        = new SmartphonePreferenceItem<>(R.string.key_autoCollapseTimers, false);
-    public static final PreferenceItem KEY_THEME                       = new SmartphonePreferenceItem<>(R.string.key_theme,
+    public static final PreferenceItem<Boolean> KEY_AUTO_COLLAPSE_ROOMS         = new SmartphonePreferenceItem<>(R.string.key_autoCollapseRooms,
+            false);
+    public static final PreferenceItem<Boolean> KEY_AUTO_COLLAPSE_TIMERS        = new SmartphonePreferenceItem<>(R.string.key_autoCollapseTimers,
+            false);
+    public static final PreferenceItem<Integer> KEY_THEME                       = new SmartphonePreferenceItem<>(R.string.key_theme,
             SettingsConstants.THEME_DARK_BLUE);
-    public static final PreferenceItem KEY_USE_COMPACT_DRAWER          = new SmartphonePreferenceItem<>(R.string.key_useCompactDrawer, false);
-    public static final PreferenceItem KEY_VIBRATE_ON_BUTTON_PRESS     = new SmartphonePreferenceItem<>(R.string.key_vibrateOnButtonPress, true);
-    public static final PreferenceItem KEY_VIBRATION_DURATION          = new SmartphonePreferenceItem<>(R.string.key_vibrationDuration,
+    public static final PreferenceItem<Boolean> KEY_USE_COMPACT_DRAWER          = new SmartphonePreferenceItem<>(R.string.key_useCompactDrawer,
+            false);
+    public static final PreferenceItem<Boolean> KEY_VIBRATE_ON_BUTTON_PRESS     = new SmartphonePreferenceItem<>(R.string.key_vibrateOnButtonPress,
+            true);
+    public static final PreferenceItem<Integer> KEY_VIBRATION_DURATION          = new SmartphonePreferenceItem<>(R.string.key_vibrationDuration,
             SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
-    public static final PreferenceItem KEY_CURRENT_APARTMENT_ID        = new SmartphonePreferenceItem<>(R.string.key_currentApartmentId,
+    public static final PreferenceItem<Long>    KEY_CURRENT_APARTMENT_ID        = new SmartphonePreferenceItem<>(R.string.key_currentApartmentId,
             SettingsConstants.INVALID_APARTMENT_ID);
-    public static final PreferenceItem KEEP_HISTORY_DURATION           = new SmartphonePreferenceItem<>(R.string.key_keepHistoryDuration,
+    public static final PreferenceItem<Integer> KEEP_HISTORY_DURATION           = new SmartphonePreferenceItem<>(R.string.key_keepHistoryDuration,
             SettingsConstants.KEEP_HISTORY_FOREVER);
-    public static final PreferenceItem KEY_SLEEP_AS_ANDROID_ENABLED    = new SmartphonePreferenceItem<>(R.string.key_sleepAsAndroidEnabled, true);
-    public static final PreferenceItem KEY_STOCK_ALARM_CLOCK_ENABLED   = new SmartphonePreferenceItem<>(R.string.key_stockAlarmClockEnabled, true);
-    public static final PreferenceItem KEY_SHOW_TOAST_IN_BACKGROUND    = new SmartphonePreferenceItem<>(R.string.key_showBackgroundActionToast, true);
-    public static final PreferenceItem KEY_SEND_ANONYMOUS_CRASH_DATA   = new SmartphonePreferenceItem<>(R.string.key_sendAnonymousCrashData, true);
-
-    public static final PreferenceItem KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = new SmartphonePreferenceItem<>(R.string.key_shouldAskSendAnonymousCrashData,
+    public static final PreferenceItem<Boolean> KEY_SLEEP_AS_ANDROID_ENABLED    = new SmartphonePreferenceItem<>(R.string.key_sleepAsAndroidEnabled,
+            true);
+    public static final PreferenceItem<Boolean> KEY_STOCK_ALARM_CLOCK_ENABLED   = new SmartphonePreferenceItem<>(R.string.key_stockAlarmClockEnabled,
+            true);
+    public static final PreferenceItem<Boolean> KEY_SHOW_TOAST_IN_BACKGROUND    = new SmartphonePreferenceItem<>(R.string.key_showBackgroundActionToast,
+            true);
+    public static final PreferenceItem<Boolean> KEY_SEND_ANONYMOUS_CRASH_DATA   = new SmartphonePreferenceItem<>(R.string.key_sendAnonymousCrashData,
             true);
 
-    public static final PreferenceItem KEY_LOG_DESTINATION             = new SmartphonePreferenceItem<>(R.string.key_logDestination, 0);
-    public static final PreferenceItem KEY_SHOW_GEOFENCE_NOTIFICATIONS = new SmartphonePreferenceItem<>(R.string.key_showGeofenceNotifications, true);
-    public static final PreferenceItem KEY_SHOW_TIMER_NOTIFICATIONS    = new SmartphonePreferenceItem<>(R.string.key_showTimerNotifications, true);
-    public static final PreferenceItem KEY_SHOULD_SHOW_WIZARD          = new SmartphonePreferenceItem<>(R.string.key_shouldShowWizard, true);
-    public static final PreferenceItem KEY_LAUNCHER_ICON               = new SmartphonePreferenceItem<>(R.string.key_launcher_icon, 0);
+    public static final PreferenceItem<Boolean> KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = new SmartphonePreferenceItem<>(R.string.key_shouldAskSendAnonymousCrashData,
+            true);
+
+    public static final PreferenceItem<Integer> KEY_LOG_DESTINATION             = new SmartphonePreferenceItem<>(R.string.key_logDestination, 0);
+    public static final PreferenceItem<Boolean> KEY_SHOW_GEOFENCE_NOTIFICATIONS = new SmartphonePreferenceItem<>(R.string.key_showGeofenceNotifications,
+            true);
+    public static final PreferenceItem<Boolean> KEY_SHOW_TIMER_NOTIFICATIONS    = new SmartphonePreferenceItem<>(R.string.key_showTimerNotifications,
+            true);
+    public static final PreferenceItem<Boolean> KEY_SHOULD_SHOW_WIZARD          = new SmartphonePreferenceItem<>(R.string.key_shouldShowWizard, true);
+    public static final PreferenceItem<Integer> KEY_LAUNCHER_ICON               = new SmartphonePreferenceItem<>(R.string.key_launcher_icon, 0);
 
     DeveloperPreferencesHandler developerPreferencesHandler;
 

@@ -20,25 +20,20 @@ package eu.power_switch.shared.constants;
 
 import java.util.NoSuchElementException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Settings Call and SMS stuff
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class PhoneConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PhoneConstants {
 
     // Tabs
     public static final int CALL_TAB_INDEX = 0;
     public static final int SMS_TAB_INDEX  = 1;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private PhoneConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
     public enum CallType {
         INCOMING(0), OUTGOING(1);

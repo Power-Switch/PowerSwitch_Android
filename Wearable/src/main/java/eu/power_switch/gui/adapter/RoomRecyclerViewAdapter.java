@@ -41,7 +41,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 15.08.2015.

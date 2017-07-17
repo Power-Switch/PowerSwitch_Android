@@ -18,23 +18,19 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Timers for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class TimerConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TimerConstants {
 
     // Timer
     public static final String TIMER_ACTIVATION_INTENT = "eu.power_switch.alarm";
     public static final String TIMER_URI_SCHEME        = "timer";
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private TimerConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

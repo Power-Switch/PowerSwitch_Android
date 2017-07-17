@@ -18,12 +18,16 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to internal broadcasts for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class LocalBroadcastConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LocalBroadcastConstants {
 
     // LocalBroadcastConstants
 
@@ -34,13 +38,4 @@ public class LocalBroadcastConstants {
     public static final String INTENT_SMS_EVENTS_CHANGED           = "eu.power_switch.sms_events_changed";
     public static final String INTENT_SMS_EVENT_ACTION_ADDED       = "eu.power_switch.sms_event_action_added";
 
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private LocalBroadcastConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

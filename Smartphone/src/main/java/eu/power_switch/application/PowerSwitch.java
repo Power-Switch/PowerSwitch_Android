@@ -60,7 +60,7 @@ import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.log.TimberHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;

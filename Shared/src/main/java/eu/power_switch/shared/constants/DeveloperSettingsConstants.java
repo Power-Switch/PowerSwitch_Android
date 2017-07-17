@@ -18,22 +18,18 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Wearable app settings
  * <p/>
  * Created by Markus on 13.11.2015.
  */
-public class DeveloperSettingsConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DeveloperSettingsConstants {
 
     // SharedPreferences
     public static final String DEVELOPER_SHARED_PREFS_NAME = "eu.power_switch.developer.prefs";
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private DeveloperSettingsConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

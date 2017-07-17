@@ -43,7 +43,7 @@ import eu.power_switch.settings.BooleanSettingsItem;
 import eu.power_switch.settings.SelectOneSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**

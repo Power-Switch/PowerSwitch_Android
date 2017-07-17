@@ -18,10 +18,14 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Markus on 11.12.2015.
  */
-public class TutorialConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TutorialConstants {
 
     public static final String MAIN_TABS_KEY_PREFIX        = "main_tab_";
     public static final String SETTINGS_TABS_KEY_PREFIX    = "settings_tab_";
@@ -31,15 +35,5 @@ public class TutorialConstants {
     public static final String APARTMENT_KEY               = "APARTMENT_KEY";
     public static final String BACKUP_KEY                  = "BACKUP_KEY";
     public static final String NFC_KEY                     = "NFC_KEY";
-
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private TutorialConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
 }

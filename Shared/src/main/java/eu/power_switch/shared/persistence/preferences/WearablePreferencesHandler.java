@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.shared.settings;
+package eu.power_switch.shared.persistence.preferences;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -26,9 +26,6 @@ import java.util.List;
 
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
-import eu.power_switch.shared.persistence.preferences.WearablePreferenceItem;
 
 /**
  * This class is responsible for accessing and modifying Wear App Settings

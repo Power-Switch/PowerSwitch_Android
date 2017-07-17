@@ -18,12 +18,16 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Widgets for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class WidgetConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class WidgetConstants {
 
     // Widgets
     public static final String WIDGET_ACTION_INTENT = "eu.power_switch.widget_action";
@@ -34,12 +38,4 @@ public class WidgetConstants {
     public static final String KEY_BUTTON    = "Button";
     public static final String KEY_SCENE     = "Scene";
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private WidgetConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

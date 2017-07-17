@@ -34,7 +34,7 @@ import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.SelectOneSettingsItem;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**

@@ -56,7 +56,7 @@ import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**

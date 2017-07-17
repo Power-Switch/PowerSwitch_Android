@@ -18,12 +18,16 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Settings for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class GeofenceConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GeofenceConstants {
 
     // Tabs
     public static final int APARTMENTS_TAB_INDEX = 0;
@@ -36,12 +40,4 @@ public class GeofenceConstants {
      */
     public static final int DEFAULT_GEOFENCE_RADIUS = 500;
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private GeofenceConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

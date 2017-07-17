@@ -18,12 +18,16 @@
 
 package eu.power_switch.shared.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class holding constants related to Api for both Smartphone and Wearable Module
  * <p/>
  * Created by Markus on 11.11.2015.
  */
-public class ApiConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ApiConstants {
 
     // DEPRECATED: Old intents from Versions older than 1.0
     /**
@@ -66,13 +70,4 @@ public class ApiConstants {
     public static final String KEY_REPLACE_VARIABLES_BUTTON    = "KEY_REPLACE_VARIABLES_BUTTON";
     public static final String KEY_REPLACE_VARIABLES_SCENE     = "KEY_REPLACE_VARIABLES_SCENE";
 
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private ApiConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 }

@@ -36,22 +36,16 @@ import org.greenrobot.eventbus.EventBus;
 
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.event.PermissionChangedEvent;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Helper class for Permission handling
  * <p/>
  * Created by Markus on 05.03.2016.
  */
-public class PermissionHelper {
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private PermissionHelper() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PermissionHelper {
 
     /**
      * Send local broadcast to inform listeners about changed permissions

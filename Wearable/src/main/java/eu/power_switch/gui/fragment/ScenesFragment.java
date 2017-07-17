@@ -39,7 +39,7 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**

@@ -24,20 +24,15 @@ import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Provides static methods for creating mutable {@code Set} instances easily and
  * other static methods for working with Sets.
  */
-public class Sets {
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private Sets() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Sets {
 
     /**
      * Creates an empty {@code HashSet} instance.

@@ -54,7 +54,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
