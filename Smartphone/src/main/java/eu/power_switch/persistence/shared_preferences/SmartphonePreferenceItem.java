@@ -20,6 +20,8 @@ package eu.power_switch.persistence.shared_preferences;
 
 import android.support.annotation.StringRes;
 
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+
 /**
  * Created by Markus on 16.07.2017.
  */

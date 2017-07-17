@@ -59,6 +59,7 @@ import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.log.TimberHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
@@ -84,6 +85,12 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
+
+    @Inject
+    DeveloperPreferencesHandler developerPreferencesHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -184,18 +191,28 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         Timber.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Timber.d("Device brand/model: " + LogHelper.getDeviceName());
 
-        // reinitialize after logging framework is up to log current values
-        WearablePreferencesHandler.init(this);
-        DeveloperPreferencesHandler.init(this);
+        // log preferences
+        for (PreferenceItem preferenceItem : smartphonePreferencesHandler.getAllPreferenceItems()) {
+            Timber.d(preferenceItem.getKey(this) + ": " + smartphonePreferencesHandler.getValue(preferenceItem));
+        }
+
+        for (PreferenceItem preferenceItem : wearablePreferencesHandler.getAllPreferenceItems()) {
+            Timber.d(preferenceItem.getKey(this) + ": " + wearablePreferencesHandler.getValue(preferenceItem));
+        }
+
+        for (PreferenceItem preferenceItem : developerPreferencesHandler.getAllPreferenceItems()) {
+            Timber.d(preferenceItem.getKey(this) + ": " + developerPreferencesHandler.getValue(preferenceItem));
+        }
 
         // Configure Fabric
         boolean crashReportingEnabled = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
-        boolean enableFabric          = crashReportingEnabled || DeveloperPreferencesHandler.getForceFabricEnabled();
+        boolean forceFabric           = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.FORCE_ENABLE_FABRIC);
+        boolean enableFabric          = crashReportingEnabled || forceFabric;
 
         if (enableFabric) {
             Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(
                     // disable Crashlytics on debug builds
-                    BuildConfig.DEBUG && !DeveloperPreferencesHandler.getForceFabricEnabled())
+                    BuildConfig.DEBUG && !forceFabric)
                     .build())
                     .build(), new Answers());
         }

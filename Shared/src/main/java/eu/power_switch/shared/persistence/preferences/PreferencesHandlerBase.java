@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.shared_preferences;
+package eu.power_switch.shared.persistence.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -45,11 +45,6 @@ public abstract class PreferencesHandlerBase {
 
         sharedPreferences = context.getSharedPreferences(getSharedPreferencesName(), Context.MODE_PRIVATE);
         forceRefreshCache();
-
-        // doesnt work when logger isn't initialized yet
-        for (PreferenceItem preferenceItem : getAllPreferenceItems()) {
-            Timber.d(preferenceItem.getKey(context) + ": " + getValue(preferenceItem));
-        }
     }
 
     /**
@@ -64,7 +59,7 @@ public abstract class PreferencesHandlerBase {
      */
     @NonNull
     @CheckResult
-    protected abstract List<PreferenceItem> getAllPreferenceItems();
+    public abstract List<PreferenceItem> getAllPreferenceItems();
 
     @Nullable
     @CheckResult

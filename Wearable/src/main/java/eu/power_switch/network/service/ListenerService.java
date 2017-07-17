@@ -59,6 +59,8 @@ public class ListenerService extends WearableListenerService {
     public static final String KEY_ROOM_DATA      = "room_data";
     public static final String KEY_SCENE_DATA     = "scene_data";
 
+    private WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(this);
+
     /**
      * Extract Apartment info from DataMap Array
      *
@@ -234,7 +236,7 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<DataMap> data = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
-                        boolean autoCollapseRooms = WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+                        boolean autoCollapseRooms = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
 
                         String apartmentName = extractApartmentDataMapItems(data);
                         // convert received data to room/receiver/button objects
@@ -253,9 +255,9 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
 
-                        int oldThemeValue = WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME);
-                        CommunicationHelper.extractSettings(settings);
-                        int newThemeValue = WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME);
+                        int oldThemeValue = wearablePreferencesHandler.getValue(WearablePreferencesHandler.THEME);
+                        CommunicationHelper.extractSettings(this, wearablePreferencesHandler, settings);
+                        int newThemeValue = wearablePreferencesHandler.getValue(WearablePreferencesHandler.THEME);
 
                         // notify about changes
                         if (newThemeValue != oldThemeValue) {

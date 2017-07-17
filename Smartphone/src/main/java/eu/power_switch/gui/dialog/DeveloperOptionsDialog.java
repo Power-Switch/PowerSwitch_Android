@@ -30,8 +30,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 
-import java.util.Locale;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -74,16 +72,20 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
     @Inject
     NotificationHandler notificationHandler;
 
+    @Inject
+    DeveloperPreferencesHandler developerPreferencesHandler;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        checkBox_playStoreMode.setChecked(DeveloperPreferencesHandler.getPlayStoreMode());
+        boolean playStoreMode = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.PLAY_STORE_MODE);
+        checkBox_playStoreMode.setChecked(playStoreMode);
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                DeveloperPreferencesHandler.setPlayStoreMode(isChecked);
+                developerPreferencesHandler.setValue(DeveloperPreferencesHandler.PLAY_STORE_MODE, isChecked);
             }
         });
 
@@ -119,15 +121,13 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.locales, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLanguage.setAdapter(adapter);
-        spinnerLanguage.setSelection(getIndex(spinnerLanguage,
-                DeveloperPreferencesHandler.getLocale()
-                        .toString()));
+        spinnerLanguage.setSelection(getIndex(spinnerLanguage, developerPreferencesHandler.<String>getValue(DeveloperPreferencesHandler.LOCALE)));
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String localeString = spinnerLanguage.getItemAtPosition(position)
                         .toString();
-                DeveloperPreferencesHandler.setLocale(new Locale(localeString));
+                developerPreferencesHandler.setValue(DeveloperPreferencesHandler.LOCALE, localeString);
             }
 
             @Override
@@ -135,19 +135,19 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
             }
         });
 
-        checkBoxForceLanguage.setChecked(DeveloperPreferencesHandler.getForceLanguage());
+        checkBoxForceLanguage.setChecked(developerPreferencesHandler.<Boolean>getValue(DeveloperPreferencesHandler.FORCE_LANGUAGE));
         checkBoxForceLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                DeveloperPreferencesHandler.setForceLanguage(isChecked);
+                developerPreferencesHandler.setValue(DeveloperPreferencesHandler.FORCE_LANGUAGE, isChecked);
             }
         });
 
-        checkBox_forceFabricEnabled.setChecked(DeveloperPreferencesHandler.getForceFabricEnabled());
+        checkBox_forceFabricEnabled.setChecked(developerPreferencesHandler.<Boolean>getValue(DeveloperPreferencesHandler.FORCE_ENABLE_FABRIC));
         checkBox_forceFabricEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                DeveloperPreferencesHandler.setForceFabricEnabled(isChecked);
+                developerPreferencesHandler.setValue(DeveloperPreferencesHandler.FORCE_ENABLE_FABRIC, isChecked);
             }
         });
 

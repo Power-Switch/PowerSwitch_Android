@@ -1,4 +1,4 @@
-package eu.power_switch.persistence.shared_preferences;
+package eu.power_switch.shared.persistence.preferences;
 
 import android.content.Context;
 import android.support.annotation.StringRes;

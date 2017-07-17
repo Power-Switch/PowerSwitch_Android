@@ -44,6 +44,12 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
     @Inject
     BackupHandler backupHandler;
 
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
+
+    @Inject
+    DeveloperPreferencesHandler developerPreferencesHandler;
+
     private AsyncTask<Void, Object, AsyncTaskResult<Void>> processingTask;
 
     public static RestoreBackupProcessingDialog newInstance(String filePath) {
@@ -90,9 +96,9 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
                 if (voidAsyncTaskResult.isSuccess()) {
                     onFinishedSuccess();
 
-                    DeveloperPreferencesHandler.forceRefresh();
+                    developerPreferencesHandler.forceRefreshCache();
                     smartphonePreferencesHandler.forceRefreshCache();
-                    WearablePreferencesHandler.forceRefresh();
+                    wearablePreferencesHandler.forceRefreshCache();
 
                     // restart app to apply
                     PowerSwitch.restart(getActivity().getApplicationContext());

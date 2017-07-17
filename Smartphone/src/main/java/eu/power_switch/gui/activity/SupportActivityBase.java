@@ -29,6 +29,7 @@ import android.util.DisplayMetrics;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -68,6 +69,9 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
     @Inject
     protected SmartphonePreferencesHandler smartphonePreferencesHandler;
 
+    @Inject
+    protected DeveloperPreferencesHandler developerPreferencesHandler;
+
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return supportFragmentInjector;
@@ -81,10 +85,10 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         // apply forced locale (if set in developer options)
         applyLocale();
-
-        AndroidInjection.inject(this);
 
         // set Theme before anything else in onCreate();
         switch (getStyle()) {
@@ -100,12 +104,16 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
     }
 
     public void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
+        boolean forceLanguage = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.FORCE_ENABLE_FABRIC);
+        if (forceLanguage) {
+            String localeString = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.LOCALE);
+            Locale locale       = new Locale(localeString);
+
             Resources res = getResources();
             // Change locale settings in the app.
             DisplayMetrics                    dm   = res.getDisplayMetrics();
             android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
+            conf.locale = locale;
             res.updateConfiguration(conf, dm);
         }
     }

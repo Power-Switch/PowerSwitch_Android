@@ -51,7 +51,6 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
-import eu.power_switch.persistence.shared_preferences.PreferenceItem;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
@@ -62,6 +61,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.wizard.gui.WizardActivity;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 

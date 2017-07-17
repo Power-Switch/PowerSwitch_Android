@@ -47,6 +47,7 @@ import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
@@ -64,6 +65,9 @@ public class UtilityService extends DaggerIntentService {
 
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -308,7 +312,7 @@ public class UtilityService extends DaggerIntentService {
         ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         ArrayList<DataMap> settings        = new ArrayList<>();
-        DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap();
+        DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap(this, wearablePreferencesHandler);
         settings.add(settingsDataMap);
 
         if (connectionResult.isSuccess() && googleApiClient.isConnected()) {

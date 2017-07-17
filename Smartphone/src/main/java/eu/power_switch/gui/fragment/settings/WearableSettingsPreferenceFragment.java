@@ -27,6 +27,8 @@ import android.support.v7.preference.Preference;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.event.WearableSettingsChangedEvent;
 import eu.power_switch.settings.IntListPreference;
@@ -47,6 +49,9 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
     private SliderPreference  vibrationDuration;
     private IntListPreference theme;
 
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // set preferences file name
@@ -65,55 +70,61 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
     }
 
     private void initializePreferenceItems() {
-        startupDefaultTab = (IntListPreference) findPreference(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
-        startupDefaultTab.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
-        String[] mainTabNames = getResources().getStringArray(R.array.wear_tab_names);
-        startupDefaultTab.setSummary(mainTabNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)]);
+        startupDefaultTab = (IntListPreference) findPreference(WearablePreferencesHandler.STARTUP_DEFAULT_TAB.getKey(getContext()));
+        startupDefaultTab.setDefaultValue(WearablePreferencesHandler.STARTUP_DEFAULT_TAB.getDefaultValue());
 
-        autoCollapseRooms = (SwitchPreference) findPreference(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
-        autoCollapseRooms.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
+        autoCollapseRooms = (SwitchPreference) findPreference(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS.getKey(getContext()));
+        autoCollapseRooms.setDefaultValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS.getDefaultValue());
         autoCollapseRooms.setSummaryOn(R.string.summary_autoCollapseRooms_enabled);
         autoCollapseRooms.setSummaryOff(R.string.summary_autoCollapseRooms_disabled);
 
-        highlightLastActivatedButton = (SwitchPreference) findPreference(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        highlightLastActivatedButton.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        highlightLastActivatedButton = (SwitchPreference) findPreference(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON.getKey(getContext()));
+        highlightLastActivatedButton.setDefaultValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON.getDefaultValue());
         highlightLastActivatedButton.setSummaryOn(R.string.summary_highlightLastActivatedButton_enabled);
         highlightLastActivatedButton.setSummaryOff(R.string.summary_highlightLastActivatedButton_disabled);
 
-        vibrateOnButtonPress = (SwitchPreference) findPreference(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
-        vibrateOnButtonPress.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
+        vibrateOnButtonPress = (SwitchPreference) findPreference(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS.getKey(getContext()));
+        vibrateOnButtonPress.setDefaultValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS.getDefaultValue());
         vibrateOnButtonPress.setSummaryOn(R.string.summary_vibrateOnButtonPress_enabled);
         vibrateOnButtonPress.setSummaryOff(R.string.summary_vibrateOnButtonPress_disabled);
 
-        vibrationDuration = (SliderPreference) findPreference(WearablePreferencesHandler.KEY_VIBRATION_DURATION);
-        vibrationDuration.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION);
-        vibrationDuration.setSummary(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
+        vibrationDuration = (SliderPreference) findPreference(WearablePreferencesHandler.VIBRATION_DURATION.getKey(getContext()));
+        vibrationDuration.setDefaultValue(WearablePreferencesHandler.VIBRATION_DURATION.getDefaultValue());
 
-        theme = (IntListPreference) findPreference(WearablePreferencesHandler.KEY_THEME);
-        theme.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_THEME);
-        String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
-        theme.setSummary(themeNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)]);
+        theme = (IntListPreference) findPreference(WearablePreferencesHandler.THEME.getKey(getContext()));
+        theme.setDefaultValue(WearablePreferencesHandler.THEME.getDefaultValue());
 
+        updateUI();
     }
 
     private void updateUI() {
-        startupDefaultTab.setValueIndex(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+
+        int startupDefaultTabIndex = wearablePreferencesHandler.getValue(WearablePreferencesHandler.STARTUP_DEFAULT_TAB);
+        startupDefaultTab.setValueIndex(startupDefaultTabIndex);
         String[] mainTabNames = getResources().getStringArray(R.array.wear_tab_names);
-        startupDefaultTab.setSummary(mainTabNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)]);
+        startupDefaultTab.setSummary(mainTabNames[startupDefaultTabIndex]);
 
-        autoCollapseRooms.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
-        highlightLastActivatedButton.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
-        vibrateOnButtonPress.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
-        vibrationDuration.setSummary(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
+        boolean autoCollapseRoomsEnabled = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
+        autoCollapseRooms.setChecked(autoCollapseRoomsEnabled);
 
-        theme.setValueIndex(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
+        boolean highlightLastActivatedButtonEnabled = wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        highlightLastActivatedButton.setChecked(highlightLastActivatedButtonEnabled);
+
+        boolean vibrateOnButtonPressEnabled = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS);
+        vibrateOnButtonPress.setChecked(vibrateOnButtonPressEnabled);
+
+        int vibrationDurationMs = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATION_DURATION);
+        vibrationDuration.setSummary(vibrationDurationMs + " ms");
+
+        int themeIndex = wearablePreferencesHandler.getValue(WearablePreferencesHandler.THEME);
+        theme.setValueIndex(themeIndex);
         String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
-        theme.setSummary(themeNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)]);
+        theme.setSummary(themeNames[themeIndex]);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        WearablePreferencesHandler.forceRefresh();
+        wearablePreferencesHandler.forceRefreshCache();
 
         updateUI();
 

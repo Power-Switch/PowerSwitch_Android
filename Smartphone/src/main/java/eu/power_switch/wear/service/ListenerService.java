@@ -43,6 +43,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
@@ -59,6 +60,9 @@ public class ListenerService extends WearableListenerService {
 
     @Inject
     PersistenceHandler persistenceHandler;
+
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
 
     @Inject
     StatusMessageHandler statusMessageHandler;
@@ -167,7 +171,7 @@ public class ListenerService extends WearableListenerService {
                         DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
-                        CommunicationHelper.extractSettings(settings);
+                        CommunicationHelper.extractSettings(this, wearablePreferencesHandler, settings);
                     }
                 }
             }

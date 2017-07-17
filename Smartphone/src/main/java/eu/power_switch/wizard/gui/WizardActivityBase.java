@@ -27,6 +27,8 @@ import android.util.DisplayMetrics;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
@@ -52,24 +54,31 @@ public abstract class WizardActivityBase extends AppIntro implements HasFragment
     @Inject
     SmartphonePreferencesHandler smartphonePreferencesHandler;
 
+    @Inject
+    DeveloperPreferencesHandler developerPreferencesHandler;
+
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         // apply forced locale (if set in developer options)
         applyLocale();
-
-        AndroidInjection.inject(this);
 
         super.onCreate(savedInstanceState);
     }
 
     private void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
+        boolean forceLanguage = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.FORCE_ENABLE_FABRIC);
+        if (forceLanguage) {
+            String localeString = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.LOCALE);
+            Locale locale       = new Locale(localeString);
+
             Resources res = getResources();
             // Change locale settings in the app.
             DisplayMetrics                    dm   = res.getDisplayMetrics();
             android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
+            conf.locale = locale;
             res.updateConfiguration(conf, dm);
         }
     }

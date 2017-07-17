@@ -19,136 +19,53 @@
 package eu.power_switch.persistence.shared_preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import eu.power_switch.R;
 import eu.power_switch.shared.constants.DeveloperSettingsConstants;
-import timber.log.Timber;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 
 /**
  * Preference handler used to store developer settings
  */
-public class DeveloperPreferencesHandler {
+@Singleton
+public class DeveloperPreferencesHandler extends PreferencesHandlerBase {
 
-    private static SharedPreferences sharedPreferences;
+    public static final PreferenceItem PLAY_STORE_MODE     = new DeveloperPreferenceItem<>(R.string.key_playStoreMode, false);
+    public static final PreferenceItem FORCE_ENABLE_FABRIC = new DeveloperPreferenceItem<>(R.string.key_forceEnableFabric, false);
+    public static final PreferenceItem FORCE_LANGUAGE      = new DeveloperPreferenceItem<>(R.string.key_forceLanguage, false);
+    public static final PreferenceItem LOCALE              = new DeveloperPreferenceItem<>(R.string.key_locale, Locale.GERMAN.toString());
 
-    // cached values
-    private static boolean playStoreModeCache;
-    private static boolean forceLanguageCache;
-    private static boolean forceFabricEnabledCache;
-    private static String localeCache;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private DeveloperPreferencesHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
+    @Inject
+    public DeveloperPreferencesHandler(Context context) {
+        super(context);
     }
 
-    public static void init(Context context) {
-        if (sharedPreferences != null) {
-            forceRefresh();
-            return;
-        }
-        sharedPreferences = context.getSharedPreferences(
-                DeveloperSettingsConstants.DEVELOPER_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-        initCache();
+    @NonNull
+    @Override
+    protected String getSharedPreferencesName() {
+        return DeveloperSettingsConstants.DEVELOPER_SHARED_PREFS_NAME;
     }
 
-    /**
-     * First time initialization of cached values
-     */
-    private static void initCache() {
-        playStoreModeCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_PLAY_STORE_MODE, false);
-        forceLanguageCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_FORCE_LANGUAGE, false);
-        forceFabricEnabledCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, false);
-        localeCache = sharedPreferences.getString(DeveloperSettingsConstants.KEY_LOCALE, Locale.GERMAN.toString());
+    @NonNull
+    @Override
+    public List<PreferenceItem> getAllPreferenceItems() {
+        List<PreferenceItem> allPreferenceItems = new ArrayList<>();
 
-        Timber.d("PlayStoreMode: " + playStoreModeCache);
-        Timber.d("ForceLanguage: " + forceLanguageCache);
-        Timber.d("ForceEnableFabric: " + forceFabricEnabledCache);
-        Timber.d("Locale: " + localeCache);
+        allPreferenceItems.add(PLAY_STORE_MODE);
+        allPreferenceItems.add(FORCE_ENABLE_FABRIC);
+        allPreferenceItems.add(FORCE_LANGUAGE);
+        allPreferenceItems.add(LOCALE);
+
+        return allPreferenceItems;
     }
 
-    /**
-     * Forces an update of the cached values
-     */
-    public static void forceRefresh() {
-        initCache();
-    }
-
-    /**
-     * Retrieves setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @return true if enabled
-     */
-    public static boolean getPlayStoreMode() {
-        return playStoreModeCache;
-    }
-
-    /**
-     * Sets setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @param bool true if enabled
-     */
-    public static void setPlayStoreMode(boolean bool) {
-        Timber.d("setPlayStoreMode: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DeveloperSettingsConstants.KEY_PLAY_STORE_MODE, bool);
-        editor.apply();
-
-        playStoreModeCache = bool;
-    }
-
-    public static boolean getForceLanguage() {
-        return forceLanguageCache;
-    }
-
-    public static void setForceLanguage(boolean bool) {
-        Timber.d("setForceLanguage: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_LANGUAGE, bool);
-        editor.apply();
-
-        forceLanguageCache = bool;
-    }
-
-    public static Locale getLocale() {
-        return new Locale(localeCache);
-    }
-
-    public static void setLocale(Locale locale) {
-        Timber.d("setLocale: " + locale.toString());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(DeveloperSettingsConstants.KEY_LOCALE, locale.toString());
-        editor.apply();
-
-        localeCache = locale.toString();
-    }
-
-    /**
-     * Retrieves setting to force enable Fabric
-     *
-     * @return true if enabled
-     */
-    public static boolean getForceFabricEnabled() {
-        return forceFabricEnabledCache;
-    }
-
-    /**
-     * Sets setting to force enable Fabric
-     *
-     * @param bool true if enabled
-     */
-    public static void setForceFabricEnabled(boolean bool) {
-        Timber.d("setForceFabricEnabled: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, bool);
-        editor.apply();
-
-        forceFabricEnabledCache = bool;
-    }
 }

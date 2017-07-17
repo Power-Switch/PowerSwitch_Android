@@ -16,33 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.dagger;
+package eu.power_switch.persistence.shared_preferences;
 
-import android.content.Context;
+import android.support.annotation.StringRes;
 
-import javax.inject.Singleton;
-
-import dagger.Binds;
-import dagger.Module;
-import dagger.Provides;
-import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.sqlite.handler.SqlitePersistenceHandler;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 
 /**
- * Created by Markus on 12.07.2017.
+ * Created by Markus on 16.07.2017.
  */
-@Module
-public abstract class PersistenceBindingsModule {
+public class DeveloperPreferenceItem<T> extends PreferenceItem<T> {
 
-    @Binds
-    @Singleton
-    public abstract PersistenceHandler providePersistenceHandler(SqlitePersistenceHandler sqlitePersistanceHandler);
-
-    @Provides
-    @Singleton
-    public static WearablePreferencesHandler provideWearablePreferencesHandler(Context context) {
-        return new WearablePreferencesHandler(context);
+    public DeveloperPreferenceItem(@StringRes int keyRes, T defaultValue) {
+        super(keyRes, defaultValue);
     }
-
 }

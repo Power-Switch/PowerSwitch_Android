@@ -33,6 +33,8 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.persistence.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 
 /**
  * Preference handler used to store general app settings
@@ -80,9 +82,12 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
     public static final PreferenceItem KEY_SHOULD_SHOW_WIZARD          = new SmartphonePreferenceItem<>(R.string.key_shouldShowWizard, true);
     public static final PreferenceItem KEY_LAUNCHER_ICON               = new SmartphonePreferenceItem<>(R.string.key_launcher_icon, 0);
 
+    DeveloperPreferencesHandler developerPreferencesHandler;
+
     @Inject
-    public SmartphonePreferencesHandler(Context context) {
+    public SmartphonePreferencesHandler(Context context, DeveloperPreferencesHandler developerPreferencesHandler) {
         super(context);
+        this.developerPreferencesHandler = developerPreferencesHandler;
     }
 
     @Override
@@ -93,7 +98,7 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
 
     @Override
     @NonNull
-    protected List<PreferenceItem> getAllPreferenceItems() {
+    public List<PreferenceItem> getAllPreferenceItems() {
         List<PreferenceItem> allPreferences = new ArrayList<>();
         allPreferences.add(GATEWAY_AUTO_DISCOVERY);
         allPreferences.add(BACKUP_PATH);
@@ -127,15 +132,19 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
     @Override
     public <T> T getValue(@NonNull PreferenceItem preferenceItem) throws ClassCastException {
         // special treatment for this key, to make playstore mode possible
-        if (KEY_CURRENT_APARTMENT_ID.equals(preferenceItem) && DeveloperPreferencesHandler.getPlayStoreMode()) {
-            DemoModePersistenceHandler demoModePersistanceHandler = new DemoModePersistenceHandler(context);
-            try {
-                Long value = demoModePersistanceHandler.getAllApartments()
-                        .get(0)
-                        .getId();
-                return (T) value;
-            } catch (Exception e) {
-                throw new RuntimeException("Error fetching apartment id for demo mode");
+
+        if (KEY_CURRENT_APARTMENT_ID.equals(preferenceItem)) {
+            boolean playStoreModeEnabled = developerPreferencesHandler.getValue(DeveloperPreferencesHandler.PLAY_STORE_MODE);
+            if (playStoreModeEnabled) {
+                DemoModePersistenceHandler demoModePersistanceHandler = new DemoModePersistenceHandler(context);
+                try {
+                    Long value = demoModePersistanceHandler.getAllApartments()
+                            .get(0)
+                            .getId();
+                    return (T) value;
+                } catch (Exception e) {
+                    throw new RuntimeException("Error fetching apartment id for demo mode");
+                }
             }
         }
 

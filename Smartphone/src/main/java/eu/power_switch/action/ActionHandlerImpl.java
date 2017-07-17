@@ -74,17 +74,19 @@ public class ActionHandlerImpl implements ActionHandler {
     private NotificationHandler          notificationHandler;
     private PersistenceHandler           persistenceHandler;
     private SmartphonePreferencesHandler smartphonePreferencesHandler;
+    private WearablePreferencesHandler   wearablePreferencesHandler;
     private StatusMessageHandler         statusMessageHandler;
 
     @Inject
     public ActionHandlerImpl(Context context, NetworkHandler networkHandler, NotificationHandler notificationHandler,
                              PersistenceHandler persistenceHandler, SmartphonePreferencesHandler smartphonePreferencesHandler,
-                             StatusMessageHandler statusMessageHandler) {
+                             WearablePreferencesHandler wearablePreferencesHandler, StatusMessageHandler statusMessageHandler) {
         this.context = context;
         this.networkHandler = networkHandler;
         this.notificationHandler = notificationHandler;
         this.persistenceHandler = persistenceHandler;
         this.smartphonePreferencesHandler = smartphonePreferencesHandler;
+        this.wearablePreferencesHandler = wearablePreferencesHandler;
         this.statusMessageHandler = statusMessageHandler;
     }
 
@@ -175,7 +177,7 @@ public class ActionHandlerImpl implements ActionHandler {
         if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -220,7 +222,8 @@ public class ActionHandlerImpl implements ActionHandler {
                     new HistoryItem((long) -1,
                             Calendar.getInstance(),
                             context.getString(R.string.room_action_history_text,
-                                    room.getName(), Button.getName(context, persistenceHandler, buttonId))));
+                                    room.getName(),
+                                    Button.getName(context, persistenceHandler, buttonId))));
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
             try {
@@ -310,7 +313,7 @@ public class ActionHandlerImpl implements ActionHandler {
         if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -393,7 +396,7 @@ public class ActionHandlerImpl implements ActionHandler {
         if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -484,7 +487,7 @@ public class ActionHandlerImpl implements ActionHandler {
         if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }

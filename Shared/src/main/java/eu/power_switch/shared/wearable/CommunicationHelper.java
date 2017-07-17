@@ -18,10 +18,13 @@
 
 package eu.power_switch.shared.wearable;
 
+import android.content.Context;
+
 import com.google.android.gms.wearable.DataMap;
 
 import java.util.ArrayList;
 
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -34,36 +37,60 @@ public class CommunicationHelper {
      *
      * @param settings received settings data
      */
-    public static void extractSettings(ArrayList<DataMap> settings) {
+    public static void extractSettings(Context context, WearablePreferencesHandler wearablePreferencesHandler, ArrayList<DataMap> settings) {
         // save map values to local preferenceHandler
+        PreferenceItem preferenceItem;
+        String         key;
         for (DataMap dataMapItem : settings) {
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, value);
+            // TODO: a lot of redundancy here, should be cleaned up
+
+            preferenceItem = WearablePreferencesHandler.STARTUP_DEFAULT_TAB;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                int value = dataMapItem.getInt(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS, bool);
+
+            preferenceItem = WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                boolean value = dataMapItem.getBoolean(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, bool);
+
+            preferenceItem = WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                boolean value = dataMapItem.getBoolean(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF, bool);
+
+            preferenceItem = WearablePreferencesHandler.SHOW_ROOM_ALL_ON_OFF;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                boolean value = dataMapItem.getBoolean(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_THEME)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_THEME);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_THEME, value);
+
+            preferenceItem = WearablePreferencesHandler.THEME;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                int value = dataMapItem.getInt(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS, bool);
+
+            preferenceItem = WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                boolean value = dataMapItem.getBoolean(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_VIBRATION_DURATION)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATION_DURATION, value);
+
+            preferenceItem = WearablePreferencesHandler.VIBRATION_DURATION;
+            key = preferenceItem.getKey(context);
+            if (dataMapItem.containsKey(key)) {
+                int value = dataMapItem.getInt(key);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
             }
         }
     }
@@ -73,21 +100,18 @@ public class CommunicationHelper {
      *
      * @return DataMap containing all Wearable settings
      */
-    public static DataMap getSettingsDataMap() {
+    public static DataMap getSettingsDataMap(Context context, WearablePreferencesHandler wearablePreferencesHandler) {
         DataMap settingsDataMap = new DataMap();
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF));
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_THEME, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
+
+        for (PreferenceItem preferenceItem : wearablePreferencesHandler.getAllPreferenceItems()) {
+            Object value = wearablePreferencesHandler.getValue(preferenceItem);
+
+            if (value instanceof Boolean) {
+                settingsDataMap.putBoolean(preferenceItem.getKey(context), (boolean) value);
+            } else if (value instanceof Integer) {
+                settingsDataMap.putInt(preferenceItem.getKey(context), (int) value);
+            }
+        }
 
         return settingsDataMap;
     }

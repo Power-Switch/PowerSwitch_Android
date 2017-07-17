@@ -41,6 +41,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
@@ -49,13 +50,15 @@ import timber.log.Timber;
  */
 public class DataApiHandler {
 
-    private static GoogleApiClient   googleApiClient;
-    protected      boolean           googleApiClientIsConnected;
-    private        MessageApiHandler messageApiHandler;
-    private        Context           context;
+    private static GoogleApiClient            googleApiClient;
+    protected      boolean                    googleApiClientIsConnected;
+    private        MessageApiHandler          messageApiHandler;
+    private        Context                    context;
+    private        WearablePreferencesHandler wearablePreferencesHandler;
 
     public DataApiHandler(Context context) {
         this.context = context;
+        this.wearablePreferencesHandler = new WearablePreferencesHandler(context);
         initPlayServices();
     }
 
@@ -302,7 +305,7 @@ public class DataApiHandler {
                 data = dataMapItem.getDataMap()
                         .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
                 if (data != null) {
-                    CommunicationHelper.extractSettings(data);
+                    CommunicationHelper.extractSettings(context, wearablePreferencesHandler, data);
                     break;
                 }
             }

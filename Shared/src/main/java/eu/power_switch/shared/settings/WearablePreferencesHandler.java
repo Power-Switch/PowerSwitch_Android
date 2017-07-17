@@ -19,16 +19,16 @@
 package eu.power_switch.shared.settings;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
-import timber.log.Timber;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
+import eu.power_switch.shared.persistence.preferences.WearablePreferenceItem;
 
 /**
  * This class is responsible for accessing and modifying Wear App Settings
@@ -38,155 +38,46 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 13.11.2015.
  */
-public class WearablePreferencesHandler {
+public class WearablePreferencesHandler extends PreferencesHandlerBase {
 
     // SharedPreferences
-    public static final String  WEARABLE_SHARED_PREFS_NAME                    = "eu.power_switch.wearable.prefs";
-    // default values
-    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF            = true;
-    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS             = false;
-    public static final int     DEFAULT_VALUE_THEME                           = SettingsConstants.THEME_DARK_BLUE;
-    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS         = true;
-    public static final int     DEFAULT_VALUE_VIBRATION_DURATION              = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-    public static final int     DEFAULT_VALUE_STARTUP_TAB                     = 0;
-    // setting keys
-    public static  String            KEY_SHOW_ROOM_ALL_ON_OFF;
-    public static  String            KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-    public static  String            KEY_AUTO_COLLAPSE_ROOMS;
-    public static  String            KEY_STARTUP_DEFAULT_TAB;
-    public static  String            KEY_THEME;
-    public static  String            KEY_VIBRATE_ON_BUTTON_PRESS;
-    public static  String            KEY_VIBRATION_DURATION;
-    private static SharedPreferences sharedPreferences;
-    private static Map<String, ?>    cachedValues;
+    public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
 
-    // default values for each settings key
-    private static Map<String, Object> defaultValueMap;
+    public static final PreferenceItem SHOW_ROOM_ALL_ON_OFF            = new WearablePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
+    public static final PreferenceItem HIGHLIGHT_LAST_ACTIVATED_BUTTON = new WearablePreferenceItem<>(R.string.key_highlightLastActivatedButton,
+            false);
+    public static final PreferenceItem AUTO_COLLAPSE_ROOMS             = new WearablePreferenceItem<>(R.string.key_autoCollapseRooms, false);
+    public static final PreferenceItem THEME                           = new WearablePreferenceItem<>(R.string.key_theme,
+            SettingsConstants.THEME_DARK_BLUE);
+    public static final PreferenceItem STARTUP_DEFAULT_TAB             = new WearablePreferenceItem<>(R.string.key_startupDefaultTab, 0);
+    public static final PreferenceItem VIBRATE_ON_BUTTON_PRESS         = new WearablePreferenceItem<>(R.string.key_vibrateOnButtonPress, true);
+    public static final PreferenceItem VIBRATION_DURATION              = new WearablePreferenceItem<>(R.string.key_vibrationDuration,
+            SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
 
-    static {
-        defaultValueMap = new HashMap<>();
-        defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
-        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
-        defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
-        defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
-        defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
-        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
+    public WearablePreferencesHandler(Context context) {
+        super(context);
     }
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private WearablePreferencesHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization vie init() method instead.");
+    @NonNull
+    @Override
+    protected String getSharedPreferencesName() {
+        return WEARABLE_SHARED_PREFS_NAME;
     }
 
-    /**
-     * One time initialization of the PreferenceHandler
-     *
-     * @param context any suitable context
-     */
-    public static void init(@NonNull Context context) {
-        sharedPreferences = context.getSharedPreferences(WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-        forceRefresh();
+    @NonNull
+    @Override
+    public List<PreferenceItem> getAllPreferenceItems() {
+        List<PreferenceItem> allPreferenceItems = new ArrayList<>();
 
-        initializePublicKeys(context);
-        initializeDefaultValueMap();
+        allPreferenceItems.add(SHOW_ROOM_ALL_ON_OFF);
+        allPreferenceItems.add(HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        allPreferenceItems.add(AUTO_COLLAPSE_ROOMS);
+        allPreferenceItems.add(THEME);
+        allPreferenceItems.add(STARTUP_DEFAULT_TAB);
+        allPreferenceItems.add(VIBRATE_ON_BUTTON_PRESS);
+        allPreferenceItems.add(VIBRATION_DURATION);
 
-        for (String key : cachedValues.keySet()) {
-            Timber.d(key + ": " + get(key));
-        }
+        return allPreferenceItems;
     }
 
-    private static void initializePublicKeys(Context context) {
-        KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
-        KEY_SHOW_ROOM_ALL_ON_OFF = context.getString(R.string.key_showRoomAllOnOff);
-        KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = context.getString(R.string.key_highlightLastActivatedButton);
-        KEY_AUTO_COLLAPSE_ROOMS = context.getString(R.string.key_autoCollapseRooms);
-        KEY_THEME = context.getString(R.string.key_theme);
-        KEY_VIBRATE_ON_BUTTON_PRESS = context.getString(R.string.key_vibrateOnButtonPress);
-        KEY_VIBRATION_DURATION = context.getString(R.string.key_vibrationDuration);
-    }
-
-    private static void initializeDefaultValueMap() {
-        defaultValueMap = new HashMap<>();
-        defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
-        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
-        defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
-        defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
-        defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
-        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
-
-        for (String key : defaultValueMap.keySet()) {
-            // initialize missing default values
-            get(key);
-        }
-    }
-
-    /**
-     * Forces an update of the cached values
-     */
-    public static void forceRefresh() {
-        cachedValues = sharedPreferences.getAll();
-    }
-
-    /**
-     * Get a settings value by key
-     *
-     * @param settingsKey Key of setting
-     * @param <T>         expected type of return value
-     *
-     * @return value
-     */
-    @SuppressWarnings("unchecked")
-    @CheckResult
-    public static <T extends Comparable<? super T>> T get(String settingsKey) throws ClassCastException {
-        // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
-
-        Object value = cachedValues.get(settingsKey);
-
-        if (value == null) {
-            return (T) getDefaultValue(settingsKey);
-        } else {
-            return (T) value;
-        }
-    }
-
-    private static Object getDefaultValue(String settingsKey) {
-        return defaultValueMap.get(settingsKey);
-    }
-
-    /**
-     * Set a settings value by key
-     *
-     * @param settingsKey Key of setting
-     * @param newValue    new value
-     */
-    public static void set(String settingsKey, Object newValue) {
-        Timber.d("setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (newValue instanceof Boolean) {
-            editor.putBoolean(settingsKey, (Boolean) newValue);
-        } else if (newValue instanceof String) {
-            editor.putString(settingsKey, (String) newValue);
-        } else if (newValue instanceof Integer) {
-            editor.putInt(settingsKey, (Integer) newValue);
-        } else if (newValue instanceof Float) {
-            editor.putFloat(settingsKey, (Float) newValue);
-        } else if (newValue instanceof Long) {
-            editor.putLong(settingsKey, (Long) newValue);
-        } else {
-            throw new IllegalArgumentException("Cant save objects of type " + newValue.getClass());
-        }
-
-        editor.apply();
-
-        forceRefresh();
-    }
 }
