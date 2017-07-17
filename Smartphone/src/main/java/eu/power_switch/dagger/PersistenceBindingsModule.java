@@ -39,7 +39,7 @@ public abstract class PersistenceBindingsModule {
     @Provides
     public static PersistenceHandler providePersistenceHandler(RunConfig runConfig, DemoModePersistenceHandler demoModePersistenceHandler,
                                                                SqlitePersistenceHandler sqlitePersistenceHandler) {
-        switch (runConfig.mode) {
+        switch (runConfig.getMode()) {
             case DEMO:
                 return demoModePersistenceHandler;
             case NORMAL:

@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.application.RunConfig;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.notification.NotificationHandler;
@@ -75,6 +76,9 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
     @Inject
     DeveloperPreferencesHandler developerPreferencesHandler;
 
+    @Inject
+    RunConfig runConfig;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -86,6 +90,11 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 developerPreferencesHandler.setValue(DeveloperPreferencesHandler.PLAY_STORE_MODE, isChecked);
+                if (isChecked) {
+                    runConfig.setMode(RunConfig.Mode.DEMO);
+                } else {
+                    runConfig.setMode(RunConfig.Mode.NORMAL);
+                }
             }
         });
 
