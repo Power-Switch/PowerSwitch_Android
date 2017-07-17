@@ -275,6 +275,15 @@ public interface PersistenceHandler {
     Room getRoom(Long id) throws Exception;
 
     /**
+     * Get the name of a room by its ID.
+     *
+     * @param id the ID of the room
+     *
+     * @return the name of a room object
+     */
+    String getRoomName(Long id) throws Exception;
+
+    /**
      * Get all rooms.
      *
      * @return a list of all rooms
@@ -327,6 +336,15 @@ public interface PersistenceHandler {
     @NonNull
     @WorkerThread
     Receiver getReceiver(Long id) throws Exception;
+
+    /**
+     * Get the name of a receiver by its ID.
+     *
+     * @param id the ID of the receiver
+     *
+     * @return the name of a receiver object
+     */
+    String getReceiverName(Long id) throws Exception;
 
     /**
      * Get all Receivers associated with a Room
@@ -453,6 +471,15 @@ public interface PersistenceHandler {
     @NonNull
     @WorkerThread
     Scene getScene(Long id) throws Exception;
+
+    /**
+     * Get the name of a scene by its ID.
+     *
+     * @param id the ID of the scene
+     *
+     * @return the name of a scene object
+     */
+    String getSceneName(Long id) throws Exception;
 
     /**
      * Get all scenes of a specific Apartment.

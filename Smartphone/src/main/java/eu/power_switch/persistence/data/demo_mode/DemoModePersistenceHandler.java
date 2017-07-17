@@ -134,12 +134,10 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         actionsMap.put(Geofence.EventType.ENTER, new ArrayList<Action>());
 
         apartment_heimat = new Apartment((long) 0,
-                true,
-                "Heimat", rooms_heimat, scenes_heimat, gateways,
+                true, "Heimat", rooms_heimat, scenes_heimat, gateways,
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100, null, actionsMap, Geofence.STATE_NONE));
         apartment_eltern = new Apartment((long) 0,
-                false,
-                "Eltern", rooms_heimat, scenes_heimat, gateways,
+                false, "Eltern", rooms_heimat, scenes_heimat, gateways,
                 new Geofence((long) 0, true, "Eltern", new LatLng(52.437418, 13.573122), 500, null, actionsMap, Geofence.STATE_NONE));
         apartments.add(apartment_heimat);
         apartments.add(apartment_eltern);
@@ -187,8 +185,7 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context,
                 (long) 5,
                 "Nachttische",
-                'E',
-                1, room_schlafzimmer.getId(),
+                'E', 1, room_schlafzimmer.getId(),
                 new ArrayList<Gateway>());
         RECEIVER_ABZUGSHAUBE_KUECHE = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, room_kueche.getId(), new ArrayList<Gateway>());
         RECEIVER_ESSTISCH_KUECHE = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, room_kueche.getId(), new ArrayList<Gateway>());
@@ -439,6 +436,11 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         return null;
     }
 
+    @Override
+    public String getRoomName(Long id) throws Exception {
+        return getRoom(id).getName();
+    }
+
     @NonNull
     @Override
     public List<Room> getAllRooms() throws Exception {
@@ -492,6 +494,11 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         }
 
         return null;
+    }
+
+    @Override
+    public String getReceiverName(Long id) throws Exception {
+        return getReceiver(id).getName();
     }
 
     @NonNull
@@ -583,6 +590,11 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         }
 
         return null;
+    }
+
+    @Override
+    public String getSceneName(Long id) throws Exception {
+        return getScene(id).getName();
     }
 
     @NonNull
@@ -756,8 +768,11 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         timers.add(new WeekdayTimer(0, true, "Abendlicht", c, 0, days, actions));
 
 
-        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, apartment_heimat.getId(), room_kueche.getId(),
-                RECEIVER_KAFFEEMASCHINE_KUECHE.getId(), receiver_ecklampe_wohnzimmer.getButton(OnButton.ID)
+        ReceiverAction timerReceiverAction2 = new ReceiverAction(0,
+                apartment_heimat.getId(),
+                room_kueche.getId(),
+                RECEIVER_KAFFEEMASCHINE_KUECHE.getId(),
+                receiver_ecklampe_wohnzimmer.getButton(OnButton.ID)
                         .getId());
 
         List<Action> actions2 = new ArrayList<>();

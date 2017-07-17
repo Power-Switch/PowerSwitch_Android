@@ -52,7 +52,7 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
     private final PersistenceHandler           persistenceHandler;
     private final AndroidAlarmHandler          androidAlarmHandler;
-    private final ArrayList<Timer>             timers;
+    private final List<Timer>                  timers;
     private final Context                      context;
     private final SmartphonePreferencesHandler smartphonePreferencesHandler;
     private final StatusMessageHandler         statusMessageHandler;
@@ -181,8 +181,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         holder.linearLayoutTimerActions.removeAllViews();
         try {
             for (Action action : timer.getActions()) {
-
-                String readableString = Action.createReadableString(action, persistenceHandler);
+                String readableString = action.createReadableString(context, action, persistenceHandler);
 
                 AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
 

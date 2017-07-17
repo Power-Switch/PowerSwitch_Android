@@ -153,6 +153,22 @@ class SceneHandler {
         return scene;
     }
 
+    public String getName(SQLiteDatabase database, Long id) {
+        String[] columns = {SceneTable.COLUMN_NAME};
+        Cursor   cursor  = database.query(SceneTable.TABLE_NAME, columns, SceneTable.COLUMN_ID + "==" + id, null, null, null, null);
+
+        String name;
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
+        }
+
+        cursor.close();
+        return name;
+    }
+
     public LinkedList<Scene> getByApartment(@NonNull SQLiteDatabase database, Long id) throws Exception {
         LinkedList<Scene> scenes = new LinkedList<>();
         Cursor cursor = database.query(SceneTable.TABLE_NAME,

@@ -141,7 +141,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         spinnerEventType.setOnItemSelectedListener(spinnerInteractionListener);
         spinnerEventType.setOnTouchListener(spinnerInteractionListener);
 
-        recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
+        recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), persistenceHandler, actions);
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {

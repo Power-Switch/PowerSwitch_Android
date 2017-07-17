@@ -97,7 +97,7 @@ public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialo
         });
 
         currentEnterActions = new ArrayList<>();
-        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), currentEnterActions);
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), persistenceHandler, currentEnterActions);
         actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {

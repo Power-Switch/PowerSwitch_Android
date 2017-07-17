@@ -230,7 +230,8 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     public Apartment getApartment(String name) throws Exception {
         SQLiteDatabase database = openReadable();
         try {
-            return apartmentHandler.get(database, name);
+            Apartment apartment = apartmentHandler.get(database, name);
+            return apartment;
         } catch (Exception e) {
             Timber.e(e);
             throw e;
@@ -320,7 +321,8 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     public List<Apartment> getAllApartments() throws Exception {
         SQLiteDatabase database = openReadable();
         try {
-            return apartmentHandler.getAll(database);
+            List<Apartment> allApartments = apartmentHandler.getAll(database);
+            return allApartments;
         } catch (Exception e) {
             Timber.e(e);
             throw e;
@@ -390,11 +392,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * ////////////////////
      * // Room functions //
      * ////////////////////
-     *
      */
 
     @Override
@@ -519,6 +519,19 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     @Override
+    public String getRoomName(Long id) throws Exception {
+        SQLiteDatabase database = openReadable();
+        try {
+            return roomHandler.getName(database, id);
+        } catch (Exception e) {
+            Timber.e(e);
+            throw e;
+        } finally {
+            close(database);
+        }
+    }
+
+    @Override
     @NonNull
     @WorkerThread
     public List<Room> getAllRooms() throws Exception {
@@ -564,11 +577,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * ////////////////////////
      * // Receiver functions //
      * ////////////////////////
-     *
      */
 
     @Override
@@ -608,6 +619,19 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
         SQLiteDatabase database = openReadable();
         try {
             return receiverHandler.get(database, id);
+        } catch (Exception e) {
+            Timber.e(e);
+            throw e;
+        } finally {
+            close(database);
+        }
+    }
+
+    @Override
+    public String getReceiverName(Long id) throws Exception {
+        SQLiteDatabase database = openReadable();
+        try {
+            return receiverHandler.getName(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
@@ -737,11 +761,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * /////////////////////
      * // Scene functions //
      * /////////////////////
-     *
      */
 
     @Override
@@ -820,6 +842,19 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     @Override
+    public String getSceneName(Long id) throws Exception {
+        SQLiteDatabase database = openReadable();
+        try {
+            return sceneHandler.getName(database, id);
+        } catch (Exception e) {
+            Timber.e(e);
+            throw e;
+        } finally {
+            close(database);
+        }
+    }
+
+    @Override
     @NonNull
     @WorkerThread
     public List<Scene> getScenes(Long apartmentId) throws Exception {
@@ -850,11 +885,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * ///////////////////////
      * // Gateway functions //
      * ///////////////////////
-     *
      */
 
     @Override
@@ -996,11 +1029,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * //////////////////////
      * // Widget functions //
      * //////////////////////
-     *
      */
 
     @Override
@@ -1263,11 +1294,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * ////////////////////////////////
      * // Alarm Clock functions //
      * ////////////////////////////////
-     *
      */
 
     @Override
@@ -1301,11 +1330,9 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
     }
 
     /**
-     *
      * ////////////////////////////////
      * // Sleep As Android functions //
      * ////////////////////////////////
-     *
      */
 
     @Override

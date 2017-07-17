@@ -242,6 +242,22 @@ class ReceiverHandler {
         return receivers;
     }
 
+    public String getName(SQLiteDatabase database, Long id) {
+        String[] columns = {ReceiverTable.COLUMN_NAME};
+        Cursor   cursor  = database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "==" + id, null, null, null, null);
+
+        String name;
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
+        }
+
+        cursor.close();
+        return name;
+    }
+
     /**
      * Gets all Receivers in Database
      *

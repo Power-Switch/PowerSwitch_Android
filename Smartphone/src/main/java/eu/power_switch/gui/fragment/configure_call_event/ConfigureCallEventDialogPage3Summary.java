@@ -135,10 +135,10 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
         while (iterator1.hasNext()) {
             Action action = iterator1.next();
 
+            actions += Action.createReadableString(getContext(), action, persistenceHandler);
+
             if (iterator1.hasNext()) {
-                actions += action.toString() + "\n";
-            } else {
-                actions += action.toString();
+                actions += "\n";
             }
         }
 

@@ -33,6 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.persistence.PersistenceHandler;
 
 /**
  * Adapter to visualize Action items in RecyclerView
@@ -43,11 +44,13 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     private List<Action>        actions;
     private Context             context;
     private OnItemClickListener onDeleteClickListener;
+    private PersistenceHandler  persistenceHandler;
 
 
-    public ActionRecyclerViewAdapter(Context context, List<Action> actions) {
-        this.actions = actions;
+    public ActionRecyclerViewAdapter(Context context, PersistenceHandler persistenceHandler, List<Action> actions) {
         this.context = context;
+        this.persistenceHandler = persistenceHandler;
+        this.actions = actions;
     }
 
     public void setOnDeleteClickListener(OnItemClickListener onItemClickListener) {
@@ -64,7 +67,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     @Override
     public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
         final Action action = actions.get(position);
-        holder.description.setText(action.toString());
+        holder.description.setText(Action.createReadableString(context, action, persistenceHandler));
 
         if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);

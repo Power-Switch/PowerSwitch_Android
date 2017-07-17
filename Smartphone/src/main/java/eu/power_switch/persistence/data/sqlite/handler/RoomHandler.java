@@ -286,6 +286,30 @@ class RoomHandler {
     }
 
     /**
+     * Get the name of a room
+     *
+     * @param database
+     * @param id       ID of the room
+     *
+     * @return Name of the Room
+     */
+    public String getName(SQLiteDatabase database, Long id) throws Exception {
+        String[] columns = {RoomTable.COLUMN_NAME};
+        Cursor   cursor  = database.query(RoomTable.TABLE_NAME, columns, RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
+
+        String name;
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
+        }
+
+        cursor.close();
+        return name;
+    }
+
+    /**
      * Gets all Rooms from Database
      *
      * @return List of Rooms

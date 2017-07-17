@@ -99,7 +99,7 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
             }
         });
 
-        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), actions);
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), persistenceHandler, actions);
         actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {

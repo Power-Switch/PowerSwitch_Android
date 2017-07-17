@@ -97,7 +97,7 @@ public class ConfigureGeofenceDialogPage3ExitActions extends ConfigurationDialog
         });
 
         currentExitActions = new ArrayList<>();
-        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), currentExitActions);
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), persistenceHandler, currentExitActions);
         actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {

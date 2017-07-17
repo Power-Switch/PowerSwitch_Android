@@ -124,7 +124,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
         String actionText = "";
         if (getConfiguration().getActions() != null) {
             for (Action action : getConfiguration().getActions()) {
-                actionText += action.toString() + "\n";
+                actionText += Action.createReadableString(getContext(), action, persistenceHandler) + "\n";
             }
         }
         textViewAction.setText(actionText);

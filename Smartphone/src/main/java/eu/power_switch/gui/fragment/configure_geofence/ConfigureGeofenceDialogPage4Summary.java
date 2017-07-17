@@ -106,7 +106,7 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
         List<Action> enterActions    = getConfiguration().getEnterActions();
         if (enterActions != null) {
             for (Action action : enterActions) {
-                enterActionText += action.toString() + "\n";
+                enterActionText += Action.createReadableString(getContext(), action, persistenceHandler) + "\n";
             }
         }
         textViewEnterActions.setText(enterActionText);
@@ -115,7 +115,7 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
         List<Action> exitActions    = getConfiguration().getExitActions();
         if (exitActions != null) {
             for (Action action : exitActions) {
-                exitActionText += action.toString() + "\n";
+                exitActionText += Action.createReadableString(getContext(), action, persistenceHandler) + "\n";
             }
         }
         textViewExitActions.setText(exitActionText);
