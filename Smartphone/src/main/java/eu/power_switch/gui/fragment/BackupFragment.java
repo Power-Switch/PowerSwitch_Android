@@ -60,7 +60,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;

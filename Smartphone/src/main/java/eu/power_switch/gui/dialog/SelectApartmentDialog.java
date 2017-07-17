@@ -37,7 +37,7 @@ import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 
 /**
  * Dialog used to quickly select and activate an Apartment

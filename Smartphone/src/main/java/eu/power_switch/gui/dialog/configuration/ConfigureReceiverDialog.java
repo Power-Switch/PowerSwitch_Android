@@ -55,12 +55,12 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.persistence.sqlite.handler.ReceiverReflectionMagic;
+import eu.power_switch.persistence.data.sqlite.handler.ReceiverReflectionMagic;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to create or modify a Receiver

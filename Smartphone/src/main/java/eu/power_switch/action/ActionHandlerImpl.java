@@ -47,7 +47,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -60,8 +60,8 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS;
 
 /**
  * Created by Markus on 05.12.2015.

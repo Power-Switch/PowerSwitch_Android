@@ -35,13 +35,13 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
 
 /**
  * Intent Receiver for Widgets

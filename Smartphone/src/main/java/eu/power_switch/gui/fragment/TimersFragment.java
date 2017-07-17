@@ -45,7 +45,7 @@ import eu.power_switch.event.TimerChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.timer.Timer;

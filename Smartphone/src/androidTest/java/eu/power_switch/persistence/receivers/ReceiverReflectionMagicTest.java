@@ -28,7 +28,7 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.persistence.DatabaseTest;
-import eu.power_switch.persistence.sqlite.handler.ReceiverReflectionMagic;
+import eu.power_switch.persistence.data.sqlite.handler.ReceiverReflectionMagic;
 
 public class ReceiverReflectionMagicTest extends DatabaseTest {
 

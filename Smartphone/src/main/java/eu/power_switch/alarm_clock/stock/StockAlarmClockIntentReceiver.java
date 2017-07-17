@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import timber.log.Timber;
 

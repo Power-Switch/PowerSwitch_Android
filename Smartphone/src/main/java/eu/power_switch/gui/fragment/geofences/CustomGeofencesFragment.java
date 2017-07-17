@@ -53,7 +53,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;

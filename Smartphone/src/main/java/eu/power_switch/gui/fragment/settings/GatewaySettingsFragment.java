@@ -52,7 +52,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;

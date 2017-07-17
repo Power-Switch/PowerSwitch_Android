@@ -61,11 +61,11 @@ import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling

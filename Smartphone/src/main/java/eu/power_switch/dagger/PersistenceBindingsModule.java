@@ -26,7 +26,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.sqlite.handler.SqlitePersistenceHandler;
+import eu.power_switch.persistence.data.sqlite.handler.SqlitePersistenceHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**

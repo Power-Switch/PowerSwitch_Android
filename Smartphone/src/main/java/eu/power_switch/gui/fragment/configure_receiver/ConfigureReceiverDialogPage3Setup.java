@@ -78,7 +78,7 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.persistence.sqlite.handler.ReceiverReflectionMagic;
+import eu.power_switch.persistence.data.sqlite.handler.ReceiverReflectionMagic;
 import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 import timber.log.Timber;

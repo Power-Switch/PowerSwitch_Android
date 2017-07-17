@@ -50,7 +50,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SmsEventRecyclerViewAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.phone.sms.SmsEvent;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;

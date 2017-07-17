@@ -41,12 +41,12 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state

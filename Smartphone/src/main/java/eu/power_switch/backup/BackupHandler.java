@@ -40,7 +40,7 @@ import javax.inject.Singleton;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.exception.backup.CreateBackupException;

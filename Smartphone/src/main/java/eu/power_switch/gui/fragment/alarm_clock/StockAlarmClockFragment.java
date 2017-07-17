@@ -57,11 +57,11 @@ import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.AlarmClockConstants.Event;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED;
 
 /**
  * Fragment containing all settings related to stock alarm clock event handling

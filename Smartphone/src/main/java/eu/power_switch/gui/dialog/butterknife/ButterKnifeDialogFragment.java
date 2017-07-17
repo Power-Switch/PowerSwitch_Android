@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 
 /**
  * Base class for a DialogFragment backed by ButterKnife

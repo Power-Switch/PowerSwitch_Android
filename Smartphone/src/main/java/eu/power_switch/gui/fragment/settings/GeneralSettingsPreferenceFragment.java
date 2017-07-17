@@ -51,7 +51,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
@@ -65,9 +65,9 @@ import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.wizard.gui.WizardActivity;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.BACKUP_PATH;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_LAUNCHER_ICON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_LOG_DESTINATION;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.BACKUP_PATH;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_LAUNCHER_ICON;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_LOG_DESTINATION;
 
 /**
  * Created by Markus on 31.07.2016.

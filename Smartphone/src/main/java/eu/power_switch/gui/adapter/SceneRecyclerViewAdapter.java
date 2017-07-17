@@ -45,12 +45,12 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
 
 
 /**

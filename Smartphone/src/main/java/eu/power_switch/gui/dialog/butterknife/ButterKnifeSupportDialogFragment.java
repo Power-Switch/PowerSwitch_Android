@@ -35,7 +35,7 @@ import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 
 /**
  * Base class for a DialogFragment backed by ButterKnife

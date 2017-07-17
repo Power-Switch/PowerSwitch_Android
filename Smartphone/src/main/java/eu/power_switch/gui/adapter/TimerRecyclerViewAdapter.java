@@ -37,12 +37,12 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AndroidAlarmHandler;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS;
 
 /**
  * Adapter to visualize Timer items in RecyclerView

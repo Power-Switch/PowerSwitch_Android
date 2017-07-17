@@ -37,10 +37,10 @@ import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.notification.NotificationHandler;
-import eu.power_switch.persistence.shared_preferences.DeveloperPreferencesHandler;
+import eu.power_switch.persistence.preferences.DeveloperPreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
 
 /**
  * Hidden Dialog Menu to access developer options

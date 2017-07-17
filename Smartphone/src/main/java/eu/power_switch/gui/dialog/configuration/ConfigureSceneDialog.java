@@ -39,7 +39,7 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 
 /**

@@ -34,7 +34,7 @@ import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.backup.ZipHelper;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 

@@ -43,7 +43,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Dialog to edit a Room

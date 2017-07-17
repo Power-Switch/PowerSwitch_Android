@@ -42,15 +42,15 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.SHOW_ROOM_ALL_ON_OFF;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_VIBRATION_DURATION;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.SHOW_ROOM_ALL_ON_OFF;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView

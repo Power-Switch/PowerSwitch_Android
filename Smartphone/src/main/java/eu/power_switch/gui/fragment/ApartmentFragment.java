@@ -46,14 +46,14 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.wear.service.UtilityService;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Created by Markus on 25.12.2015.

@@ -23,10 +23,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDelegate;
 
 import eu.power_switch.R;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
-import static eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler.KEY_THEME;
+import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_THEME;
 
 /**
  * Created by Markus on 25.07.2016.

@@ -35,7 +35,7 @@ import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.persistence.shared_preferences.SmartphonePreferencesHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 
 /**
  * ButterKnife base class for implementing a fragment
