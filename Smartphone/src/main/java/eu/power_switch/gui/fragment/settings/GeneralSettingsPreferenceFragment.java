@@ -313,14 +313,18 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
                                                 statusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
                                             }
                                         }
-
-                                        sendLogsEmail.setEnabled(true);
                                         //                        sendLogsProgress.setVisibility(View.GONE);
                                     }
                                 }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         })
                         .setNeutralButton(android.R.string.cancel, null)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                sendLogsEmail.setEnabled(true);
+                            }
+                        })
                         .show();
 
                 sendLogsEmail.setEnabled(false);
