@@ -79,8 +79,8 @@ public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            checkmark = (CircledImageView) itemView.findViewById(R.id.circle);
-            value = (TextView) itemView.findViewById(R.id.value);
+            checkmark = itemView.findViewById(R.id.circle);
+            value = itemView.findViewById(R.id.value);
         }
     }
 }

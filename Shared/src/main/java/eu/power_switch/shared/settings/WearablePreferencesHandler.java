@@ -43,15 +43,16 @@ public class WearablePreferencesHandler extends PreferencesHandlerBase {
     // SharedPreferences
     public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
 
-    public static final PreferenceItem SHOW_ROOM_ALL_ON_OFF            = new WearablePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
-    public static final PreferenceItem HIGHLIGHT_LAST_ACTIVATED_BUTTON = new WearablePreferenceItem<>(R.string.key_highlightLastActivatedButton,
+    public static final PreferenceItem<Boolean> SHOW_ROOM_ALL_ON_OFF            = new WearablePreferenceItem<>(R.string.key_showRoomAllOnOff, true);
+    public static final PreferenceItem<Boolean> HIGHLIGHT_LAST_ACTIVATED_BUTTON = new WearablePreferenceItem<>(R.string.key_highlightLastActivatedButton,
             false);
-    public static final PreferenceItem AUTO_COLLAPSE_ROOMS             = new WearablePreferenceItem<>(R.string.key_autoCollapseRooms, false);
-    public static final PreferenceItem THEME                           = new WearablePreferenceItem<>(R.string.key_theme,
+    public static final PreferenceItem<Boolean> AUTO_COLLAPSE_ROOMS             = new WearablePreferenceItem<>(R.string.key_autoCollapseRooms, false);
+    public static final PreferenceItem<Integer> THEME                           = new WearablePreferenceItem<>(R.string.key_theme,
             SettingsConstants.THEME_DARK_BLUE);
-    public static final PreferenceItem STARTUP_DEFAULT_TAB             = new WearablePreferenceItem<>(R.string.key_startupDefaultTab, 0);
-    public static final PreferenceItem VIBRATE_ON_BUTTON_PRESS         = new WearablePreferenceItem<>(R.string.key_vibrateOnButtonPress, true);
-    public static final PreferenceItem VIBRATION_DURATION              = new WearablePreferenceItem<>(R.string.key_vibrationDuration,
+    public static final PreferenceItem<Integer> STARTUP_DEFAULT_TAB             = new WearablePreferenceItem<>(R.string.key_startupDefaultTab, 0);
+    public static final PreferenceItem<Boolean> VIBRATE_ON_BUTTON_PRESS         = new WearablePreferenceItem<>(R.string.key_vibrateOnButtonPress,
+            true);
+    public static final PreferenceItem<Integer> VIBRATION_DURATION              = new WearablePreferenceItem<>(R.string.key_vibrationDuration,
             SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
 
     public WearablePreferencesHandler(Context context) {

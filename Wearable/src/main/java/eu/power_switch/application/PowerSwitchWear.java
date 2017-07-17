@@ -25,7 +25,6 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
 import eu.power_switch.BuildConfig;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -73,8 +72,5 @@ public class PowerSwitchWear extends Application {
                         .build())
                         .build(),
                 new Answers());
-
-        // One time initialization of handlers for static access
-        WearablePreferencesHandler.init(this);
     }
 }

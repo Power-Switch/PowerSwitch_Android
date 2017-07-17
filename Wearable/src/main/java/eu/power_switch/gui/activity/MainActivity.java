@@ -80,6 +80,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     private RelativeLayout relativeLayoutStatus;
     private FrameLayout    contentFrameLayout;
 
+    private WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(this);
+
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
 
@@ -90,7 +92,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        WearableThemeHelper.applyTheme(this);
+        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -152,7 +154,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
 
         // load first fragment
-        navigationDrawerAdapter.onItemSelected(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+        int index = wearablePreferencesHandler.getValue(WearablePreferencesHandler.STARTUP_DEFAULT_TAB);
+        navigationDrawerAdapter.onItemSelected(index);
         // TODO: Refresh Navigation drawer
 
         // Peeks Navigation drawer on the top.
@@ -300,7 +303,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
             // Get Room Data from Smartphone App
             ArrayList<Room> rooms             = dataApiHandler.getRoomData();
-            boolean         autoCollapseRooms = WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+            boolean         autoCollapseRooms = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
             for (Room room : rooms) {
                 room.setCollapsed(autoCollapseRooms);
             }

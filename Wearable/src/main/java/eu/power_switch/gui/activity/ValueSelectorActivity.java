@@ -49,6 +49,8 @@ public class ValueSelectorActivity<T> extends WearableActivity {
 
     private ArrayList<T> values;
 
+    private WearablePreferencesHandler wearablePreferencesHandler;
+
     public static <T> void newInstance(Context context, ArrayList<T> values, Serializable selectedValue) {
         Intent intent = new Intent(context, ValueSelectorActivity.class);
         intent.putExtra(KEY_VALUES, values);
@@ -59,7 +61,8 @@ public class ValueSelectorActivity<T> extends WearableActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        WearableThemeHelper.applyTheme(this);
+        wearablePreferencesHandler = new WearablePreferencesHandler(this);
+        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_selector);
@@ -72,12 +75,13 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         T selectedValue = (T) getIntent().getExtras()
                 .get(KEY_SELECTED_VALUE);
 
-        WearableListView wearableListView = (WearableListView) findViewById(R.id.listView);
+        WearableListView wearableListView = findViewById(R.id.listView);
         final SelectOneSettingsItem selectOneSettingsItem = new SelectOneSettingsItem(this,
                 IconicsHelper.getTabsIcon(this),
                 R.string.title_startupDefaultTab,
-                WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
-                R.array.wear_tab_names) {
+                WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
+                R.array.wear_tab_names,
+                wearablePreferencesHandler) {
         };
         final ValueSelectorListAdapter<T> listAdapter = new ValueSelectorListAdapter<>(this, selectOneSettingsItem);
         wearableListView.setAdapter(listAdapter);
@@ -89,7 +93,8 @@ public class ValueSelectorActivity<T> extends WearableActivity {
                 }
 
                 ValueSelectorListAdapter.ItemViewHolder holder = (ValueSelectorListAdapter.ItemViewHolder) viewHolder;
-                T                                       value  = values.get(viewHolder.getAdapterPosition());
+
+                T value = values.get(viewHolder.getAdapterPosition());
 
                 selectOneSettingsItem.setValue(holder.getAdapterPosition());
                 Timber.d("selected value: " + value);

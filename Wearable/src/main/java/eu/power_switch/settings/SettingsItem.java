@@ -25,6 +25,7 @@ import android.support.annotation.StringRes;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -34,10 +35,11 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public abstract class SettingsItem<T> {
 
-    protected Context context;
-    private String description;
-    private IconicsDrawable icon;
-    private String settingsKey;
+    protected Context                    context;
+    private   String                     description;
+    private   IconicsDrawable            icon;
+    private   PreferenceItem<T>          preferenceItem;
+    private   WearablePreferencesHandler wearablePreferencesHandler;
 
     /**
      * Constructor
@@ -45,13 +47,16 @@ public abstract class SettingsItem<T> {
      * @param context
      * @param iconDrawable
      * @param description
-     * @param settingsKey
+     * @param preferenceItem
+     * @param wearablePreferencesHandler
      */
-    public SettingsItem(@NonNull Context context, @NonNull IconicsDrawable iconDrawable, @StringRes int description, @NonNull String settingsKey) {
+    public SettingsItem(@NonNull Context context, @NonNull IconicsDrawable iconDrawable, @StringRes int description,
+                        @NonNull PreferenceItem<T> preferenceItem, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
         this.context = context;
         this.icon = iconDrawable;
         this.description = context.getString(description);
-        this.settingsKey = settingsKey;
+        this.preferenceItem = preferenceItem;
+        this.wearablePreferencesHandler = wearablePreferencesHandler;
     }
 
     /**
@@ -78,7 +83,7 @@ public abstract class SettingsItem<T> {
      * @return value
      */
     public T getValue() {
-        return WearablePreferencesHandler.get(settingsKey);
+        return wearablePreferencesHandler.getValue(preferenceItem);
     }
 
     /**
@@ -87,7 +92,7 @@ public abstract class SettingsItem<T> {
      * @param newValue
      */
     public void setValue(T newValue) {
-        WearablePreferencesHandler.set(settingsKey, newValue);
+        wearablePreferencesHandler.setValue(preferenceItem, newValue);
     }
 
     /**
@@ -105,6 +110,7 @@ public abstract class SettingsItem<T> {
      * This method should always return something
      *
      * @param value value to get description for
+     *
      * @return value description
      */
     public abstract String getValueDescription(T value);

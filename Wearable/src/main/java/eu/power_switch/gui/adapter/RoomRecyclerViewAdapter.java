@@ -49,17 +49,20 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
 
     // Store a member variable for the users
-    private ArrayList<Room> rooms;
-    private Context         context;
-    private DataApiHandler  dataApiHandler;
-    private RecyclerView    parentRecyclerView;
+    private ArrayList<Room>            rooms;
+    private Context                    context;
+    private DataApiHandler             dataApiHandler;
+    private RecyclerView               parentRecyclerView;
+    private WearablePreferencesHandler wearablePreferencesHandler;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Room> rooms, DataApiHandler dataApiHandler) {
+    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Room> rooms, DataApiHandler dataApiHandler,
+                                   WearablePreferencesHandler wearablePreferencesHandler) {
         this.rooms = rooms;
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
         this.dataApiHandler = dataApiHandler;
+        this.wearablePreferencesHandler = wearablePreferencesHandler;
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -114,9 +117,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(context, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
-                }
+                giveVibrationFeedback();
 
                 android.widget.Button button = (android.widget.Button) v;
 
@@ -142,7 +143,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     }
                 }
 
-                if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     notifyDataSetChanged();
                 }
             }
@@ -179,7 +180,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
 
-                if (button.getId() == receiver.getLastActivatedButtonId() && WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                if (button.getId() == receiver.getLastActivatedButtonId() && wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     buttonView.setTextColor(accentColor);
                 }
 
@@ -187,17 +188,14 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     @Override
                     public void onClick(View v) {
                         // Vibration Feedback
-                        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                            VibrationHandler.vibrate(context,
-                                    WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
-                        }
+                        giveVibrationFeedback();
 
                         // Send Action to Smartphone app
                         String actionString = DataApiHandler.buildReceiverActionString(room, receiver, button);
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
                         receiver.setLastActivatedButtonId(button.getId());
-                        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                        if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);
@@ -231,6 +229,13 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         }
     }
 
+    private void giveVibrationFeedback() {
+        if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
+            int duration = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATION_DURATION);
+            VibrationHandler.vibrate(context, duration);
+        }
+    }
+
     // Return the total count of items
     @Override
     public int getItemCount() {
@@ -253,12 +258,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.roomName = (TextView) itemView.findViewById(R.id.textView_room_name);
-            this.linearLayout_AllOnOffButtons = (LinearLayout) itemView.findViewById(R.id.linearLayout_AllOnOffButtons);
-            this.buttonAllOn = (android.widget.Button) itemView.findViewById(R.id.button_AllOn);
-            this.buttonAllOff = (android.widget.Button) itemView.findViewById(R.id.button_AllOff);
-            this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.roomName = itemView.findViewById(R.id.textView_room_name);
+            this.linearLayout_AllOnOffButtons = itemView.findViewById(R.id.linearLayout_AllOnOffButtons);
+            this.buttonAllOn = itemView.findViewById(R.id.button_AllOn);
+            this.buttonAllOff = itemView.findViewById(R.id.button_AllOff);
+            this.linearLayoutOfReceivers = itemView.findViewById(R.id.layout_of_receivers);
+            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

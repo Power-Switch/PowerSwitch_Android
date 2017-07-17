@@ -39,6 +39,7 @@ import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -58,6 +59,8 @@ public class RoomsFragment extends Fragment {
     private LinearLayout      layoutLoading;
     private LinearLayout      layoutEmpty;
 
+    private WearablePreferencesHandler wearablePreferencesHandler;
+
     /**
      * Used to notify Rooms Fragment (this) that data has changed
      *
@@ -76,6 +79,7 @@ public class RoomsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
 
         dataApiHandler = new DataApiHandler(getActivity());
+        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -97,7 +101,11 @@ public class RoomsFragment extends Fragment {
         layoutEmpty.setVisibility(View.GONE);
 
         roomsRecyclerView = rootView.findViewById(R.id.rooms_recyclerView);
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), roomsRecyclerView, MainActivity.roomList, dataApiHandler);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(),
+                roomsRecyclerView,
+                MainActivity.roomList,
+                dataApiHandler,
+                wearablePreferencesHandler);
         roomsRecyclerView.setAdapter(roomsRecyclerViewAdapter);
 
         SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);

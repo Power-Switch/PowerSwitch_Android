@@ -73,9 +73,9 @@ public class SettingsListAdapter extends WearableListView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            icon = (CircledImageView) itemView.findViewById(R.id.circle);
-            description = (TextView) itemView.findViewById(R.id.description);
-            value = (TextView) itemView.findViewById(R.id.value);
+            icon = itemView.findViewById(R.id.circle);
+            description = itemView.findViewById(R.id.description);
+            value = itemView.findViewById(R.id.value);
         }
     }
 }

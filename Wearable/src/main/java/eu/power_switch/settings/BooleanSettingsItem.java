@@ -19,11 +19,14 @@
 package eu.power_switch.settings;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
 import eu.power_switch.R;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * SettingsItem for boolean type settings
@@ -32,8 +35,9 @@ import eu.power_switch.R;
  */
 public class BooleanSettingsItem extends SettingsItem<Boolean> {
 
-    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey) {
-        super(context, iconDrawable, description, settingsKey);
+    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, PreferenceItem<Boolean> preferenceItem,
+                               @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
+        super(context, iconDrawable, description, preferenceItem, wearablePreferencesHandler);
     }
 
     @Override

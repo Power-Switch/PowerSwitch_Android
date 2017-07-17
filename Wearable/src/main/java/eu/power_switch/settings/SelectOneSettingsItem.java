@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import eu.power_switch.gui.activity.ValueSelectorActivity;
+import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * SettingsItem for boolean type settings
@@ -39,9 +41,11 @@ public abstract class SelectOneSettingsItem extends SettingsItem<Integer> {
 
     private final ArrayList<String> values;
 
-    public SelectOneSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, @ArrayRes int values) {
-        super(context, iconDrawable, description, settingsKey);
-        String[] valuesArray = context.getResources().getStringArray(values);
+    public SelectOneSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, PreferenceItem<Integer> preferenceItem,
+                                 @ArrayRes int values, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
+        super(context, iconDrawable, description, preferenceItem, wearablePreferencesHandler);
+        String[] valuesArray = context.getResources()
+                .getStringArray(values);
         ArrayList<String> valuesList = new ArrayList<>();
         Collections.addAll(valuesList, valuesArray);
         this.values = valuesList;

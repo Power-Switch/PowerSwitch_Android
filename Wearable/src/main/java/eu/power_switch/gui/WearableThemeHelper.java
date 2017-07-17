@@ -19,10 +19,13 @@
 package eu.power_switch.gui;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 07.03.2016.
@@ -34,8 +37,14 @@ public class WearableThemeHelper {
      *
      * @param activity Activity to apply theme on
      */
-    public static void applyTheme(Activity activity) {
-        switch (WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)) {
+    public static void applyTheme(@Nullable Activity activity, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
+        if (activity == null) {
+            Timber.w("activity was null!");
+            return;
+        }
+
+        int theme = wearablePreferencesHandler.getValue(WearablePreferencesHandler.THEME);
+        switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
                 break;

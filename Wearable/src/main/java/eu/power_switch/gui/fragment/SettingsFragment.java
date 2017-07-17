@@ -60,12 +60,15 @@ public class SettingsFragment extends Fragment {
     private SettingsListAdapter settingsListAdapter;
     private boolean ownModification = false;
 
+    private WearablePreferencesHandler wearablePreferencesHandler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
         dataApiHandler = new DataApiHandler(getActivity());
+        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -86,23 +89,21 @@ public class SettingsFragment extends Fragment {
         SelectOneSettingsItem item0 = new SelectOneSettingsItem(getActivity(),
                 IconicsHelper.getTabsIcon(getActivity()),
                 R.string.title_startupDefaultTab,
-                WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
-                R.array.wear_tab_names) {
+                WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
+                R.array.wear_tab_names,
+                wearablePreferencesHandler) {
 
         };
 
         SettingsItem item1 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
-                R.string.title_autoCollapseRooms,
-                WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+                R.string.title_autoCollapseRooms, WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS, wearablePreferencesHandler);
         SettingsItem item2 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getHistoryIcon(getActivity()),
-                R.string.title_highlightLastActivatedButton,
-                WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                R.string.title_highlightLastActivatedButton, WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON, wearablePreferencesHandler);
         SettingsItem item3 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getVibrationIcon(getActivity()),
-                R.string.title_vibrateOnButtonPress,
-                WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
+                R.string.title_vibrateOnButtonPress, WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS, wearablePreferencesHandler);
 
         settings.add(item0);
         settings.add(item1);

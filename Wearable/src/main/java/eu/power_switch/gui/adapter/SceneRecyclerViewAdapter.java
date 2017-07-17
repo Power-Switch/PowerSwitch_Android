@@ -39,21 +39,21 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
 
-    // Store a member variable for the users
-    private ArrayList<Scene> scenes;
-    private Context          context;
-    private DataApiHandler   dataApiHandler;
-    private RecyclerView     parentRecyclerView;
+    private ArrayList<Scene>           scenes;
+    private Context                    context;
+    private DataApiHandler             dataApiHandler;
+    private RecyclerView               parentRecyclerView;
+    private WearablePreferencesHandler wearablePreferencesHandler;
 
-    // Pass in the context and users array into the constructor
-    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Scene> scenes, DataApiHandler dataApiHandler) {
+    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Scene> scenes, DataApiHandler dataApiHandler,
+                                    WearablePreferencesHandler wearablePreferencesHandler) {
         this.scenes = scenes;
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
         this.dataApiHandler = dataApiHandler;
+        this.wearablePreferencesHandler = wearablePreferencesHandler;
     }
 
-    // Usually involves inflating a layout from XML and returning the holder
     @Override
     public SceneRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
@@ -63,7 +63,6 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         return new SceneRecyclerViewAdapter.ViewHolder(itemView);
     }
 
-    // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
@@ -75,8 +74,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(context, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
+                if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
+                    int duration = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATION_DURATION);
+                    VibrationHandler.vibrate(context, duration);
                 }
 
                 String actionString = DataApiHandler.buildSceneActionString(scene);
@@ -110,9 +110,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.sceneName = (TextView) itemView.findViewById(R.id.textView_scene_name);
-            this.buttonActivate = (android.widget.Button) itemView.findViewById(R.id.button_Activate);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.sceneName = itemView.findViewById(R.id.textView_scene_name);
+            this.buttonActivate = itemView.findViewById(R.id.button_Activate);
+            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

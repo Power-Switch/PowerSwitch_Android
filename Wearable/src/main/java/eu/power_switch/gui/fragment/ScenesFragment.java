@@ -39,6 +39,7 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -54,9 +55,10 @@ public class ScenesFragment extends Fragment {
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     private DataApiHandler           dataApiHandler;
 
-    private BroadcastReceiver broadcastReceiver;
-    private LinearLayout      layoutLoading;
-    private LinearLayout      layoutEmpty;
+    private BroadcastReceiver          broadcastReceiver;
+    private LinearLayout               layoutLoading;
+    private LinearLayout               layoutEmpty;
+    private WearablePreferencesHandler wearablePreferencesHandler;
 
     /**
      * Used to notify Scenes Fragment (this) that data has changed
@@ -76,6 +78,7 @@ public class ScenesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
 
         dataApiHandler = new DataApiHandler(getActivity());
+        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -97,7 +100,11 @@ public class ScenesFragment extends Fragment {
         layoutEmpty.setVisibility(View.GONE);
 
         scenesRecyclerView = rootView.findViewById(R.id.scenes_recyclerView);
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), scenesRecyclerView, MainActivity.sceneList, dataApiHandler);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(),
+                scenesRecyclerView,
+                MainActivity.sceneList,
+                dataApiHandler,
+                wearablePreferencesHandler);
         scenesRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 
         SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);

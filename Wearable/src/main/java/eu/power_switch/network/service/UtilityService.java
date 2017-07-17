@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import timber.log.Timber;
 
@@ -92,7 +93,7 @@ public class UtilityService extends IntentService {
             ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
             ArrayList<DataMap> settings        = new ArrayList<>();
-            DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap();
+            DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap(this, new WearablePreferencesHandler(this));
             settings.add(settingsDataMap);
 
             if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
@@ -108,10 +109,9 @@ public class UtilityService extends IntentService {
 
                 if (!result.getStatus()
                         .isSuccess()) {
-                    Timber.e(
-                            String.format("Error sending settings using DataApi (error code = %d)",
-                                    result.getStatus()
-                                            .getStatusCode()));
+                    Timber.e(String.format("Error sending settings using DataApi (error code = %d)",
+                            result.getStatus()
+                                    .getStatusCode()));
                 } else {
                     Timber.d("Updated settings sent");
                 }
