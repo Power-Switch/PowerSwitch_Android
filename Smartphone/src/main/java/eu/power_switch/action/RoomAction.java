@@ -34,7 +34,11 @@ public class RoomAction extends Action {
 
     private long   id;
     private long   apartmentId;
+    private String apartmentName;
+
     private long   roomId;
+    private String roomName;
+
     private String buttonName;
 
     @Override

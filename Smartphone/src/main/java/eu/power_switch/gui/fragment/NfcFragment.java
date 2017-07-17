@@ -619,7 +619,14 @@ public class NfcFragment extends EventBusFragment {
                     }
                 }
 
-                action = new ReceiverAction(-1, currentApartment.getId(), selectedRoom.getId(), selectedReceiver.getId(), selectedButton.getId());
+                action = new ReceiverAction(-1,
+                        currentApartment.getId(),
+                        null,
+                        selectedRoom.getId(),
+                        null,
+                        selectedReceiver.getId(),
+                        null,
+                        selectedButton.getId());
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
                 Timber.d(spinner_room.getSelectedItem()
                         .toString());
@@ -628,7 +635,7 @@ public class NfcFragment extends EventBusFragment {
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1, currentApartment.getId(), selectedRoom.getId(),
+                action = new RoomAction(-1, currentApartment.getId(), null, selectedRoom.getId(), null,
                         spinner_button.getSelectedItem()
                                 .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
@@ -638,7 +645,7 @@ public class NfcFragment extends EventBusFragment {
                 Scene selectedScene = persistenceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
-                action = new SceneAction(-1, currentApartment.getId(), selectedScene.getId());
+                action = new SceneAction(-1, currentApartment.getId(), null, selectedScene.getId(), null);
             }
 
         } catch (Exception e) {

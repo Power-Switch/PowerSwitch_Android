@@ -33,9 +33,16 @@ import lombok.Value;
 public class ReceiverAction extends Action {
 
     private long id;
-    private long apartmentId;
-    private long roomId;
-    private long receiverId;
+
+    private long   apartmentId;
+    private String apartmentName;
+
+    private long   roomId;
+    private String roomName;
+
+    private long   receiverId;
+    private String receiverName;
+
     private long buttonId;
 
     @Override

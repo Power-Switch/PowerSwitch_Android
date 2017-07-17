@@ -133,11 +133,9 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
         actionsMap.put(Geofence.EventType.ENTER, new ArrayList<Action>());
 
-        apartment_heimat = new Apartment((long) 0,
-                true, "Heimat", rooms_heimat, scenes_heimat, gateways,
+        apartment_heimat = new Apartment((long) 0, true, "Heimat", rooms_heimat, scenes_heimat, gateways,
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100, null, actionsMap, Geofence.STATE_NONE));
-        apartment_eltern = new Apartment((long) 0,
-                false, "Eltern", rooms_heimat, scenes_heimat, gateways,
+        apartment_eltern = new Apartment((long) 0, false, "Eltern", rooms_heimat, scenes_heimat, gateways,
                 new Geofence((long) 0, true, "Eltern", new LatLng(52.437418, 13.573122), 500, null, actionsMap, Geofence.STATE_NONE));
         apartments.add(apartment_heimat);
         apartments.add(apartment_eltern);
@@ -184,8 +182,7 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         RECEIVER_FENSTER_SCHLAFZIMMER = new CMR1000(context, (long) 4, "Fenster", 'E', 1, room_schlafzimmer.getId(), new ArrayList<Gateway>());
         RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context,
                 (long) 5,
-                "Nachttische",
-                'E', 1, room_schlafzimmer.getId(),
+                "Nachttische", 'E', 1, room_schlafzimmer.getId(),
                 new ArrayList<Gateway>());
         RECEIVER_ABZUGSHAUBE_KUECHE = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, room_kueche.getId(), new ArrayList<Gateway>());
         RECEIVER_ESSTISCH_KUECHE = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, room_kueche.getId(), new ArrayList<Gateway>());
@@ -744,9 +741,9 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         List<Timer> timers = new ArrayList<>();
 
         ReceiverAction timerReceiverAction = new ReceiverAction(0,
-                apartment_heimat.getId(),
-                room_wohnzimmer.getId(),
-                receiver_ecklampe_wohnzimmer.getId(),
+                apartment_heimat.getId(), null,
+                room_wohnzimmer.getId(), null,
+                receiver_ecklampe_wohnzimmer.getId(), null,
                 receiver_ecklampe_wohnzimmer.getButton(OnButton.ID)
                         .getId());
         List<WeekdayTimer.Day> days = new ArrayList<>();
@@ -769,9 +766,9 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
 
 
         ReceiverAction timerReceiverAction2 = new ReceiverAction(0,
-                apartment_heimat.getId(),
-                room_kueche.getId(),
-                RECEIVER_KAFFEEMASCHINE_KUECHE.getId(),
+                apartment_heimat.getId(), null,
+                room_kueche.getId(), null,
+                RECEIVER_KAFFEEMASCHINE_KUECHE.getId(), null,
                 receiver_ecklampe_wohnzimmer.getButton(OnButton.ID)
                         .getId());
 
@@ -844,24 +841,24 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
 
         switch (eventType) {
             case ALARM_TRIGGERED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
                 break;
             case ALARM_SNOOZED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)
                                 .getId()));
                 break;
             case ALARM_DISMISSED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
                 break;
@@ -882,24 +879,24 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
 
         switch (event) {
             case ALARM_TRIGGERED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
                 break;
             case ALARM_SNOOZED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OffButton.ID)
                                 .getId()));
                 break;
             case ALARM_DISMISSED:
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
-                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+                actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                        RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                         RECEIVER_FENSTER_SCHLAFZIMMER.getButton(OnButton.ID)
                                 .getId()));
                 break;
@@ -1009,8 +1006,8 @@ public class DemoModePersistenceHandler implements PersistenceHandler {
         phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, phoneNumbers);
 
         List<Action> actions = new ArrayList<>();
-        actions.add(new ReceiverAction(-1, apartment_heimat.getId(), room_schlafzimmer.getId(),
-                RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(),
+        actions.add(new ReceiverAction(-1, apartment_heimat.getId(), null, room_schlafzimmer.getId(), null,
+                RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getId(), null,
                 RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)
                         .getId()));
 

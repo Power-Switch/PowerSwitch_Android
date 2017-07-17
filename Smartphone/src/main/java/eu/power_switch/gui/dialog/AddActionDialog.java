@@ -615,7 +615,14 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                     }
                 }
 
-                action = new ReceiverAction(-1, selectedApartment.getId(), selectedRoom.getId(), selectedReceiver.getId(), selectedButton.getId());
+                action = new ReceiverAction(-1,
+                        selectedApartment.getId(),
+                        selectedApartment.getName(),
+                        selectedRoom.getId(),
+                        selectedRoom.getName(),
+                        selectedReceiver.getId(),
+                        selectedReceiver.getName(),
+                        selectedButton.getId());
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
                 Timber.d(spinner_room.getSelectedItem()
                         .toString());
@@ -624,7 +631,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1, currentApartment.getId(), selectedRoom.getId(),
+                action = new RoomAction(-1, currentApartment.getId(), currentApartment.getName(), selectedRoom.getId(), selectedRoom.getName(),
                         spinner_button.getSelectedItem()
                                 .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
@@ -634,7 +641,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                 Scene selectedScene = persistenceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
-                action = new SceneAction(-1, currentApartment.getId(), selectedScene.getId());
+                action = new SceneAction(-1, currentApartment.getId(), currentApartment.getName(), selectedScene.getId(), selectedScene.getName());
             }
 
         } catch (Exception e) {

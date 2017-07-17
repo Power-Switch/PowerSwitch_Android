@@ -40,7 +40,11 @@ import eu.power_switch.persistence.data.sqlite.table.action.RoomActionTable;
 import eu.power_switch.persistence.data.sqlite.table.action.SceneActionTable;
 import eu.power_switch.persistence.data.sqlite.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.persistence.data.sqlite.table.alarm_clock.stock.AlarmClockActionTable;
+import eu.power_switch.persistence.data.sqlite.table.apartment.ApartmentTable;
 import eu.power_switch.persistence.data.sqlite.table.geofence.GeofenceActionTable;
+import eu.power_switch.persistence.data.sqlite.table.receiver.ReceiverTable;
+import eu.power_switch.persistence.data.sqlite.table.room.RoomTable;
+import eu.power_switch.persistence.data.sqlite.table.scene.SceneTable;
 import eu.power_switch.persistence.data.sqlite.table.timer.TimerActionTable;
 import timber.log.Timber;
 
@@ -232,17 +236,31 @@ class ActionHandler {
         String actionType = cursor.getString(1);
 
         if (Action.ACTION_TYPE_RECEIVER.equals(actionType)) {
-            String[] columns1 = {ReceiverActionTable.COLUMN_APARTMENT_ID,
-                                 ReceiverActionTable.COLUMN_ROOM_ID,
-                                 ReceiverActionTable.COLUMN_RECEIVER_ID,
-                                 ReceiverActionTable.COLUMN_BUTTON_ID};
-            Cursor cursor1 = database.query(ReceiverActionTable.TABLE_NAME,
-                    columns1,
-                    ReceiverActionTable.COLUMN_ACTION_ID + "=" + actionId,
-                    null,
-                    null,
-                    null,
-                    null);
+            //@formatter:off
+            String select = "SELECT " +
+                    ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_APARTMENT_ID + ", " +
+                    ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_ROOM_ID + ", " +
+                    ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_RECEIVER_ID + ", " +
+                    ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_BUTTON_ID + ", " +
+                    ApartmentTable.TABLE_NAME + "." + ApartmentTable.COLUMN_NAME + ", " +
+                    RoomTable.TABLE_NAME + "." + RoomTable.COLUMN_NAME + ", " +
+                    ReceiverTable.TABLE_NAME + "." + ReceiverTable.COLUMN_NAME + " " +
+                    " FROM " +
+                    ReceiverActionTable.TABLE_NAME +
+                    " INNER JOIN " + ApartmentTable.TABLE_NAME + " ON "
+                      + ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_APARTMENT_ID + "=" +
+                    ApartmentTable.TABLE_NAME +"." + ApartmentTable.COLUMN_ID +
+                    " INNER JOIN " + RoomTable.TABLE_NAME + " ON "
+                    + ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_ROOM_ID + "=" +
+                    RoomTable.TABLE_NAME +"." + RoomTable.COLUMN_ID +
+                    " INNER JOIN " + ReceiverTable.TABLE_NAME + " ON "
+                    + ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_RECEIVER_ID + "=" +
+                    ReceiverTable.TABLE_NAME +"." + ReceiverTable.COLUMN_ID +
+                    " WHERE " + ReceiverActionTable.TABLE_NAME + "." + ReceiverActionTable.COLUMN_ACTION_ID + "=" + actionId +
+                    ";";
+            //@formatter:on
+
+            Cursor cursor1 = database.rawQuery(select, null);
             cursor1.moveToFirst();
 
             long apartmentId = cursor1.getLong(0);
@@ -250,42 +268,76 @@ class ActionHandler {
             long receiverId  = cursor1.getLong(2);
             long buttonId    = cursor1.getLong(3);
 
+            String apartmentName = cursor1.getString(4);
+            String roomName      = cursor1.getString(5);
+            String receiverName  = cursor1.getString(6);
+
             cursor1.close();
 
-            return new ReceiverAction(actionId, apartmentId, roomId, receiverId, buttonId);
+            return new ReceiverAction(actionId, apartmentId, apartmentName, roomId, roomName, receiverId, receiverName, buttonId);
         } else if (Action.ACTION_TYPE_ROOM.equals(actionType)) {
-            String[] columns1 = {RoomActionTable.COLUMN_APARTMENT_ID, RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME};
-            Cursor cursor1 = database.query(RoomActionTable.TABLE_NAME,
-                    columns1,
-                    RoomActionTable.COLUMN_ACTION_ID + "=" + actionId,
-                    null,
-                    null,
-                    null,
-                    null);
+            //@formatter:off
+            String select = "SELECT " +
+                    RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_APARTMENT_ID + ", " +
+                    RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_ROOM_ID + ", " +
+                    RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_BUTTON_NAME + ", " +
+                    ApartmentTable.TABLE_NAME + "." + ApartmentTable.COLUMN_NAME + ", " +
+                    RoomTable.TABLE_NAME + "." + RoomTable.COLUMN_NAME + " " +
+                    " FROM " +
+                    RoomActionTable.TABLE_NAME +
+                    " INNER JOIN " + ApartmentTable.TABLE_NAME + " ON "
+                      + RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_APARTMENT_ID + "=" +
+                    ApartmentTable.TABLE_NAME +"." + ApartmentTable.COLUMN_ID +
+                    " INNER JOIN " + RoomTable.TABLE_NAME + " ON "
+                    + RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_ROOM_ID + "=" +
+                    RoomTable.TABLE_NAME +"." + RoomTable.COLUMN_ID +
+                    " WHERE " + RoomActionTable.TABLE_NAME + "." + RoomActionTable.COLUMN_ACTION_ID + "=" + actionId +
+                    ";";
+            //@formatter:on
+
+            Cursor cursor1 = database.rawQuery(select, null);
             cursor1.moveToFirst();
 
             long   apartmentId = cursor1.getLong(0);
             long   roomId      = cursor1.getLong(1);
             String buttonName  = cursor1.getString(2);
+
+            String apartmentName = cursor1.getString(3);
+            String roomName      = cursor1.getString(4);
             cursor1.close();
 
-            return new RoomAction(actionId, apartmentId, roomId, buttonName);
+            return new RoomAction(actionId, apartmentId, apartmentName, roomId, roomName, buttonName);
         } else if (Action.ACTION_TYPE_SCENE.equals(actionType)) {
-            String[] columns1 = {SceneActionTable.COLUMN_APARTMENT_ID, SceneActionTable.COLUMN_SCENE_ID};
-            Cursor cursor1 = database.query(SceneActionTable.TABLE_NAME,
-                    columns1,
-                    SceneActionTable.COLUMN_ACTION_ID + "=" + actionId,
-                    null,
-                    null,
-                    null,
-                    null);
+            //@formatter:off
+            String select = "SELECT " +
+                    SceneActionTable.TABLE_NAME + "." + SceneActionTable.COLUMN_APARTMENT_ID + ", " +
+                    SceneActionTable.TABLE_NAME + "." + SceneActionTable.COLUMN_SCENE_ID + ", " +
+                    ApartmentTable.TABLE_NAME + "." + ApartmentTable.COLUMN_NAME + ", " +
+                    SceneTable.TABLE_NAME + "." + SceneTable.COLUMN_NAME + " " +
+                    " FROM " +
+                    SceneActionTable.TABLE_NAME +
+                    " INNER JOIN " + ApartmentTable.TABLE_NAME + " ON "
+                      + SceneActionTable.TABLE_NAME + "." + SceneActionTable.COLUMN_APARTMENT_ID + "=" +
+                    ApartmentTable.TABLE_NAME +"." + ApartmentTable.COLUMN_ID +
+                    " INNER JOIN " + SceneTable.TABLE_NAME + " ON "
+                    + SceneActionTable.TABLE_NAME + "." + SceneActionTable.COLUMN_SCENE_ID + "=" +
+                    SceneTable.TABLE_NAME +"." + SceneTable.COLUMN_ID +
+                    " WHERE " + SceneActionTable.TABLE_NAME + "." + SceneActionTable.COLUMN_ACTION_ID + "=" + actionId +
+                    ";";
+            //@formatter:on
+
+            Cursor cursor1 = database.rawQuery(select, null);
             cursor1.moveToFirst();
 
             long apartmentId = cursor1.getLong(0);
             long sceneId     = cursor1.getLong(1);
+
+            String apartmentName = cursor1.getString(2);
+            String sceneName     = cursor1.getString(3);
+
             cursor1.close();
 
-            return new SceneAction(actionId, apartmentId, sceneId);
+            return new SceneAction(actionId, apartmentId, apartmentName, sceneId, sceneName);
         } else {
             Timber.e("Unknown ActionType!");
             throw new RuntimeException("Unknown ActionType: " + actionType);

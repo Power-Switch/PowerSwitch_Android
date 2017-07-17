@@ -74,11 +74,6 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     }
 
     private void updateUi() {
-        updateUiValues();
-//        updateUiVisibility();
-    }
-
-    private void updateUiValues() {
         if (getConfiguration().getName() != null) {
             textViewName.setText(getConfiguration().getName());
         }

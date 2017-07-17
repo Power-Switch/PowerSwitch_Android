@@ -32,9 +32,12 @@ import lombok.Value;
 @Value
 public class SceneAction extends Action {
 
-    private long id;
-    private long apartmentId;
-    private long sceneId;
+    private long   id;
+    private long   apartmentId;
+    private String apartmentName;
+
+    private long   sceneId;
+    private String sceneName;
 
     @Override
     @ActionType

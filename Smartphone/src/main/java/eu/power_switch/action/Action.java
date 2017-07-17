@@ -70,37 +70,29 @@ public abstract class Action {
             if (action instanceof ReceiverAction) {
                 ReceiverAction receiverAction = (ReceiverAction) action;
 
-                String apartmentName = persistenceHandler.getApartmentName(receiverAction.getApartmentId());
-                String roomName      = persistenceHandler.getRoomName(receiverAction.getRoomId());
-                String receiverName  = persistenceHandler.getReceiverName(receiverAction.getReceiverId());
-                String buttonName    = Button.getName(context, persistenceHandler, receiverAction.getButtonId());
+                String buttonName = Button.getName(context, persistenceHandler, receiverAction.getButtonId());
 
-                s.append(apartmentName)
+                s.append(receiverAction.getApartmentName())
                         .append(": ")
-                        .append(roomName)
+                        .append(receiverAction.getRoomName())
                         .append(": ")
-                        .append(receiverName)
+                        .append(receiverAction.getReceiverName())
                         .append(": ")
                         .append(buttonName);
             } else if (action instanceof RoomAction) {
-                RoomAction roomAction    = (RoomAction) action;
-                String     apartmentName = persistenceHandler.getApartmentName(roomAction.getApartmentId());
-                String     roomName      = persistenceHandler.getRoomName(roomAction.getRoomId());
+                RoomAction roomAction = (RoomAction) action;
 
-                s.append(apartmentName)
+                s.append(roomAction.getApartmentName())
                         .append(": ")
-                        .append(roomName)
+                        .append(roomAction.getRoomName())
                         .append(": ")
                         .append(roomAction.getButtonName());
             } else if (action instanceof SceneAction) {
                 SceneAction sceneAction = (SceneAction) action;
 
-                String apartmentName = persistenceHandler.getApartmentName(sceneAction.getApartmentId());
-                String sceneName     = persistenceHandler.getSceneName(sceneAction.getSceneId());
-
-                s.append(apartmentName)
+                s.append(sceneAction.getApartmentName())
                         .append(": ")
-                        .append(sceneName);
+                        .append(sceneAction.getSceneName());
             } else {
                 s.append("Unknown");
             }
