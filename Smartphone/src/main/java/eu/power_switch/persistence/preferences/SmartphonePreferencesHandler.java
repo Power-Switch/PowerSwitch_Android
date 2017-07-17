@@ -140,7 +140,7 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getValue(@NonNull PreferenceItem preferenceItem) throws ClassCastException {
+    public <T> T getValue(@NonNull PreferenceItem<T> preferenceItem) throws ClassCastException {
         // special treatment for this key, to make playstore mode possible
 
         if (KEY_CURRENT_APARTMENT_ID.equals(preferenceItem)) {

@@ -22,10 +22,11 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import eu.power_switch.application.RunConfig;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.data.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.persistence.data.sqlite.handler.SqlitePersistenceHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
@@ -35,9 +36,18 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 @Module
 public abstract class PersistenceBindingsModule {
 
-    @Binds
-    @Singleton
-    public abstract PersistenceHandler providePersistenceHandler(SqlitePersistenceHandler sqlitePersistanceHandler);
+    @Provides
+    public static PersistenceHandler providePersistenceHandler(RunConfig runConfig, DemoModePersistenceHandler demoModePersistenceHandler,
+                                                               SqlitePersistenceHandler sqlitePersistenceHandler) {
+        switch (runConfig.mode) {
+            case DEMO:
+                return demoModePersistenceHandler;
+            case NORMAL:
+            default:
+                return sqlitePersistenceHandler;
+        }
+
+    }
 
     @Provides
     @Singleton

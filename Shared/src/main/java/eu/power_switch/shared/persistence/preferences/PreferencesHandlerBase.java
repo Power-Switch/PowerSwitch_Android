@@ -93,10 +93,10 @@ public abstract class PreferencesHandlerBase {
     @SuppressWarnings("unchecked")
     @CheckResult
     @CallSuper
-    public <T> T getValue(@NonNull PreferenceItem preferenceItem) throws ClassCastException {
+    public <T> T getValue(@NonNull PreferenceItem<T> preferenceItem) throws ClassCastException {
         String key = preferenceItem.getKey(context);
 
-        Object value = cachedValues.get(key);
+        T value = (T) cachedValues.get(key);
 
         // if no value was set, return preference default
         if (value == null) {
@@ -107,7 +107,7 @@ public abstract class PreferencesHandlerBase {
 
         Timber.v("retrieving value \"" + value + "\" for key \"" + key + "\"");
 
-        return (T) value;
+        return value;
     }
 
     /**
@@ -116,18 +116,8 @@ public abstract class PreferencesHandlerBase {
      * @param preferenceItem the preference to set a new value for
      * @param newValue       new value
      */
-    public void setValue(@NonNull PreferenceItem preferenceItem, @NonNull Object newValue) {
+    public <T> void setValue(@NonNull PreferenceItem<T> preferenceItem, @NonNull T newValue) {
         String key = preferenceItem.getKey(context);
-
-        // check if the passed in type matches the expected one
-        if (!newValue.getClass()
-                .isAssignableFrom(preferenceItem.getDefaultValue()
-                        .getClass())) {
-            throw new IllegalArgumentException("Invalid type! Should be " + preferenceItem.getDefaultValue()
-                    .getClass()
-                    .getCanonicalName() + " but was " + newValue.getClass()
-                    .getCanonicalName());
-        }
 
         Timber.d("setting new value \"" + newValue + "\" for key \"" + key + "\"");
 

@@ -115,7 +115,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
      * @param apartment the selected Apartment
      */
     protected void onApartmentClicked(Apartment apartment) {
-        smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB, apartment.getId());
+        smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
         ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }
