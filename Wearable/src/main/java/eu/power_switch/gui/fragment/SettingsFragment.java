@@ -26,8 +26,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SnapHelper;
+import android.support.wearable.view.CurvedChildLayoutManager;
 import android.support.wearable.view.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,8 +120,10 @@ public class SettingsFragment extends Fragment {
         settings.add(item3);
 
         final WearableRecyclerView wearableRecyclerView = rootView.findViewById(R.id.wearableRecyclerView);
+        wearableRecyclerView.setCenterEdgeItems(true);
 
-        wearableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        CurvedChildLayoutManager curvedChildLayoutManager = new CurvedChildLayoutManager(getActivity());
+        wearableRecyclerView.setLayoutManager(curvedChildLayoutManager);
 
         SnapHelper snapHelper = new SettingsListSnapHelper();
         snapHelper.attachToRecyclerView(wearableRecyclerView);

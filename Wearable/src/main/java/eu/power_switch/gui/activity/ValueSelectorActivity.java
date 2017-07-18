@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableRecyclerView;
 import android.view.View;
@@ -76,6 +77,11 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         // TODO: make this universal for any PreferenceItem
 
         WearableRecyclerView wearableRecyclerView = findViewById(R.id.recyclerView);
+        wearableRecyclerView.setCenterEdgeItems(true);
+
+        LinearSnapHelper linearSnapHelper = new LinearSnapHelper();
+        linearSnapHelper.attachToRecyclerView(wearableRecyclerView);
+
         final SingleSelectSettingsItem singleSelectSettingsItem = new SingleSelectSettingsItem(this,
                 IconicsHelper.getTabsIcon(this),
                 R.string.title_startupDefaultTab,

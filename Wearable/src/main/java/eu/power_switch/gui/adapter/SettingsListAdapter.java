@@ -52,7 +52,7 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
     }
 
     @Override
-    public WearableRecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemViewHolder(mInflater.inflate(R.layout.list_item_setting, null));
     }
 

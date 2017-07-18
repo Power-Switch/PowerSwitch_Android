@@ -18,14 +18,14 @@
 
 package eu.power_switch.gui.view;
 
-import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
  * Created by Markus on 18.07.2017.
  */
-public class SettingsListSnapHelper extends LinearSnapHelper {
+public class SettingsListSnapHelper extends PagerSnapHelper {
 
     @Override
     public View findSnapView(RecyclerView.LayoutManager layoutManager) {
