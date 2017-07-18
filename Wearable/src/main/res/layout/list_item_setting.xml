@@ -23,9 +23,7 @@
     android:id="@+id/list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:gravity="center_vertical">
 
     <android.support.wearable.view.CircledImageView
         android:id="@+id/circle"
