@@ -16,40 +16,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.action;
+package eu.power_switch.gui.view;
 
-import android.support.annotation.NonNull;
-
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 /**
- * ReceiverAction that holds a specific room/receiver/button combination to activate on execution
- * <p/>
- * Created by Markus on 24.09.2015.
+ * Created by Markus on 18.07.2017.
  */
-@EqualsAndHashCode(callSuper = true)
-@Value
-public class ReceiverAction extends Action {
-
-    private long id;
-
-    private long   apartmentId;
-    private String apartmentName;
-
-    private long   roomId;
-    private String roomName;
-
-    private long   receiverId;
-    private String receiverName;
-
-    private long buttonId;
+public class SettingsListSnapHelper extends LinearSnapHelper {
 
     @Override
-    @ActionType
-    @NonNull
-    public String getActionType() {
-        return ACTION_TYPE_RECEIVER;
-    }
+    public View findSnapView(RecyclerView.LayoutManager layoutManager) {
+        View snapView = super.findSnapView(layoutManager);
 
+        if (snapView instanceof SettingsListItemLayout) {
+            ((SettingsListItemLayout) snapView).onCenterPosition(true);
+        }
+
+        return snapView;
+    }
 }

@@ -1,19 +1,19 @@
 /*
- *     PowerSwitch by Max Rosin & Markus Ressel
- *     Copyright (C) 2015  Markus Ressel
+ *  PowerSwitch by Max Rosin & Markus Ressel
+ *  Copyright (C) 2015  Markus Ressel
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.fragment;
@@ -26,7 +26,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.wearable.view.WearableListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SnapHelper;
+import android.support.wearable.view.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
+import eu.power_switch.gui.view.SettingsListSnapHelper;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.network.service.UtilityService;
@@ -97,32 +100,37 @@ public class SettingsFragment extends Fragment {
 
         SettingsItem item1 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
-                R.string.title_autoCollapseRooms, WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS, wearablePreferencesHandler);
+                R.string.title_autoCollapseRooms,
+                WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS,
+                wearablePreferencesHandler);
         SettingsItem item2 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getHistoryIcon(getActivity()),
-                R.string.title_highlightLastActivatedButton, WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON, wearablePreferencesHandler);
+                R.string.title_highlightLastActivatedButton,
+                WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON,
+                wearablePreferencesHandler);
         SettingsItem item3 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getVibrationIcon(getActivity()),
-                R.string.title_vibrateOnButtonPress, WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS, wearablePreferencesHandler);
+                R.string.title_vibrateOnButtonPress,
+                WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS,
+                wearablePreferencesHandler);
 
         settings.add(item0);
         settings.add(item1);
         settings.add(item2);
         settings.add(item3);
 
-        final WearableListView wearableListView = rootView.findViewById(R.id.wearable_List);
+        final WearableRecyclerView wearableRecyclerView = rootView.findViewById(R.id.wearableRecyclerView);
+
+        wearableRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        SnapHelper snapHelper = new SettingsListSnapHelper();
+        snapHelper.attachToRecyclerView(wearableRecyclerView);
+
         settingsListAdapter = new SettingsListAdapter(getActivity(), settings);
-        wearableListView.setAdapter(settingsListAdapter);
-        wearableListView.setClickListener(new WearableListView.ClickListener() {
+        settingsListAdapter.setOnItemClickListener(new SettingsListAdapter.OnItemClickListener() {
             @Override
-            public void onClick(WearableListView.ViewHolder viewHolder) {
-                if (viewHolder.getAdapterPosition() == -1) {
-                    return; // ignore click while adapter is refreshing data
-                }
-
-                SettingsListAdapter.ItemViewHolder holder = (SettingsListAdapter.ItemViewHolder) viewHolder;
-
-                SettingsItem settingsItem = settings.get(viewHolder.getAdapterPosition());
+            public void onItemClick(SettingsListAdapter.ItemViewHolder viewHolder, int position) {
+                SettingsItem settingsItem = settings.get(position);
                 if (settingsItem instanceof BooleanSettingsItem) {
                     BooleanSettingsItem booleanSettingsItem = (BooleanSettingsItem) settingsItem;
                     booleanSettingsItem.toggle();
@@ -132,17 +140,14 @@ public class SettingsFragment extends Fragment {
                     singleSelectSettingsItem.showValueSelector();
                 }
 
-                holder.value.setText(settingsItem.getCurrentValueDescription());
+                viewHolder.value.setText(settingsItem.getCurrentValueDescription());
                 ownModification = true;
 
                 UtilityService.forceWearSettingsUpdate(getActivity());
             }
-
-            @Override
-            public void onTopEmptyRegionClick() {
-            }
         });
 
+        wearableRecyclerView.setAdapter(settingsListAdapter);
 
         refreshUI();
 
