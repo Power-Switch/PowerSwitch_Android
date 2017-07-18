@@ -30,6 +30,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.view.SettingsListItemLayout;
 import eu.power_switch.settings.SettingsItem;
 
 /**
@@ -77,6 +78,8 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
     }
 
     public final class ItemViewHolder extends WearableRecyclerView.ViewHolder {
+        public SettingsListItemLayout listItemLayout;
+
         public CircledImageView icon;
         public TextView         description;
         public TextView         value;
@@ -96,6 +99,7 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
                 }
             });
 
+            listItemLayout = itemView.findViewById(R.id.list_item);
             icon = itemView.findViewById(R.id.circle);
             description = itemView.findViewById(R.id.description);
             value = itemView.findViewById(R.id.value);

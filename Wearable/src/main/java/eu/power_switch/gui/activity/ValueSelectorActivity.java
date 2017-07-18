@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.SnapHelper;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableRecyclerView;
 import android.view.View;
@@ -35,6 +35,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
+import eu.power_switch.gui.view.SettingsListSnapHelper;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.SingleSelectSettingsItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
@@ -79,8 +80,8 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         WearableRecyclerView wearableRecyclerView = findViewById(R.id.recyclerView);
         wearableRecyclerView.setCenterEdgeItems(true);
 
-        LinearSnapHelper linearSnapHelper = new LinearSnapHelper();
-        linearSnapHelper.attachToRecyclerView(wearableRecyclerView);
+        SnapHelper snapHelper = new SettingsListSnapHelper();
+        snapHelper.attachToRecyclerView(wearableRecyclerView);
 
         final SingleSelectSettingsItem singleSelectSettingsItem = new SingleSelectSettingsItem(this,
                 IconicsHelper.getTabsIcon(this),
