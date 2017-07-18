@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -63,8 +62,6 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     private ArrayList<Timer> timers = new ArrayList<>();
 
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
-
-    private FloatingActionButton addTimerFAB;
 
     @Inject
     AndroidAlarmHandler androidAlarmHandler;
@@ -113,9 +110,9 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             }
         });
 
-        addTimerFAB = rootView.findViewById(R.id.add_fab);
-        addTimerFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        addTimerFAB.setOnClickListener(new View.OnClickListener() {
+        addFAB = rootView.findViewById(R.id.add_fab);
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -126,10 +123,6 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                 }
             }
         });
-
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            addTimerFAB.setVisibility(View.GONE);
-        }
 
         updateUI();
 
@@ -148,7 +141,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity()).setTarget(addTimerFAB)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(addFAB)
                 .setUseAutoRadius(true)
                 .setDismissOnTouch(true)
                 .setDismissText(getString(R.string.tutorial__got_it))

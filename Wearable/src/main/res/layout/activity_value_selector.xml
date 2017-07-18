@@ -27,8 +27,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.wearable.view.WearableListView
-            android:id="@+id/listView"
+        <android.support.wearable.view.WearableRecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

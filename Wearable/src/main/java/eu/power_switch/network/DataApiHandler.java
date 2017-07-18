@@ -31,6 +31,7 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.gui.animation.ActionResponse;
@@ -219,8 +220,8 @@ public class DataApiHandler {
      *
      * @return List of Rooms
      */
-    public ArrayList<Room> getRoomData() {
-        ArrayList<Room> rooms = new ArrayList<>();
+    public List<Room> getRoomData() {
+        List<Room> rooms = new ArrayList<>();
 
         if (!googleApiClient.isConnected()) {
             if (!blockingConnect()) {
@@ -228,7 +229,7 @@ public class DataApiHandler {
             }
         }
 
-        ArrayList<DataMap> data;
+        List<DataMap> data;
         DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
                 .await();
 
@@ -254,8 +255,8 @@ public class DataApiHandler {
      *
      * @return List of Scenes
      */
-    public ArrayList<Scene> getSceneData() {
-        ArrayList<Scene> scenes = new ArrayList<>();
+    public List<Scene> getSceneData() {
+        List<Scene> scenes = new ArrayList<>();
 
         if (!googleApiClient.isConnected()) {
             if (!blockingConnect()) {
@@ -263,7 +264,7 @@ public class DataApiHandler {
             }
         }
 
-        ArrayList<DataMap> data;
+        List<DataMap> data;
         DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
                 .await();
 

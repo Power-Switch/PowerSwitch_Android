@@ -26,7 +26,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -45,7 +44,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SmsEventRecyclerViewAdapter;
@@ -67,9 +65,6 @@ import timber.log.Timber;
 public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
     private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS};
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
 
     private List<SmsEvent> smsEvents = new ArrayList<>();
     private SmsEventRecyclerViewAdapter smsEventRecyclerViewAdapter;
@@ -101,8 +96,8 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
@@ -222,16 +217,6 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

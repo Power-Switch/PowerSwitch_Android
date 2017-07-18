@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -30,7 +31,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.util.Calendar;
@@ -42,6 +42,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import lombok.Getter;
 
 /**
@@ -56,10 +57,13 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
     @Inject
     protected PersistenceHandler persistenceHandler;
 
+    @BindView(R.id.add_fab)
+    protected FloatingActionButton addFAB;
+
     @BindView(R.id.layoutLoading)
     LinearLayout layoutLoading;
     @BindView(R.id.layoutEmpty)
-    FrameLayout  layoutEmpty;
+    LinearLayout layoutEmpty;
 
     @BindView(R.id.layoutError)
     LinearLayout layoutError;
@@ -160,6 +164,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.VISIBLE);
         getRecyclerView().setVisibility(View.GONE);
+        addFAB.setVisibility(View.GONE);
     }
 
     protected void showList() {
@@ -167,6 +172,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
         getRecyclerView().setVisibility(View.VISIBLE);
+        showFabIfEnabled();
     }
 
     protected void showEmpty() {
@@ -174,6 +180,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
         getRecyclerView().setVisibility(View.INVISIBLE);
+        showFabIfEnabled();
     }
 
     protected void showError(final Exception e, final long timeInMilliseconds) {
@@ -181,6 +188,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         layoutError.setVisibility(View.VISIBLE);
         layoutLoading.setVisibility(View.GONE);
         getRecyclerView().setVisibility(View.GONE);
+        addFAB.setVisibility(View.GONE);
 
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +196,14 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
                 statusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
             }
         });
+    }
+
+    private void showFabIfEnabled() {
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+            addFAB.setVisibility(View.GONE);
+        } else {
+            addFAB.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

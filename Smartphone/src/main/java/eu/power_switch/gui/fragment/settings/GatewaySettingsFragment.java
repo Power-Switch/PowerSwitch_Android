@@ -66,8 +66,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
     @BindView(R.id.search_gateway_fab)
     FloatingActionButton searchGatewayFAB;
-    @BindView(R.id.add_fab)
-    FloatingActionButton addGatewayFAB;
 
     @Inject
     NetworkHandler networkHandler;
@@ -85,6 +83,16 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+            searchGatewayFAB.setVisibility(View.GONE);
+        } else {
+            searchGatewayFAB.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -113,8 +121,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         searchGatewayFAB.setImageDrawable(IconicsHelper.getRefreshIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         searchGatewayFAB.setOnClickListener(onClickListener);
 
-        addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        addGatewayFAB.setOnClickListener(onClickListener);
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(onClickListener);
 
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistenceHandler, statusMessageHandler, gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
@@ -130,7 +138,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        updateUI();
+        updateListContent();
 
         return rootView;
     }
@@ -214,18 +222,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             protected void onPostExecute(Void aVoid) {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    private void updateUI() {
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            searchGatewayFAB.setVisibility(View.GONE);
-            addGatewayFAB.setVisibility(View.GONE);
-        } else {
-            searchGatewayFAB.setVisibility(View.VISIBLE);
-            addGatewayFAB.setVisibility(View.VISIBLE);
-        }
-
-        updateListContent();
     }
 
     @Override

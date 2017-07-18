@@ -19,42 +19,48 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.support.wearable.view.CircledImageView;
-import android.support.wearable.view.WearableListView;
+import android.support.wearable.view.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.settings.SelectOneSettingsItem;
+import eu.power_switch.settings.SingleSelectSettingsItem;
 
 /**
  * Created by Markus on 08.06.2016.
  */
-public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
-    private final LayoutInflater        mInflater;
-    private       Context               context;
-    private       ArrayList<Integer>    values;
-    private       SelectOneSettingsItem settingsItem;
+public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter {
+    private final LayoutInflater           mInflater;
+    private       Context                  context;
+    private       List<Integer>            values;
+    private       SingleSelectSettingsItem settingsItem;
+    private       OnItemClickListener      onItemClickListener;
 
-    public ValueSelectorListAdapter(Context context, SelectOneSettingsItem settingsItem) {
+    public ValueSelectorListAdapter(Context context, SingleSelectSettingsItem settingsItem) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
         this.values = settingsItem.getAllValues();
         this.settingsItem = settingsItem;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @Override
-    public WearableListView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public WearableRecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new ItemViewHolder(mInflater.inflate(R.layout.list_item_value_selector, null));
     }
 
     @Override
-    public void onBindViewHolder(WearableListView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Integer value = values.get(position);
 
         ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
@@ -73,12 +79,30 @@ public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
         return values.size();
     }
 
-    public static class ItemViewHolder extends WearableListView.ViewHolder {
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    public final class ItemViewHolder extends WearableRecyclerView.ViewHolder {
         public CircledImageView checkmark;
         public TextView         value;
 
-        public ItemViewHolder(View itemView) {
+        public ItemViewHolder(final View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onItemClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
+
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
+                    }
+                }
+            });
+
             checkmark = itemView.findViewById(R.id.circle);
             value = itemView.findViewById(R.id.value);
         }

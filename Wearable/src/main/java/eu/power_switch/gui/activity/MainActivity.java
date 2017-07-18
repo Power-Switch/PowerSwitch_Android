@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.WearableThemeHelper;
@@ -64,11 +65,11 @@ import timber.log.Timber;
  */
 public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
-    private static final int              MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
-    public static        String           apartmentName                                 = "";
-    public static        ArrayList<Room>  roomList                                      = new ArrayList<>();
-    public static        ArrayList<Scene> sceneList                                     = new ArrayList<>();
-    private static       boolean          isInitialized                                 = false;
+    private static final int         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
+    public static        String      apartmentName                                 = "";
+    public static        List<Room>  roomList                                      = new ArrayList<>();
+    public static        List<Scene> sceneList                                     = new ArrayList<>();
+    private static       boolean     isInitialized                                 = false;
     private DataApiHandler    dataApiHandler;
     private BroadcastReceiver broadcastReceiver;
 
@@ -80,7 +81,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     private RelativeLayout relativeLayoutStatus;
     private FrameLayout    contentFrameLayout;
 
-    private WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(this);
+    private WearablePreferencesHandler wearablePreferencesHandler;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -91,6 +92,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        wearablePreferencesHandler = new WearablePreferencesHandler(this);
         // set Theme before anything else in onCreate
         WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
 
@@ -292,51 +294,63 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
      * <p/>
      * Created by Markus on 07.06.2015.
      */
-    private class FetchDataAsyncTask extends AsyncTask<Uri, Void, ArrayList<Object>> {
+    private class FetchDataAsyncTask extends AsyncTask<Uri, Void, List<Object>> {
 
         @Override
-        protected ArrayList<Object> doInBackground(Uri... params) {
+        protected List<Object> doInBackground(Uri... params) {
+            List<Object> result = new ArrayList<>();
+
             // Get Apartment Data from Smartphone App
-            String            apartmentName = dataApiHandler.getApartmentName();
-            ArrayList<String> apartments    = new ArrayList<>();
-            apartments.add(apartmentName);
+            String       apartmentName  = dataApiHandler.getApartmentName();
+            List<String> apartmentNames = new ArrayList<>();
+            apartmentNames.add(apartmentName);
+
+            result.add(apartmentNames);
 
             // Get Room Data from Smartphone App
-            ArrayList<Room> rooms             = dataApiHandler.getRoomData();
-            boolean         autoCollapseRooms = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
-            for (Room room : rooms) {
-                room.setCollapsed(autoCollapseRooms);
+            List<Room> rooms = dataApiHandler.getRoomData();
+            if (rooms != null) {
+                boolean autoCollapseRooms = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
+                for (Room room : rooms) {
+                    room.setCollapsed(autoCollapseRooms);
+                }
+
+                result.add(rooms);
+            } else {
+                result.add(new ArrayList<>());
             }
 
             // Get Scene Data from Smartphone App
-            ArrayList<Scene> scenes = dataApiHandler.getSceneData();
+            List<Scene> scenes = dataApiHandler.getSceneData();
+            if (scenes != null) {
+                result.add(scenes);
+            } else {
+                result.add(new ArrayList<>());
+            }
 
             // Get Wearable Settings from Smartphone App
             dataApiHandler.updateSettings();
-
-            ArrayList<Object> result = new ArrayList<>();
-            result.add(apartments);
-            result.add(rooms);
-            result.add(scenes);
 
             return result;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Object> result) {
+        protected void onPostExecute(List<Object> result) {
             if (result != null) {
                 // Update UI based on the result of the background processing
 //                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
 
-                apartmentName = ((ArrayList<String>) result.get(0)).get(0);
+                apartmentName = ((List<String>) result.get(0)).get(0);
 
                 roomList.clear();
-                roomList.addAll((ArrayList<Room>) result.get(1));
+                List<Room> rooms = (List<Room>) result.get(1);
+                roomList.addAll(rooms);
 
                 RoomsFragment.notifyDataChanged(getApplicationContext());
 
                 sceneList.clear();
-                sceneList.addAll((ArrayList<Scene>) result.get(2));
+                List<Scene> scenes = (List<Scene>) result.get(2);
+                sceneList.addAll(scenes);
 
                 ScenesFragment.notifyDataChanged(getApplicationContext());
 

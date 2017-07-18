@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -39,7 +38,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -59,9 +57,6 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * Created by Markus on 25.12.2015.
  */
 public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
 
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
     private ArrayList<Apartment> apartments = new ArrayList<>();
@@ -132,8 +127,8 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             }
         });
 
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getContext(), android.R.color.white)));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getContext(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -151,7 +146,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity()).setTarget(fab)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(addFAB)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -226,11 +221,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
 
         showTutorial();
     }

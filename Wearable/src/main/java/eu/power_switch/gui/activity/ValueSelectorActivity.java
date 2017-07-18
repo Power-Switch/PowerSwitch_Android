@@ -23,17 +23,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
-import android.support.wearable.view.WearableListView;
+import android.support.wearable.view.WearableRecyclerView;
+import android.view.View;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.network.service.UtilityService;
-import eu.power_switch.settings.SelectOneSettingsItem;
+import eu.power_switch.settings.SingleSelectSettingsItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
@@ -44,17 +46,15 @@ import timber.log.Timber;
  */
 public class ValueSelectorActivity<T> extends WearableActivity {
 
-    public static final String KEY_VALUES         = "values";
-    public static final String KEY_SELECTED_VALUE = "selectedValue";
+    public static final String KEY_VALUES = "values";
 
-    private ArrayList<T> values;
+    private List<T> values;
 
     private WearablePreferencesHandler wearablePreferencesHandler;
 
-    public static <T> void newInstance(Context context, ArrayList<T> values, Serializable selectedValue) {
+    public static <T extends Serializable> void newInstance(Context context, List<T> values) {
         Intent intent = new Intent(context, ValueSelectorActivity.class);
-        intent.putExtra(KEY_VALUES, values);
-        intent.putExtra(KEY_SELECTED_VALUE, selectedValue);
+        intent.putExtra(KEY_VALUES, new ArrayList<>(values));
         context.startActivity(intent);
     }
 
@@ -70,44 +70,34 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         // allow always-on screen
         setAmbientEnabled();
 
-        values = (ArrayList<T>) getIntent().getExtras()
+        values = (List<T>) getIntent().getExtras()
                 .get(KEY_VALUES);
-        T selectedValue = (T) getIntent().getExtras()
-                .get(KEY_SELECTED_VALUE);
 
-        WearableListView wearableListView = findViewById(R.id.listView);
-        final SelectOneSettingsItem selectOneSettingsItem = new SelectOneSettingsItem(this,
+        // TODO: make this universal for any PreferenceItem
+
+        WearableRecyclerView wearableRecyclerView = findViewById(R.id.recyclerView);
+        final SingleSelectSettingsItem singleSelectSettingsItem = new SingleSelectSettingsItem(this,
                 IconicsHelper.getTabsIcon(this),
                 R.string.title_startupDefaultTab,
                 WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
                 R.array.wear_tab_names,
                 wearablePreferencesHandler) {
         };
-        final ValueSelectorListAdapter<T> listAdapter = new ValueSelectorListAdapter<>(this, selectOneSettingsItem);
-        wearableListView.setAdapter(listAdapter);
-        wearableListView.setClickListener(new WearableListView.ClickListener() {
+        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, singleSelectSettingsItem);
+        listAdapter.setOnItemClickListener(new ValueSelectorListAdapter.OnItemClickListener() {
             @Override
-            public void onClick(WearableListView.ViewHolder viewHolder) {
-                if (viewHolder.getAdapterPosition() == -1) {
-                    return; // ignore click while adapter is refreshing data
-                }
+            public void onItemClick(View itemView, int position) {
+                T value = values.get(position);
 
-                ValueSelectorListAdapter.ItemViewHolder holder = (ValueSelectorListAdapter.ItemViewHolder) viewHolder;
-
-                T value = values.get(viewHolder.getAdapterPosition());
-
-                selectOneSettingsItem.setValue(holder.getAdapterPosition());
+                singleSelectSettingsItem.setValue(position);
                 Timber.d("selected value: " + value);
 
                 listAdapter.notifyDataSetChanged();
                 UtilityService.forceWearSettingsUpdate(getApplicationContext());
             }
-
-            @Override
-            public void onTopEmptyRegionClick() {
-
-            }
         });
+
+        wearableRecyclerView.setAdapter(listAdapter);
     }
 
     @Override

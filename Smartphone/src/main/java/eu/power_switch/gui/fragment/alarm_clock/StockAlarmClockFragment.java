@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.alarm_clock;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -73,11 +72,9 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
     private static Event currentEventType = Event.ALARM_TRIGGERED;
 
     @BindView(R.id.spinner_sleep_as_android_event)
-    Spinner              spinnerEventType;
-    @BindView(R.id.add_fab)
-    FloatingActionButton addActionFAB;
+    Spinner spinnerEventType;
     @BindView(R.id.switch_on_off)
-    Switch               switchOnOff;
+    Switch  switchOnOff;
 
     @Inject
     PersistenceHandler persistenceHandler;
@@ -152,8 +149,8 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        addActionFAB.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(
@@ -194,16 +191,6 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         }
 
         updateListContent();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            addActionFAB.setVisibility(View.GONE);
-        } else {
-            addActionFAB.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

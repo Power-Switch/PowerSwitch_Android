@@ -52,4 +52,5 @@ ext {
     playServicesVersion = "11.0.2"
     dagger2Version = "2.11"
     butterknifeVersion = "8.6.0"
+    lombokVersion = "1.16.16"
 }

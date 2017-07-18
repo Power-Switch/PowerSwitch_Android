@@ -32,6 +32,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
@@ -49,14 +50,14 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
 
     // Store a member variable for the users
-    private ArrayList<Room>            rooms;
+    private List<Room>                 rooms;
     private Context                    context;
     private DataApiHandler             dataApiHandler;
     private RecyclerView               parentRecyclerView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Room> rooms, DataApiHandler dataApiHandler,
+    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<Room> rooms, DataApiHandler dataApiHandler,
                                    WearablePreferencesHandler wearablePreferencesHandler) {
         this.rooms = rooms;
         this.context = context;

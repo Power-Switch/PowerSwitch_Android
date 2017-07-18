@@ -96,8 +96,8 @@ public class ListenerService extends WearableListenerService {
      *
      * @return List of Rooms containing the appropriate Receivers and Buttons
      */
-    public static ArrayList<Room> extractRoomDataMapItems(ArrayList<DataMap> dataMapArrayList) {
-        ArrayList<Room> rooms = new ArrayList<>();
+    public static List<Room> extractRoomDataMapItems(List<DataMap> dataMapArrayList) {
+        List<Room> rooms = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
             if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_ROOM_NAME)) {
@@ -164,8 +164,8 @@ public class ListenerService extends WearableListenerService {
      *
      * @return List of Rooms containing the appropriate Receivers and Buttons
      */
-    public static ArrayList<Scene> extractSceneDataMapItems(ArrayList<DataMap> dataMapArrayList) {
-        ArrayList<Scene> scenes = new ArrayList<>();
+    public static List<Scene> extractSceneDataMapItems(List<DataMap> dataMapArrayList) {
+        List<Scene> scenes = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
             if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_SCENE_NAME)) {
@@ -185,11 +185,11 @@ public class ListenerService extends WearableListenerService {
      * @param rooms
      * @param scenes
      */
-    public static void sendDataUpdatedBroadcast(Context context, String apartmentName, ArrayList<Room> rooms, ArrayList<Scene> scenes) {
+    public static void sendDataUpdatedBroadcast(Context context, String apartmentName, List<Room> rooms, List<Scene> scenes) {
         Intent intent = new Intent(DATA_UPDATED);
         intent.putExtra(KEY_APARTMENT_DATA, apartmentName);
-        intent.putExtra(KEY_ROOM_DATA, rooms);
-        intent.putExtra(KEY_SCENE_DATA, scenes);
+        intent.putExtra(KEY_ROOM_DATA, new ArrayList<>(rooms));
+        intent.putExtra(KEY_SCENE_DATA, new ArrayList<>(scenes));
 
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
@@ -240,11 +240,11 @@ public class ListenerService extends WearableListenerService {
 
                         String apartmentName = extractApartmentDataMapItems(data);
                         // convert received data to room/receiver/button objects
-                        ArrayList<Room> rooms = extractRoomDataMapItems(data);
+                        List<Room> rooms = extractRoomDataMapItems(data);
                         for (Room room : rooms) {
                             room.setCollapsed(autoCollapseRooms);
                         }
-                        ArrayList<Scene> scenes = extractSceneDataMapItems(data);
+                        List<Scene> scenes = extractSceneDataMapItems(data);
 
                         // send data to Activity
                         sendDataUpdatedBroadcast(this, apartmentName, rooms, scenes);

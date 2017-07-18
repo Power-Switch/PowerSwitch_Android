@@ -22,7 +22,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -45,7 +44,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -69,9 +67,6 @@ import timber.log.Timber;
 public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
 
     @Inject
     GeofenceApiHandler geofenceApiHandler;
@@ -124,9 +119,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             }
         });
 
-        fab = rootView.findViewById(R.id.add_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
@@ -271,16 +265,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public void onStart() {
         super.onStart();
         geofenceApiHandler.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

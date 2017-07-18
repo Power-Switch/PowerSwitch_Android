@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -80,10 +79,9 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             return lhs.compareDate(rhs);
         }
     };
+
     @BindView(R.id.textView_backupPath)
-    TextView             textViewBackupPath;
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
+    TextView textViewBackupPath;
 
     @Inject
     BackupHandler backupHandler;
@@ -161,8 +159,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -228,7 +226,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity()).setTarget(fab)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(addFAB)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -322,11 +320,6 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
 
         showTutorial();
     }

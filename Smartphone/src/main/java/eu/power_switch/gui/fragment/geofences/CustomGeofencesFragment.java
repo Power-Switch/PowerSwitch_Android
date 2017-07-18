@@ -23,7 +23,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +43,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.CustomGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -66,9 +64,6 @@ import timber.log.Timber;
 public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
 
     @Inject
     GeofenceApiHandler geofenceApiHandler;
@@ -112,8 +107,8 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
             }
         });
 
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
@@ -214,16 +209,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
             menu.findItem(R.id.create_geofence)
                     .setVisible(false)
                     .setEnabled(false);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
         }
     }
 

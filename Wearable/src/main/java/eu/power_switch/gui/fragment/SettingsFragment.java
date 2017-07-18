@@ -40,8 +40,8 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.BooleanSettingsItem;
-import eu.power_switch.settings.SelectOneSettingsItem;
 import eu.power_switch.settings.SettingsItem;
+import eu.power_switch.settings.SingleSelectSettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
@@ -86,7 +86,7 @@ public class SettingsFragment extends Fragment {
             }
         };
 
-        SelectOneSettingsItem item0 = new SelectOneSettingsItem(getActivity(),
+        SingleSelectSettingsItem item0 = new SingleSelectSettingsItem(getActivity(),
                 IconicsHelper.getTabsIcon(getActivity()),
                 R.string.title_startupDefaultTab,
                 WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
@@ -127,9 +127,9 @@ public class SettingsFragment extends Fragment {
                     BooleanSettingsItem booleanSettingsItem = (BooleanSettingsItem) settingsItem;
                     booleanSettingsItem.toggle();
 
-                } else if (settingsItem instanceof SelectOneSettingsItem) {
-                    SelectOneSettingsItem selectOneSettingsItem = (SelectOneSettingsItem) settingsItem;
-                    selectOneSettingsItem.showValueSelector();
+                } else if (settingsItem instanceof SingleSelectSettingsItem) {
+                    SingleSelectSettingsItem singleSelectSettingsItem = (SingleSelectSettingsItem) settingsItem;
+                    singleSelectSettingsItem.showValueSelector();
                 }
 
                 holder.value.setText(settingsItem.getCurrentValueDescription());

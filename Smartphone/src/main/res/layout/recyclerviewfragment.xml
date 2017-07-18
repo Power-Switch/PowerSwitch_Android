@@ -24,12 +24,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/loading"/>
-
-    <include layout="@layout/empty"/>
-
-    <include layout="@layout/error"/>
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -40,6 +34,12 @@
             android:layout_height="match_parent"
             android:fadeScrollbars="false"
             android:scrollbars="vertical"/>
+
+        <include layout="@layout/loading"/>
+
+        <include layout="@layout/empty"/>
+
+        <include layout="@layout/error"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_fab"

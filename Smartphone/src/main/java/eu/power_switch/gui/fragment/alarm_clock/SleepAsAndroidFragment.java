@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.alarm_clock;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -80,17 +79,15 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     RecyclerView recyclerViewActions;
     ActionRecyclerViewAdapter recyclerViewAdapter;
     @BindView(R.id.spinner_sleep_as_android_event)
-    Spinner              spinnerEventType;
-    @BindView(R.id.add_fab)
-    FloatingActionButton addActionFAB;
+    Spinner          spinnerEventType;
     @BindView(R.id.layout_installed)
-    LinearLayout         layout_installed;
+    LinearLayout     layout_installed;
     @BindView(R.id.layout_not_installed)
-    LinearLayout         layout_not_installed;
+    LinearLayout     layout_not_installed;
     @BindView(R.id.get_from_play_store)
-    IconicsImageView     getFromPlayStore;
+    IconicsImageView getFromPlayStore;
     @BindView(R.id.switch_on_off)
-    Switch               switchOnOff;
+    Switch           switchOnOff;
 
     @Inject
     PersistenceHandler persistenceHandler;
@@ -171,8 +168,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
 
-        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        addActionFAB.setOnClickListener(new View.OnClickListener() {
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddSleepAsAndroidAlarmEventActionDialog addAlarmEventActionDialog = AddSleepAsAndroidAlarmEventActionDialog.newInstance(
@@ -221,11 +218,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            addActionFAB.setVisibility(View.GONE);
-        } else {
-            addActionFAB.setVisibility(View.VISIBLE);
-        }
 
         if (SleepAsAndroidHelper.isInstalled(getActivity())) {
             layout_installed.setVisibility(View.VISIBLE);

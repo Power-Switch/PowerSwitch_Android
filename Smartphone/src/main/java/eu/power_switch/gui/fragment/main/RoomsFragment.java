@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -41,7 +40,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
@@ -66,9 +64,6 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * Fragment containing a List of all Rooms and Receivers
  */
 public class RoomsFragment extends RecyclerViewFragment<Room> {
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton addReceiverFAB;
 
     @Inject
     ActionHandler actionHandler;
@@ -111,9 +106,9 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final RecyclerViewFragment recyclerViewFragment = this;
-        addReceiverFAB.setOnClickListener(new View.OnClickListener() {
+        addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -232,16 +227,6 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                     .setEnabled(false);
         }
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            addReceiverFAB.setVisibility(View.GONE);
-        } else {
-            addReceiverFAB.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

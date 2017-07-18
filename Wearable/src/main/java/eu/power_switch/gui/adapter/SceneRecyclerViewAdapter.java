@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
@@ -39,13 +39,13 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Scene>           scenes;
     private Context                    context;
+    private List<Scene>                scenes;
     private DataApiHandler             dataApiHandler;
     private RecyclerView               parentRecyclerView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
-    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Scene> scenes, DataApiHandler dataApiHandler,
+    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<Scene> scenes, DataApiHandler dataApiHandler,
                                     WearablePreferencesHandler wearablePreferencesHandler) {
         this.scenes = scenes;
         this.context = context;

@@ -27,6 +27,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.gui.activity.ValueSelectorActivity;
@@ -37,12 +38,12 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
  * <p/>
  * Created by Markus on 08.06.2016.
  */
-public abstract class SelectOneSettingsItem extends SettingsItem<Integer> {
+public abstract class SingleSelectSettingsItem extends SettingsItem<Integer> {
 
-    private final ArrayList<String> values;
+    private final List<String> values;
 
-    public SelectOneSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, PreferenceItem<Integer> preferenceItem,
-                                 @ArrayRes int values, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
+    public SingleSelectSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, PreferenceItem<Integer> preferenceItem,
+                                    @ArrayRes int values, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
         super(context, iconDrawable, description, preferenceItem, wearablePreferencesHandler);
         String[] valuesArray = context.getResources()
                 .getStringArray(values);
@@ -66,11 +67,14 @@ public abstract class SelectOneSettingsItem extends SettingsItem<Integer> {
      * Opens GUI to select a new value from all possible values
      */
     public void showValueSelector() {
-        ValueSelectorActivity.newInstance(context, getAllValues(), getValue());
+        ValueSelectorActivity.newInstance(context, getAllValues());
     }
 
-    public ArrayList<Integer> getAllValues() {
-        ArrayList<Integer> values = new ArrayList<>();
+    /**
+     * @return a list of all values
+     */
+    public List<Integer> getAllValues() {
+        List<Integer> values = new ArrayList<>();
         for (int i = 0; i < this.values.size(); i++) {
             values.add(i);
         }

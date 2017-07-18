@@ -48,8 +48,8 @@ dependencies {
     // compile fileTree(include: ['*.jar'], dir: 'libraries')
 
     // Lombok - Boilerplate compile time generator
-    compile "org.projectlombok:lombok:1.16.16"
-    annotationProcessor "org.projectlombok:lombok:1.16.16"
+    compile "org.projectlombok:lombok:${rootProject.ext.lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${rootProject.ext.lombokVersion}"
 
     // Timber - Logging framework
     compile 'com.jakewharton.timber:timber:4.5.1'
