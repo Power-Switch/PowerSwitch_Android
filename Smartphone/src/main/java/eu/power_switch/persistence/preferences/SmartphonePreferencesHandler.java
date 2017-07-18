@@ -29,12 +29,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.markusressel.typedpreferences.PreferenceItem;
+import de.markusressel.typedpreferences.PreferencesHandlerBase;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.persistence.data.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 
 /**
  * Preference handler used to store general app settings
@@ -102,7 +102,7 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
 
     @Override
     @NonNull
-    protected String getSharedPreferencesName() {
+    public String getSharedPreferencesName() {
         return SettingsConstants.SHARED_PREFS_NAME;
     }
 

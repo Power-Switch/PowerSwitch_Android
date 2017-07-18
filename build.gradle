@@ -48,7 +48,8 @@ ext {
     buildToolsVersion = "26.0.0"
 
     supportLibVersion = "25.4.0"
-    playServicesVersion = "11.0.2"
     supportLibWearableVersion = "2.0.3"
+    playServicesVersion = "11.0.2"
     dagger2Version = "2.11"
+    butterknifeVersion = "8.6.0"
 }

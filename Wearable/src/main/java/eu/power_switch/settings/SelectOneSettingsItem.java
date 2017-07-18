@@ -28,8 +28,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.gui.activity.ValueSelectorActivity;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**

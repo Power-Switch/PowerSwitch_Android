@@ -20,7 +20,7 @@ package eu.power_switch.persistence.preferences;
 
 import android.support.annotation.StringRes;
 
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import de.markusressel.typedpreferences.PreferenceItem;
 
 /**
  * Created by Markus on 16.07.2017.

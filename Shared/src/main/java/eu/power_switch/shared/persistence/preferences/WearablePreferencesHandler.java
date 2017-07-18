@@ -24,6 +24,8 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.markusressel.typedpreferences.PreferenceItem;
+import de.markusressel.typedpreferences.PreferencesHandlerBase;
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
 
@@ -58,7 +60,7 @@ public class WearablePreferencesHandler extends PreferencesHandlerBase {
 
     @NonNull
     @Override
-    protected String getSharedPreferencesName() {
+    public String getSharedPreferencesName() {
         return WEARABLE_SHARED_PREFS_NAME;
     }
 

@@ -24,7 +24,7 @@ import com.google.android.gms.wearable.DataMap;
 
 import java.util.ArrayList;
 
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
+import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

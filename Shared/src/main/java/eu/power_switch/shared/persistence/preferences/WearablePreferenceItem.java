@@ -2,6 +2,8 @@ package eu.power_switch.shared.persistence.preferences;
 
 import android.support.annotation.StringRes;
 
+import de.markusressel.typedpreferences.PreferenceItem;
+
 /**
  * Created by Markus on 17.07.2017.
  */

@@ -19,6 +19,7 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="eu.power_switch">
 
     <uses-feature android:name="android.hardware.type.watch"/>
@@ -32,7 +33,8 @@
         android:name="eu.power_switch.application.PowerSwitchWear"
         android:allowBackup="true"
         android:icon="@drawable/wearable_ic_launcher"
-        android:label="@string/powerswitch_app_name">
+        android:label="@string/powerswitch_app_name"
+        tools:replace="android:label">
 
         <uses-library
             android:name="com.google.android.wearable"

@@ -93,8 +93,8 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0'
 
     // Butterknife View Annotation
-    compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     // MaterialShowcaseView (Fullscreen tutorial messages)
     compile 'com.github.deano2390:MaterialShowcaseView:wip-SNAPSHOT'

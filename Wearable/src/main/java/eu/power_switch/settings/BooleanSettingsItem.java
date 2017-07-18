@@ -24,8 +24,8 @@ import android.support.annotation.StringRes;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
+import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.R;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**

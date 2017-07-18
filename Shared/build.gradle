@@ -68,6 +68,13 @@ dependencies {
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.google.android.gms:play-services-wearable:${rootProject.ext.playServicesVersion}"
 
+    // Easy preferences
+    compile('com.github.markusressel:TypedPreferences:master-SNAPSHOT') {
+        exclude module: 'app'
+        changing = true;
+        transitive = true
+    }
+
     // Iconics (use SVG resources)
     compile 'com.mikepenz:iconics-core:2.8.7@aar'
     // Fonts

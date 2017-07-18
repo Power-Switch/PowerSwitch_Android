@@ -36,14 +36,14 @@ import eu.power_switch.R;
 public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentCompat {
 
     TextView textView;
-    SeekBar seekBar;
+    SeekBar  seekBar;
 
     public SliderPreferenceFragmentCompat() {
     }
 
     public static SliderPreferenceFragmentCompat newInstance(String key) {
         SliderPreferenceFragmentCompat fragment = new SliderPreferenceFragmentCompat();
-        Bundle b = new Bundle(1);
+        Bundle                         b        = new Bundle(1);
         b.putString(ARG_KEY, key);
         fragment.setArguments(b);
         return fragment;
@@ -51,8 +51,8 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
 
     @Override
     protected View onCreateDialogView(Context context) {
-        LayoutInflater li = LayoutInflater.from(context);
-        View contentView = li.inflate(R.layout.dialog_slider_preference, null);
+        LayoutInflater li          = LayoutInflater.from(context);
+        View           contentView = li.inflate(R.layout.dialog_slider_preference, null);
 
         return contentView;
         // super.onCreateDialogView(context);
@@ -64,10 +64,10 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
 
         SliderPreference sliderPreference = getSliderPreference();
 
-        textView = (TextView) view.findViewById(R.id.textView);
+        textView = view.findViewById(R.id.textView);
         textView.setText(String.format(Locale.getDefault(), "%d ms", sliderPreference.getProgress()));
 
-        seekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        seekBar = view.findViewById(R.id.seekbar);
         seekBar.setMax(1000);
         seekBar.setProgress(getSliderPreference().getProgress());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -28,10 +28,10 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.markusressel.typedpreferences.PreferenceItem;
+import de.markusressel.typedpreferences.PreferencesHandlerBase;
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.DeveloperSettingsConstants;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
-import eu.power_switch.shared.persistence.preferences.PreferencesHandlerBase;
 
 /**
  * Preference handler used to store developer settings
@@ -51,7 +51,7 @@ public class DeveloperPreferencesHandler extends PreferencesHandlerBase {
 
     @NonNull
     @Override
-    protected String getSharedPreferencesName() {
+    public String getSharedPreferencesName() {
         return DeveloperSettingsConstants.DEVELOPER_SHARED_PREFS_NAME;
     }
 

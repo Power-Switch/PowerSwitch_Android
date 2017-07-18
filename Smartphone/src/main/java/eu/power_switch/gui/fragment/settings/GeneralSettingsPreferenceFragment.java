@@ -31,6 +31,7 @@ import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
@@ -38,12 +39,11 @@ import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
+import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -61,7 +61,6 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
-import eu.power_switch.shared.persistence.preferences.PreferenceItem;
 import eu.power_switch.wizard.gui.WizardActivity;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -73,6 +72,12 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * Created by Markus on 31.07.2016.
  */
 public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragment {
+
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    StatusMessageHandler statusMessageHandler;
 
     private IntListPreference startupDefaultTab;
     private SwitchPreference  autodiscover;
@@ -96,19 +101,13 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
     private IntListPreference logDestination;
     private Preference        sendLogsEmail;
 
-    private Calendar             devMenuFirstClickTime;
-    private int                  devMenuClickCounter;
-    private Map<Integer, String> mainTabsMap;
-    private Map<Integer, String> keepHistoryMap;
-    private Map<Integer, String> themeMap;
-    private Map<Integer, String> logDestinationMap;
-    private Map<Integer, String> launcherIconMap;
-
-    @Inject
-    SmartphonePreferencesHandler smartphonePreferencesHandler;
-
-    @Inject
-    StatusMessageHandler statusMessageHandler;
+    private Calendar                  devMenuFirstClickTime;
+    private int                       devMenuClickCounter;
+    private SparseArrayCompat<String> mainTabsMap;
+    private SparseArrayCompat<String> keepHistoryMap;
+    private SparseArrayCompat<String> themeMap;
+    private SparseArrayCompat<String> logDestinationMap;
+    private SparseArrayCompat<String> launcherIconMap;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -384,8 +383,8 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
      *
      * @return Map from stored value -> display name
      */
-    private Map<Integer, String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
-        Map<Integer, String> map = new HashMap<>();
+    private SparseArrayCompat<String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
+        SparseArrayCompat<String> map = new SparseArrayCompat<>();
 
         String[] values = getResources().getStringArray(valueRes);
         String[] names  = getResources().getStringArray(nameRes);
@@ -407,15 +406,15 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         }
 
         if (preferenceItem == SmartphonePreferencesHandler.KEEP_HISTORY_DURATION) {
-            keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.getValue(preferenceItem)));
+            keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.<Integer>getValue(preferenceItem)));
         } else if (preferenceItem == BACKUP_PATH) {
             backupPath.setSummary(String.valueOf(smartphonePreferencesHandler.getValue(preferenceItem)));
         } else if (preferenceItem == SmartphonePreferencesHandler.STARTUP_DEFAULT_TAB) {
-            startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.getValue(preferenceItem)));
+            startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.<Integer>getValue(preferenceItem)));
         } else if (preferenceItem == SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) {
             vibrationDuration.setSummary(smartphonePreferencesHandler.getValue(preferenceItem) + " ms");
         } else if (preferenceItem == SmartphonePreferencesHandler.KEY_THEME) {
-            theme.setSummary(themeMap.get(smartphonePreferencesHandler.getValue(preferenceItem)));
+            theme.setSummary(themeMap.get(smartphonePreferencesHandler.<Integer>getValue(preferenceItem)));
 
             // restart activity
             getActivity().finish();
@@ -425,11 +424,11 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
             startActivity(intent);
 
         } else if (preferenceItem == SmartphonePreferencesHandler.KEY_LAUNCHER_ICON) {
-            logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.getValue(preferenceItem)));
+            logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.<Integer>getValue(preferenceItem)));
         } else if (preferenceItem == SmartphonePreferencesHandler.KEY_LAUNCHER_ICON) {
             ApplicationHelper.setLauncherIcon(getContext(),
                     ApplicationHelper.LauncherIcon.valueOf((int) smartphonePreferencesHandler.getValue(preferenceItem)));
-            launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.getValue(preferenceItem)));
+            launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.<Integer>getValue(preferenceItem)));
 
             new AlertDialog.Builder(getActivity()).setTitle(R.string.attention)
                     .setMessage(R.string.changes_may_only_show_up_after_device_restart)
