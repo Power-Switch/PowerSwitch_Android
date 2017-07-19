@@ -222,7 +222,7 @@ class ActionHandler {
         // delete specific information
         database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID + "=" + actionId, null);
         database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID + "=" + actionId, null);
-        database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ID + "=" + actionId, null);
+        database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID + "=" + actionId, null);
 
         // delete from every relational table too
         database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID + "=" + actionId, null);
