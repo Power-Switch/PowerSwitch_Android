@@ -76,7 +76,8 @@ dependencies {
     }
 
     // Iconics (use SVG resources)
-    compile 'com.mikepenz:iconics-core:2.8.7@aar'
+    compile "com.mikepenz:iconics-core:${rootProject.ext.iconicsVersion}@aar"
+    compile "com.mikepenz:iconics-views:${rootProject.ext.iconicsVersion}@aar"
     // Fonts
     compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
     compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.3@aar'

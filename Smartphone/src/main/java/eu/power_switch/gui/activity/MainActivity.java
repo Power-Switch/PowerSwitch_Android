@@ -653,6 +653,7 @@ public class MainActivity extends EventBusActivity {
                                 .withAboutAppName(aboutAppName)
                                 .withAboutIconShown(true)
                                 .withAboutVersionShown(true)
+                                .withAboutVersionShownName(true)
                                 .withLicenseShown(true)
                                 .withVersionShown(true)
                                 .withAutoDetect(true)
@@ -696,8 +697,8 @@ public class MainActivity extends EventBusActivity {
                                             startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
-                                            return false;
-                                        }
+                                        return false;
+                                    }
 
                                         return false;
                                     }

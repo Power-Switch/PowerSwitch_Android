@@ -90,7 +90,7 @@ dependencies {
     compile "com.google.dagger:dagger-android-support:${rootProject.ext.dagger2Version}"
 
     // Dexter (Permissions)
-    compile 'com.karumi:dexter:4.1.0'
+    compile 'com.karumi:dexter:4.1.1'
 
     // Butterknife View Annotation
     compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
@@ -101,12 +101,12 @@ dependencies {
     //compile project(':ShowcaseViewLibrary')
 
     // AboutLibraries ("About" screen)
-    compile('com.mikepenz:aboutlibraries:5.9.6@aar') {
+    compile('com.mikepenz:aboutlibraries:5.9.7@aar') {
         transitive = true
     }
 
     // MaterialDrawer (Swipe menu)
-    compile('com.mikepenz:materialdrawer:5.9.3@aar') {
+    compile('com.mikepenz:materialdrawer:5.9.4@aar') {
         transitive = true
     }
 
