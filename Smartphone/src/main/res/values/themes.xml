@@ -57,8 +57,9 @@
         <item name="textColorError">@color/color_red_a700</item>
 
         <!-- About Libraries -->
-        <item name="about_libraries_window_background">@color/windowBackgroundColor</item>
+        <!--<item name="about_libraries_window_background">@color/windowBackgroundColor</item>-->
         <item name="about_libraries_card">@color/cardview_background</item>
+        <item name="about_libraries_title_description">@color/textColorPrimary</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimary</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondary</item>
         <item name="about_libraries_special_button_openSource">
@@ -119,8 +120,9 @@
         <item name="textColorError">@color/color_red_a700</item>
 
         <!-- About Libraries -->
-        <item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>
+        <!--<item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>-->
         <item name="about_libraries_card">@color/cardview_backgroundInverse</item>
+        <item name="about_libraries_title_description">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondaryInverse</item>
         <item name="about_libraries_special_button_openSource">
@@ -178,8 +180,9 @@
         <!--<item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>-->
 
         <!-- About Libraries -->
-        <item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>
+        <!--<item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>-->
         <item name="about_libraries_card">@color/cardview_backgroundInverse</item>
+        <item name="about_libraries_title_description">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondaryInverse</item>
         <item name="about_libraries_special_button_openSource">
@@ -325,19 +328,19 @@
     </style>
 
     <!-- Themes -->
-    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue" />
+    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue"/>
 
-    <style name="PowerSwitchTheme.DayNight.Blue" parent="PowerSwitchThemeBase.DayNight.Blue" />
+    <style name="PowerSwitchTheme.DayNight.Blue" parent="PowerSwitchThemeBase.DayNight.Blue"/>
 
-    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red" />
+    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red"/>
 
-    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue" />
+    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue"/>
 
-    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red" />
+    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red"/>
 
-    <style name="PowerSwitchDialogTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dialog.Dark.Blue" />
+    <style name="PowerSwitchDialogTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dialog.Dark.Blue"/>
 
-    <style name="PowerSwitchDialogTheme.Light.Blue" parent="PowerSwitchThemeBase.Dialog.Light.Blue" />
+    <style name="PowerSwitchDialogTheme.Light.Blue" parent="PowerSwitchThemeBase.Dialog.Light.Blue"/>
 
     <style name="PowerSwitchTheme.Tasker.Dark" parent="Theme.Locale.Dark">
         <!-- material design -->

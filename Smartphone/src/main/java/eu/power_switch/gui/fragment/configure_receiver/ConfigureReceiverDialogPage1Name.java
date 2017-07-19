@@ -152,8 +152,6 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
         initializeReceiverData();
 
-        checkValidity();
-
         createTutorial();
 
         initialized = true;
