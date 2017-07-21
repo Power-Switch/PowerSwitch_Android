@@ -58,7 +58,7 @@
 
     <string name="geofence_radius">Geofence Radius</string>
 
-    <string name="search_address">Addresse suchen</string>
+    <string name="search_address">Adresse suchen</string>
     <string name="address_not_found">Adresse nicht gefunden</string>
 
 </resources>
