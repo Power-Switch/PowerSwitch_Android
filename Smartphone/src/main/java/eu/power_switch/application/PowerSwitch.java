@@ -52,6 +52,7 @@ import eu.power_switch.dagger.DaggerAppComponent;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.location.LocationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -62,6 +63,7 @@ import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.log.TimberHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import eu.power_switch.timer.SunHelper;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
@@ -95,6 +97,9 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
     @Inject
     StatusMessageHandler statusMessageHandler;
+
+    @Inject
+    LocationHandler locationHandler;
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
@@ -168,9 +173,27 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
      * @return true if the app is in night mode
      */
     public static boolean isNightModeActive() {
-        Calendar now         = Calendar.getInstance();
-        int      currentHour = now.get(Calendar.HOUR_OF_DAY);
+        Calendar now = Calendar.getInstance();
 
+        // center of germany as fallback until location is automatically detected
+        double lat = 51.221379;
+        double lon = 10.631652;
+
+        int offsetMinutes = 30;
+
+        Calendar sunrise = SunHelper.getSunrise(now, lat, lon);
+        Calendar sunset  = SunHelper.getSunset(now, lat, lon);
+        if (sunrise != null && sunset != null) {
+            sunrise.add(Calendar.MINUTE, offsetMinutes);
+            sunset.add(Calendar.MINUTE, -offsetMinutes);
+
+            if (now.before(sunrise) || now.after(sunset)) {
+                return true;
+            }
+        }
+
+        // fallback
+        int currentHour = now.get(Calendar.HOUR_OF_DAY);
         return currentHour < 8 || currentHour >= 22;
     }
 

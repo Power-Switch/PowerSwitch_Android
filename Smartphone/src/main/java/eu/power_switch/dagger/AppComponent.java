@@ -36,7 +36,7 @@ import eu.power_switch.application.PowerSwitch;
                       BackupBindingsModule.class,
                       CallEventBindingsModule.class,
                       GatewayBindingsModule.class,
-                      GeofenceBindingsModule.class,
+                      GeofenceBindingsModule.class, LocationBindingsModule.class,
                       NetworkHandlerModule.class,
                       NfcBindingsModule.class,
                       PersistenceBindingsModule.class,

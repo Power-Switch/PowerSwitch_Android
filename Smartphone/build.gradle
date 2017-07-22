@@ -149,6 +149,9 @@ dependencies {
 //        exclude module: 'app'
 //    }
 
+    // Sunrise/Sunset calculations
+    compile 'net.e175.klaus:solarpositioning:0.0.9'
+
     // PowerSwitch Modules
     compile project(':Shared')
     compile project(':LocaleApi')
