@@ -38,9 +38,11 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.persistence.preferences.DeveloperPreferencesHandler;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
  * Created by Markus on 30.06.2017.
@@ -56,6 +58,15 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
      * Normal activity style
      */
     public static final int DIALOG = 1;
+
+    /**
+     * Indicates if this activity is in night mode
+     */
+    private boolean nightModeActive;
+    /**
+     * Indicates if the current theme is one that changes based on the time of day
+     */
+    private boolean dayNightModeActive;
 
 
     @Inject
@@ -90,6 +101,9 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
         // apply forced locale (if set in developer options)
         applyLocale();
 
+        // set initial state
+        nightModeActive = PowerSwitch.isNightModeActive();
+        dayNightModeActive = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_THEME) == SettingsConstants.THEME_DAY_NIGHT_BLUE;
         // set Theme before anything else in onCreate();
         switch (getStyle()) {
             case DEFAULT:
@@ -101,6 +115,18 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
         }
 
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (PowerSwitch.isNightModeActive() != nightModeActive) {
+            nightModeActive = !nightModeActive;
+            if (dayNightModeActive) {
+                recreate();
+            }
+        }
     }
 
     public void applyLocale() {
