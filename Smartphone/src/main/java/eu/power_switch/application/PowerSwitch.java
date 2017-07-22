@@ -171,7 +171,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         Calendar now         = Calendar.getInstance();
         int      currentHour = now.get(Calendar.HOUR_OF_DAY);
 
-        return currentHour < 8 || currentHour > 22;
+        return currentHour < 8 || currentHour >= 22;
     }
 
     @Override
