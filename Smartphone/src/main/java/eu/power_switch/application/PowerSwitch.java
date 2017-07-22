@@ -22,15 +22,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -53,7 +52,9 @@ import eu.power_switch.dagger.DaggerAppComponent;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.location.Coordinate;
 import eu.power_switch.location.LocationHandler;
+import eu.power_switch.location.LocationListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -82,7 +83,6 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
-    private Handler                         mHandler;
 
     @Inject
     PersistenceHandler persistenceHandler;
@@ -171,14 +171,22 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     }
 
     /**
+     * @param preferencesHandler
+     *
      * @return true if the app is in night mode
      */
-    public static boolean isNightModeActive() {
+    public static boolean isNightModeActive(SmartphonePreferencesHandler preferencesHandler) {
         GregorianCalendar now = new GregorianCalendar();
 
         // center of germany as fallback until location is automatically detected
         double lat = 51.221379;
         double lon = 10.631652;
+
+        Coordinate coordinate = preferencesHandler.getValue(SmartphonePreferencesHandler.LAST_COORDINATE);
+        if (coordinate.getLatitude() != 0 && coordinate.getLongitude() != 0) {
+            lat = coordinate.getLatitude();
+            lon = coordinate.getLongitude();
+        }
 
         int offsetMinutes = 30;
 
@@ -216,8 +224,8 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         super.onCreate();
 
         // Configure Log4J Logger
-        boolean internalFileLoggingOnly;
-        Integer logDestinationType = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
+        boolean       internalFileLoggingOnly;
+        final Integer logDestinationType = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
         if (logDestinationType.equals(Integer.valueOf(getString(R.string.value_internal)))) {
             internalFileLoggingOnly = true;
         } else {
@@ -262,18 +270,22 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         // Initialize Firebase
 //        Firebase.setAndroidContext(this);
 
+        if (PermissionHelper.isLocationPermissionAvailable(this)) {
+            LocationListener listener = new LocationListener() {
+                @Override
+                public void onLocationUpdated(Location location) {
+                    Timber.d("Location: " + location.getLatitude() + " " + location.getLongitude());
+                    smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.LAST_COORDINATE,
+                            new Coordinate(location.getLatitude(), location.getLongitude()));
+                }
 
-        // This is where you do your work in the UI thread.
-// Your worker tells you in the message what to do.
-        mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message message) {
-                // This is where you do your work in the UI thread.
-                // Your worker tells you in the message what to do.
-                Toast.makeText(getApplicationContext(), message.obj.toString(), Toast.LENGTH_SHORT)
-                        .show();
-            }
-        };
+                @Override
+                public void onAvailabilityChanged(boolean isLocationAvailable) {
+
+                }
+            };
+            locationHandler.addLocationListener(listener);
+        }
 
 
         // Log configuration and update widgets, wear, etc.
@@ -281,12 +293,8 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-//                    mHandler.obtainMessage(0, "Wait...").sendToTarget();
-
                     // wait some time for application to finish loading
                     Thread.sleep(5000);
-//                    mHandler.obtainMessage(0, "Working...").sendToTarget();
-
 
                     if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
                         try {
@@ -314,9 +322,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
                 try {
                     android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_LESS_FAVORABLE);
 
-//                    mHandler.obtainMessage(0, "Wait...").sendToTarget();
                     Thread.sleep(5000);
-//                    mHandler.obtainMessage(0, "Logging database...").sendToTarget();
 
                     for (Apartment apartment : persistenceHandler.getAllApartments()) {
                         Timber.d(apartment.toString());

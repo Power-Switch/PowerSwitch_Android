@@ -85,7 +85,8 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
 
         for (Action action : callEvent.getActions(PhoneConstants.CallType.INCOMING)) {
             AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
-            textViewActionDescription.setText(action.toString());
+            // TODO:
+//            textViewActionDescription.setText(Action.createReadableString(context, action, persistenceHandler));
             textViewActionDescription.setPadding(0, 0, 0, 4);
             holder.linearLayoutActions.addView(textViewActionDescription);
         }

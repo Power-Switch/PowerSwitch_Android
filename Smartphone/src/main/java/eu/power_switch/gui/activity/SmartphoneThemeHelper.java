@@ -22,6 +22,9 @@ import android.app.Activity;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.DialogFragment;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
@@ -32,14 +35,22 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
 /**
  * Created by Markus on 25.07.2016.
  */
+@Singleton
 public class SmartphoneThemeHelper {
+
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    public SmartphoneThemeHelper() {
+    }
 
     /**
      * Apply a Theme to an Activity
      *
      * @param activity Activity to apply theme on
      */
-    public static void applyTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+    public void applyTheme(Activity activity) {
         int theme = smartphonePreferencesHandler.getValue(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
@@ -60,7 +71,7 @@ public class SmartphoneThemeHelper {
 //                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 //                setTheme(activity, R.style.PowerSwitchTheme_DayNight_Blue);
 
-                if (PowerSwitch.isNightModeActive()) {
+                if (PowerSwitch.isNightModeActive(smartphonePreferencesHandler)) {
                     setTheme(activity, R.style.PowerSwitchTheme_Dark_Blue);
                 } else {
                     setTheme(activity, R.style.PowerSwitchTheme_Light_Blue);
@@ -78,7 +89,7 @@ public class SmartphoneThemeHelper {
      *
      * @param activity Activity to apply theme on
      */
-    public static void applyDialogTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+    public void applyDialogTheme(Activity activity) {
         int theme = smartphonePreferencesHandler.getValue(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
@@ -97,7 +108,7 @@ public class SmartphoneThemeHelper {
 //                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 //                setTheme(activity, R.style.PowerSwitchTheme_DayNight_Blue);
 //
-                if (PowerSwitch.isNightModeActive()) {
+                if (PowerSwitch.isNightModeActive(smartphonePreferencesHandler)) {
                     setTheme(activity, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 } else {
                     setTheme(activity, R.style.PowerSwitchDialogTheme_Light_Blue);
@@ -110,7 +121,7 @@ public class SmartphoneThemeHelper {
         }
     }
 
-    private static void setTheme(Activity activity, @StyleRes int themeRes) {
+    private void setTheme(Activity activity, @StyleRes int themeRes) {
         activity.getApplicationContext()
                 .setTheme(themeRes);
         activity.setTheme(themeRes);
@@ -121,7 +132,7 @@ public class SmartphoneThemeHelper {
      *
      * @param dialogFragment Fragment to apply theme on
      */
-    public static void applyDialogTheme(DialogFragment dialogFragment, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+    public void applyDialogTheme(DialogFragment dialogFragment) {
         int theme = smartphonePreferencesHandler.getValue(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
@@ -141,7 +152,7 @@ public class SmartphoneThemeHelper {
 //
 //                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
 
-                if (PowerSwitch.isNightModeActive()) {
+                if (PowerSwitch.isNightModeActive(smartphonePreferencesHandler)) {
                     dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 } else {
                     dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);

@@ -131,7 +131,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
         holder.linearLayoutEnterActions.removeAllViews();
         for (Action action : geofence.getActions(Geofence.EventType.ENTER)) {
             AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
-            textViewActionDescription.setText(action.toString());
+            textViewActionDescription.setText(Action.createReadableString(context, action, persistenceHandler));
             textViewActionDescription.setPadding(0, 0, 0, 4);
             holder.linearLayoutEnterActions.addView(textViewActionDescription);
         }
@@ -139,7 +139,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
         holder.linearLayoutExitActions.removeAllViews();
         for (Action action : geofence.getActions(Geofence.EventType.EXIT)) {
             AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
-            textViewActionDescription.setText(action.toString());
+            textViewActionDescription.setText(Action.createReadableString(context, action, persistenceHandler));
             textViewActionDescription.setPadding(0, 0, 0, 4);
             holder.linearLayoutExitActions.addView(textViewActionDescription);
         }

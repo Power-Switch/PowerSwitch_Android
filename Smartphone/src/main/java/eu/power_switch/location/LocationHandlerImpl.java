@@ -18,11 +18,17 @@
 
 package eu.power_switch.location;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -34,6 +40,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 22.07.2017.
@@ -43,31 +50,109 @@ public class LocationHandlerImpl implements LocationHandler {
 
     private final Context context;
 
-    private final Set<String> listeners = Collections.synchronizedSet(new HashSet<String>());
+    private final Set<LocationListener> listeners = Collections.synchronizedSet(new HashSet<LocationListener>());
+
     private final FusedLocationProviderClient fusedLocationProviderClient;
+    private final LocationCallback            locationCallback;
+
+    private Location lastLocation;
 
     @Inject
     public LocationHandlerImpl(Context context) {
         this.context = context;
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationAvailability(LocationAvailability locationAvailability) {
+                callListeners(locationAvailability.isLocationAvailable());
+            }
+
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    callListeners(location);
+                }
+            }
+        };
+
+        getLastLocation();
     }
 
-    @Nullable
+    private synchronized void callListeners(boolean locationAvailable) {
+        for (LocationListener listener : listeners) {
+            listener.onAvailabilityChanged(locationAvailable);
+        }
+    }
+
+    private synchronized void callListeners(Location location) {
+        for (LocationListener listener : listeners) {
+            lastLocation = location;
+            listener.onLocationUpdated(location);
+        }
+    }
+
     @Override
-    public Location getCurrentLocation() {
+    public Location getLastLocation() {
         if (PermissionHelper.isLocationPermissionAvailable(context)) {
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // ...
-                            }
+                            lastLocation = location;
+                            Timber.d("LastLocation: " + location.getLatitude() + " " + location.getLongitude());
                         }
                     });
         }
 
-        return null;
+        return lastLocation;
+    }
+
+    public boolean addLocationListener(LocationListener listener) {
+        if (listener == null) {
+            return false;
+        }
+
+        boolean added = listeners.add(listener);
+
+        if (added && listeners.size() == 1) {
+            startLocationUpdates();
+        }
+
+        return added;
+    }
+
+    public boolean removeLocationListener(LocationListener listener) {
+        if (listener == null) {
+            return false;
+        }
+
+        boolean removed = listeners.remove(listener);
+
+        if (removed && listeners.size() == 0) {
+            stopLocationUpdates();
+        }
+
+        return removed;
+    }
+
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_NO_POWER);
+        locationRequest.setInterval(60 * 1000 * 1000);
+        locationRequest.setFastestInterval(60 * 1000);
+
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Timber.w("Missing location permission, not starting location updates");
+            return;
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+    }
+
+    private void stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 }

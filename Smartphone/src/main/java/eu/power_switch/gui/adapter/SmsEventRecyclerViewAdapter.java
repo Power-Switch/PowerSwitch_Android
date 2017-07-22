@@ -75,7 +75,8 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
 
         for (Action action : smsEvent.getActions(PhoneConstants.SmsType.INCOMING)) {
             AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
-            textViewActionDescription.setText(action.toString());
+            // TODO:
+//            textViewActionDescription.setText(Action.createReadableString(context, action, persistenceHandler));
             textViewActionDescription.setPadding(0, 0, 0, 4);
             holder.linearLayoutActions.addView(textViewActionDescription);
         }

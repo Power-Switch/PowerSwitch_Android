@@ -18,38 +18,17 @@
 
 package eu.power_switch.location;
 
-import android.location.Location;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 /**
- * Interface for a location handler
- * <p>
  * Created by Markus on 22.07.2017.
  */
-public interface LocationHandler {
+@AllArgsConstructor
+@Value
+public class Coordinate {
 
-    /**
-     * Get the last known location without requesting a position update by the system
-     *
-     * @return the last known location
-     */
-    Location getLastLocation();
-
-    /**
-     * Add a location listener
-     *
-     * @param listener the listener to add
-     *
-     * @return true if the listener was added, false otherwise
-     */
-    boolean addLocationListener(LocationListener listener);
-
-    /**
-     * Remove a location listener
-     *
-     * @param listener the listener to remove
-     *
-     * @return true if the listener was removed, false otherwise
-     */
-    boolean removeLocationListener(LocationListener listener);
+    double latitude;
+    double longitude;
 
 }

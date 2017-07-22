@@ -50,6 +50,9 @@ public abstract class ButterKnifeSupportDialogFragment extends DialogFragment {
     @Inject
     protected SmartphonePreferencesHandler smartphonePreferencesHandler;
 
+    @Inject
+    SmartphoneThemeHelper smartphoneThemeHelper;
+
     protected View     rootView;
     private   Unbinder unbinder;
 
@@ -57,7 +60,7 @@ public abstract class ButterKnifeSupportDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
 
-        SmartphoneThemeHelper.applyDialogTheme(this, smartphonePreferencesHandler);
+        smartphoneThemeHelper.applyDialogTheme(this);
 
         super.onCreate(savedInstanceState);
     }

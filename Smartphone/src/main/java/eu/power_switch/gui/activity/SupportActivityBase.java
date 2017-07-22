@@ -40,6 +40,7 @@ import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.location.LocationHandler;
 import eu.power_switch.persistence.preferences.DeveloperPreferencesHandler;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -59,21 +60,6 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
      */
     public static final int DIALOG = 1;
 
-    /**
-     * Indicates if this activity is in night mode
-     */
-    private boolean nightModeActive;
-    /**
-     * Indicates if the current theme is one that changes based on the time of day
-     */
-    private boolean dayNightModeActive;
-
-
-    @Inject
-    DispatchingAndroidInjector<Fragment>             supportFragmentInjector;
-    @Inject
-    DispatchingAndroidInjector<android.app.Fragment> frameworkFragmentInjector;
-
     @Inject
     protected StatusMessageHandler statusMessageHandler;
 
@@ -82,6 +68,26 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
 
     @Inject
     protected DeveloperPreferencesHandler developerPreferencesHandler;
+
+    @Inject
+    protected LocationHandler locationHandler;
+
+    @Inject
+    DispatchingAndroidInjector<Fragment>             supportFragmentInjector;
+    @Inject
+    DispatchingAndroidInjector<android.app.Fragment> frameworkFragmentInjector;
+
+    @Inject
+    SmartphoneThemeHelper smartphoneThemeHelper;
+
+    /**
+     * Indicates if this activity is in night mode
+     */
+    private boolean nightModeActive;
+    /**
+     * Indicates if the current theme is one that changes based on the time of day
+     */
+    private boolean dayNightModeActive;
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
@@ -102,15 +108,15 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
         applyLocale();
 
         // set initial state
-        nightModeActive = PowerSwitch.isNightModeActive();
+        nightModeActive = PowerSwitch.isNightModeActive(smartphonePreferencesHandler);
         dayNightModeActive = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.KEY_THEME) == SettingsConstants.THEME_DAY_NIGHT_BLUE;
         // set Theme before anything else in onCreate();
         switch (getStyle()) {
             case DEFAULT:
-                SmartphoneThemeHelper.applyTheme(this, smartphonePreferencesHandler);
+                smartphoneThemeHelper.applyTheme(this);
                 break;
             case DIALOG:
-                SmartphoneThemeHelper.applyDialogTheme(this, smartphonePreferencesHandler);
+                smartphoneThemeHelper.applyDialogTheme(this);
                 break;
         }
 
@@ -121,7 +127,7 @@ public abstract class SupportActivityBase extends AppCompatActivity implements H
     protected void onStart() {
         super.onStart();
 
-        if (PowerSwitch.isNightModeActive() != nightModeActive) {
+        if (PowerSwitch.isNightModeActive(smartphonePreferencesHandler) != nightModeActive) {
             nightModeActive = !nightModeActive;
             if (dayNightModeActive) {
                 recreate();

@@ -33,6 +33,7 @@ import de.markusressel.typedpreferences.PreferenceItem;
 import de.markusressel.typedpreferences.PreferencesHandlerBase;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
+import eu.power_switch.location.Coordinate;
 import eu.power_switch.persistence.data.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
@@ -92,6 +93,9 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
     public static final PreferenceItem<Boolean> KEY_SHOULD_SHOW_WIZARD          = new SmartphonePreferenceItem<>(R.string.key_shouldShowWizard, true);
     public static final PreferenceItem<Integer> KEY_LAUNCHER_ICON               = new SmartphonePreferenceItem<>(R.string.key_launcher_icon, 0);
 
+    public static final PreferenceItem<Coordinate> LAST_COORDINATE = new SmartphonePreferenceItem<>(R.string.key_last_coordinate,
+            new Coordinate(0, 0));
+
     DeveloperPreferencesHandler developerPreferencesHandler;
 
     @Inject
@@ -134,6 +138,7 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
         allPreferences.add(KEY_SHOW_TIMER_NOTIFICATIONS);
         allPreferences.add(KEY_SHOULD_SHOW_WIZARD);
         allPreferences.add(KEY_LAUNCHER_ICON);
+        allPreferences.add(LAST_COORDINATE);
 
         return allPreferences;
     }
