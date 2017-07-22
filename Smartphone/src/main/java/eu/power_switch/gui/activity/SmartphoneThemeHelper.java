@@ -19,10 +19,11 @@
 package eu.power_switch.gui.activity;
 
 import android.app.Activity;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDelegate;
 
 import eu.power_switch.R;
+import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
@@ -42,34 +43,32 @@ public class SmartphoneThemeHelper {
         int theme = smartphonePreferencesHandler.getValue(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                activity.setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(activity, R.style.PowerSwitchTheme_Dark_Blue);
                 break;
             case SettingsConstants.THEME_DARK_RED:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                activity.setTheme(R.style.PowerSwitchTheme_Dark_Red);
+                setTheme(activity, R.style.PowerSwitchTheme_Dark_Red);
                 break;
             case SettingsConstants.THEME_LIGHT_BLUE:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                activity.setTheme(R.style.PowerSwitchTheme_Light_Blue);
+                setTheme(activity, R.style.PowerSwitchTheme_Light_Blue);
                 break;
             case SettingsConstants.THEME_LIGHT_RED:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchTheme_Light_Red);
-                activity.setTheme(R.style.PowerSwitchTheme_Light_Red);
+                setTheme(activity, R.style.PowerSwitchTheme_Light_Red);
                 break;
             case SettingsConstants.THEME_DAY_NIGHT_BLUE:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+                // Day/Night mode not working yet
 
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
-                activity.setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+//                setTheme(activity, R.style.PowerSwitchTheme_DayNight_Blue);
+
+                if (PowerSwitch.isNightModeActive()) {
+                    setTheme(activity, R.style.PowerSwitchTheme_Dark_Blue);
+                } else {
+                    setTheme(activity, R.style.PowerSwitchTheme_Light_Blue);
+                }
+
                 break;
             default:
-                activity.setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(activity, R.style.PowerSwitchTheme_Dark_Blue);
                 break;
         }
     }
@@ -83,33 +82,38 @@ public class SmartphoneThemeHelper {
         int theme = smartphonePreferencesHandler.getValue(KEY_THEME);
         switch (theme) {
             case SettingsConstants.THEME_DARK_BLUE:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
-                activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
+                setTheme(activity, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 break;
             case SettingsConstants.THEME_LIGHT_BLUE:
-                activity.getApplicationContext()
-                        .setTheme(R.style.PowerSwitchDialogTheme_Light_Blue);
-                activity.setTheme(R.style.PowerSwitchDialogTheme_Light_Blue);
+                setTheme(activity, R.style.PowerSwitchDialogTheme_Light_Blue);
                 break;
             case SettingsConstants.THEME_DARK_RED:
-//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
-//                activity.setTheme(R.style.PowerSwitchTheme_Dark_Red);
+//                setTheme(activity, R.style.PowerSwitchTheme_Dark_Red);
 //                break;
             case SettingsConstants.THEME_LIGHT_RED:
-//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
-//                activity.setTheme(R.style.PowerSwitchTheme_Light_Red);
+//                setTheme(activity, R.style.PowerSwitchTheme_Light_Red);
 //                break;
             case SettingsConstants.THEME_DAY_NIGHT_BLUE:
 //                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+//                setTheme(activity, R.style.PowerSwitchTheme_DayNight_Blue);
 //
-//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
-//                activity.setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
-//                break;
+                if (PowerSwitch.isNightModeActive()) {
+                    setTheme(activity, R.style.PowerSwitchDialogTheme_Dark_Blue);
+                } else {
+                    setTheme(activity, R.style.PowerSwitchDialogTheme_Light_Blue);
+                }
+
+                break;
             default:
                 activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
                 break;
         }
+    }
+
+    private static void setTheme(Activity activity, @StyleRes int themeRes) {
+        activity.getApplicationContext()
+                .setTheme(themeRes);
+        activity.setTheme(themeRes);
     }
 
     /**
@@ -136,7 +140,14 @@ public class SmartphoneThemeHelper {
 //                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 //
 //                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
-//                break;
+
+                if (PowerSwitch.isNightModeActive()) {
+                    dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
+                } else {
+                    dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
+                }
+
+                break;
             default:
                 dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 break;

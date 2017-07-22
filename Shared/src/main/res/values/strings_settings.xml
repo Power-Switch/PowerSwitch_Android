@@ -29,6 +29,10 @@
     <string name="theme_light_blue">Light Blue</string>
     <string name="theme_dayNight_blue">Day/Night Blue</string>
 
+    <string name="theme_dark_red">Dark Red</string>
+    <string name="theme_light_red">Light Red</string>
+    <string name="theme_dayNight_red">Day/Night Red</string>
+
     <string name="create_gateway">Add Gateway</string>
     <string name="search_gateway">Search Gateway</string>
 

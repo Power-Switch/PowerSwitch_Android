@@ -28,7 +28,7 @@
         <item>1</item>
     </string-array>
 
-    <string-array name="locales">
+    <string-array name="locales" translatable="false">
         <item>en</item>
         <item>de</item>
     </string-array>

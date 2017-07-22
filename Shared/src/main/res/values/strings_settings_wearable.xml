@@ -30,11 +30,11 @@
     </string-array>
 
     <string-array name="theme_names_wear">
-        <item>Dark Blue</item>
-        <item>Dark Red</item>
-        <item>Light Blue</item>
-        <item>Light Red</item>
-        <item>DayNight Blue</item>
+        <item>@string/theme_dark_blue</item>
+        <item>@string/theme_dark_red</item>
+        <item>@string/theme_light_blue</item>
+        <item>@string/theme_light_red</item>
+        <item>@string/theme_dayNight_blue</item>
     </string-array>
 
     <string-array name="theme_values_wear" translatable="false">

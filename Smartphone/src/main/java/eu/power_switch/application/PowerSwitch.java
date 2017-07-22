@@ -37,6 +37,7 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -161,6 +162,16 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     public boolean isUIThread() {
         return Looper.getMainLooper()
                 .getThread() == Thread.currentThread();
+    }
+
+    /**
+     * @return true if the app is in night mode
+     */
+    public static boolean isNightModeActive() {
+        Calendar now         = Calendar.getInstance();
+        int      currentHour = now.get(Calendar.HOUR_OF_DAY);
+
+        return currentHour < 8 || currentHour > 22;
     }
 
     @Override

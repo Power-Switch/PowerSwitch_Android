@@ -29,6 +29,10 @@
     <string name="theme_light_blue">Hell Blau</string>
     <string name="theme_dayNight_blue">Tag/Nacht Blau</string>
 
+    <string name="theme_dark_red">Dunkel Red</string>
+    <string name="theme_light_red">Hell Red</string>
+    <string name="theme_dayNight_red">Tag/Nacht Red</string>
+
     <string name="create_gateway">Gateway erstellen</string>
     <string name="search_gateway">Gateway suchen</string>
 
