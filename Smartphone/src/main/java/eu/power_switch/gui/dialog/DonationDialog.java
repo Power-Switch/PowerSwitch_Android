@@ -161,7 +161,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getActivity(), e);
             Timber.e(e);
-            dismiss();
+            dismissAllowingStateLoss();
         }
     }
 
@@ -223,7 +223,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
                             Timber.w("unhandled result response code: " + result.getResponseCode());
                         case BillingResponse.ERROR:
                             statusMessageHandler.showInfoMessage(getContext(), "Error: " + result.getResponseCode(), Snackbar.LENGTH_LONG);
-                            dismiss();
+                            dismissAllowingStateLoss();
                             break;
 
                     }
@@ -233,7 +233,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
         } else {
             statusMessageHandler.showInfoMessage(getContext(), "Error: " + billingResponseCode, Snackbar.LENGTH_LONG);
             Timber.e("Problem setting up In-app Billing: " + billingResponseCode);
-            dismiss();
+            dismissAllowingStateLoss();
         }
     }
 
@@ -257,7 +257,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
                     }
                 }
 
-                getDialog().dismiss();
+                dismissAllowingStateLoss();
 
                 break;
             case BillingResponse.USER_CANCELED:
@@ -275,7 +275,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
                 Timber.w("unhandled result response code: " + responseCode);
             case BillingResponse.ERROR:
                 statusMessageHandler.showInfoMessage(getContext(), "Error: " + responseCode, Snackbar.LENGTH_LONG);
-                dismiss();
+                dismissAllowingStateLoss();
                 break;
 
         }
@@ -288,7 +288,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
                 if (responseCode == BillingResponse.OK) {
                     // Handle the success of the consume operation.
                     // For example, increase the number of coins inside the user's basket.
-                    dismiss();
+                    dismissAllowingStateLoss();
                     statusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
                 } else {
                     statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + responseCode, Snackbar.LENGTH_LONG);
