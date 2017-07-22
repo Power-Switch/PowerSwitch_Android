@@ -34,7 +34,7 @@ android {
         // Write compile time timestamp
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
 
-        resConfigs "en", "de"
+        resConfigs rootProject.ext.supportedLocales
     }
     buildTypes {
         debug {
