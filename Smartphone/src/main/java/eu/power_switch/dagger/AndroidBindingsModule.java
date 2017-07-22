@@ -21,6 +21,7 @@ package eu.power_switch.dagger;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.main.RoomSceneTabFragment;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
@@ -54,5 +55,9 @@ public abstract class AndroidBindingsModule {
 
     @ContributesAndroidInjector
     abstract SmsEventsFragment smsEventsFragment();
+
+    // Donate
+    @ContributesAndroidInjector
+    abstract DonationDialog donationDialog();
 
 }

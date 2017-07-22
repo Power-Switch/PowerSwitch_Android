@@ -51,6 +51,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
@@ -426,13 +427,14 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             }
         };
 
+        // Master/Slave Tutorial
         TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(channelMasterListView, TutorialTooltipView.Gravity.CENTER)
                 .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
                         .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_master_select__text)
                         .gravity(TutorialTooltipView.Gravity.TOP)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .size(500, MessageBuilder.WRAP_CONTENT)
                         .onClick(onClickListener)
                         .build())
                 .oneTimeUse(R.string.tutorial__configure_receiver_master_select__id)
@@ -444,7 +446,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_slave_select__text)
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .size(500, MessageBuilder.WRAP_CONTENT)
                         .onClick(onClickListener)
                         .build())
                 .oneTimeUse(R.string.tutorial__configure_receiver_slave_select__id)
@@ -453,6 +455,22 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         new TutorialTooltipChainBuilder().addItem(message1)
                 .addItem(message2)
                 .execute();
+
+        // AutoPair Tutorial
+        TutorialTooltipBuilder messageSeed = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(textInputEditTextSeed)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .message(new MessageBuilder(getActivity()).
+                        text(R.string.tutorial__configure_receiver_seed_configuration__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_receiver_seed_configuration__id)
+                .build();
+        TutorialTooltip.show(messageSeed);
+
     }
 
     private void initializeReceiverData() {

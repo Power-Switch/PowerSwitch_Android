@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration.holder;
 
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
@@ -41,7 +42,7 @@ public class ApartmentConfigurationHolder extends ConfigurationHolder {
 
     private String name;
 
-    private List<Gateway> associatedGateways;
+    private List<Gateway> associatedGateways = new ArrayList<>();
 
     public boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {

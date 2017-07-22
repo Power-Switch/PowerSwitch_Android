@@ -244,8 +244,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
      *
      * @return List of Gateways
      */
-    private ArrayList<Gateway> getCheckedGateways() {
-        ArrayList<Gateway> checkedGateways = new ArrayList<>();
+    private List<Gateway> getCheckedGateways() {
+        List<Gateway> checkedGateways = new ArrayList<>();
 
         for (CheckBox checkBox : gatewayCheckboxList) {
             if (checkBox.isChecked()) {

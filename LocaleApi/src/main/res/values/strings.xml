@@ -17,5 +17,5 @@
   -->
 
 <resources>
-    <string name="app_name">Locale-API</string>
+    <string name="app_name" translatable="false">Locale-API</string>
 </resources>

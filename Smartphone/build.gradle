@@ -33,6 +33,8 @@ android {
 
         // Write compile time timestamp
         buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
+
+        resConfigs "en", "de"
     }
     buildTypes {
         debug {
@@ -75,6 +77,8 @@ dependencies {
     compile "com.google.android.gms:play-services-drive:${rootProject.ext.playServicesVersion}"
     compile "com.google.android.gms:play-services-maps:${rootProject.ext.playServicesVersion}"
     compile "com.google.android.gms:play-services-location:${rootProject.ext.playServicesVersion}"
+    // In-app purchases
+    compile 'com.android.billingclient:billing:dp-1'
 
     // MultiDex
     compile 'com.android.support:multidex:1.0.1'

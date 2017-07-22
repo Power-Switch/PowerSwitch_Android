@@ -124,6 +124,12 @@
 
     <string name="tutorial__configure_receiver_slave_select__text">… und den Slave hier so aus, dass er zu deiner Gerätekonfiguration passt.</string>
 
+    <string name="tutorial__configure_receiver_seed_configuration__text">The seed is generated automatically for you. You can enter a custom one though if want to copy an AutoPair Receiver from another PowerSwitch configuration. Be aware that seeds have to be different for all AutoPair receivers.</string>
+
+    <string name="tutorial__configure_receiver_repetition_amount__text">Set the number of times a network signal should be repeated when activating a button. Keep in mind that this might cause problems on dimmers.</string>
+
+    <string name="tutorial__configure_receiver_custom_gateways__text">Optionally select a subset of gateways that should be used for this receiver.</string>
+
     <!-- Configure Scene -->
 
     <string name="tutorial__configure_scene_name__text">Gib hier den Namen deiner Szene ein …</string>

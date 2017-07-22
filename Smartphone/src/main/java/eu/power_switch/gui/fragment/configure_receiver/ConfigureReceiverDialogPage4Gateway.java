@@ -40,6 +40,16 @@ import java.util.Locale;
 import java.util.Set;
 
 import butterknife.BindView;
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
+import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -63,6 +73,8 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
     Button       buttonPlus;
     @BindView(R.id.button_minus)
     Button       buttonMinus;
+    @BindView(R.id.layout_customGateways)
+    LinearLayout layoutCustomGateways;
     @BindView(R.id.linearLayoutOfApartmentGateways)
     LinearLayout linearLayoutOfApartmentGateways;
     @BindView(R.id.linearLayoutOfRoomGateways)
@@ -154,7 +166,59 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
 
         updateCustomGatewaySelectionVisibility();
 
+        createTutorial();
+
         return rootView;
+    }
+
+    private void createTutorial() {
+        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
+            @Override
+            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
+                                         View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+
+        TutorialTooltipBuilder repetitions = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(textView_repetitionAmount, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_repetition_amount__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(500, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
+                        .build())
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_receiver_repetition_amount__id)
+                .build();
+
+        TutorialTooltipBuilder gateways = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(layoutCustomGateways, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_custom_gateways__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(500, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
+                        .build())
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_receiver_custom_gateways__id)
+                .build();
+
+
+        TutorialTooltipChainBuilder chain = new TutorialTooltipChainBuilder();
+        chain.addItem(repetitions);
+        chain.addItem(gateways);
+
+        chain.execute();
     }
 
     @Override

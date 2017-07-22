@@ -26,7 +26,7 @@
     <string name="time">Time</string>
     <string name="randomizer">Randomizer</string>
 
-    <string name="plus_minus_minutes">+/- %d min</string>
+    <string name="plus_minus_minutes" translatable="false">+/- %d min</string>
 
     <string name="days">Days</string>
     <string name="weekdays">Weekdays</string>

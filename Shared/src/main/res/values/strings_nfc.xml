@@ -19,7 +19,7 @@
 
 <resources>
 
-    <string name="nfc">NFC</string>
+    <string name="nfc" translatable="false">NFC</string>
     <string name="write_nfc_tag">Write NFC Tag</string>
     <string name="write_nfc_tag_image">{gmi-nfc} Write NFC Tag</string>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="key_playStoreMode">playStoreMode</string>
-    <string name="key_forceEnableFabric">forceEnableFabric</string>
-    <string name="key_forceLanguage">forceLanguage</string>
-    <string name="key_locale">locale</string>
+    <string name="key_playStoreMode" translatable="false">playStoreMode</string>
+    <string name="key_forceEnableFabric" translatable="false">forceEnableFabric</string>
+    <string name="key_forceLanguage" translatable="false">forceLanguage</string>
+    <string name="key_locale" translatable="false">locale</string>
 
 </resources>

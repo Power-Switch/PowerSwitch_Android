@@ -21,7 +21,7 @@
 
     <string name="phone">Phone</string>
     <string name="call">Call</string>
-    <string name="sms">SMS</string>
+    <string name="sms" translatable="false">SMS</string>
 
     <string name="contacts">Contacts</string>
 

@@ -32,6 +32,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        resConfigs "en", "de"
     }
     buildTypes {
         release {
@@ -71,7 +73,6 @@ dependencies {
     // Easy preferences
     compile('com.github.markusressel:TypedPreferences:v1.1.2') {
         exclude module: 'app'
-        changing = true;
         transitive = true
     }
 

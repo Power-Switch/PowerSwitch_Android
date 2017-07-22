@@ -21,6 +21,7 @@
 
     <!-- Tabs -->
     <string name="general">Allgemein</string>
+    <string name="wearable">Wearable</string>
 
     <!-- Themes -->
     <string name="theme">Theme</string>

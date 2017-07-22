@@ -56,6 +56,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -96,6 +97,7 @@ import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.ActivityResultEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
@@ -697,8 +699,8 @@ public class MainActivity extends EventBusActivity {
                                             startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
-                                        return false;
-                                    }
+                                            return false;
+                                        }
 
                                         return false;
                                     }
@@ -928,15 +930,7 @@ public class MainActivity extends EventBusActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
-        if (DonationDialog.iapHelper == null) {
-            return;
-        }
-
-        // Pass on the activity result to the helper for handling
-        if (!DonationDialog.iapHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        } else {
-            Timber.d("onActivityResult handled by IABUtil.");
-        }
+        EventBus.getDefault()
+                .post(new ActivityResultEvent(requestCode, resultCode, data));
     }
 }

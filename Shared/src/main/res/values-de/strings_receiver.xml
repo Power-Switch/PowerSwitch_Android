@@ -48,6 +48,8 @@
 
     <string name="dips">Dips</string>
 
+    <string name="seed">Seed</string>
+
     <string name="copySeed">Seed kopieren</string>
     <string name="paste">Einfügen (Zwischenablage)</string>
     <string name="pasted_from_clipboard">Aus Zwischenablage eingefügt</string>
@@ -60,6 +62,10 @@
     <string name="receiver_deleted">Empfänger gelöscht</string>
 
     <string name="pair_manual">Genauere Informationen zum Pairing Prozess findest du in der Anleitung zu deinem Empfänger</string>
+
+    <string name="pair">Anlernen</string>
+    <string name="unpair">Ablernen</string>
+    <string name="unpair_all">Alle Ablernen</string>
 
     <!-- Buttons -->
     <string name="on">An</string>

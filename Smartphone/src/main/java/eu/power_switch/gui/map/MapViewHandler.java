@@ -159,15 +159,15 @@ public class MapViewHandler implements OnMapReadyCallback {
      *
      * @param latLng position
      * @param radius radius
+     *
      * @return Geofence
      */
     public Geofence addGeofence(LatLng latLng, double radius) {
-        if (latLng == null) {
+        if (latLng == null || googleMap == null) {
             return null;
         }
 
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(latLng)
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng)
                 .draggable(true);
         Marker marker = googleMap.addMarker(markerOptions);
 
@@ -211,6 +211,7 @@ public class MapViewHandler implements OnMapReadyCallback {
      * Add Marker to Map
      *
      * @param markerOptions options
+     *
      * @return Marker
      */
     public Marker addMarker(MarkerOptions markerOptions) {
@@ -249,7 +250,9 @@ public class MapViewHandler implements OnMapReadyCallback {
      * Find a address description for a given coordinate
      *
      * @param latLng coordinate
+     *
      * @return address description
+     *
      * @throws AddressNotFoundException
      */
     public String findAddress(LatLng latLng) throws AddressNotFoundException {
@@ -279,8 +282,8 @@ public class MapViewHandler implements OnMapReadyCallback {
      * Find Coordinates for a given address
      *
      * @param address address as text
+     *
      * @return coordinate near the given address
-     * @throws AddressNotFoundException
      */
     public LatLng findCoordinates(String address) throws CoordinatesNotFoundException {
         /* get latitude and longitude from the address */
@@ -288,14 +291,14 @@ public class MapViewHandler implements OnMapReadyCallback {
         try {
             List<Address> addresses = geoCoder.getFromLocationName(address, 5);
             if (addresses.size() > 0) {
-                Double lat = (addresses.get(0).getLatitude());
-                Double lon = (addresses.get(0).getLongitude());
+                Double lat = (addresses.get(0)
+                        .getLatitude());
+                Double lon = (addresses.get(0)
+                        .getLongitude());
 
                 Timber.d("lat-lon", lat + "......." + lon);
                 final LatLng location = new LatLng(lat, lon);
                 return location;
-            } else {
-                throw new CoordinatesNotFoundException(address);
             }
         } catch (IOException e) {
             Timber.e(e);

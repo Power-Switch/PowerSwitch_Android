@@ -26,7 +26,7 @@
     <string name="grant">Grant</string>
 
     <string name="menu_geofences">Geofences</string>
-    <string name="geofence">Geofence</string>
+    <string name="geofence" translatable="false">Geofence</string>
 
     <string name="apartments">Apartments</string>
     <string name="custom">Custom</string>

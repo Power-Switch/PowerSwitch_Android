@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  PowerSwitch by Max Rosin & Markus Ressel
+  ~  Copyright (C) 2015  Markus Ressel
+  ~
+  ~  This program is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <!-- Configure Receiver -->
+    <string name="tutorial__configure_receiver_name__id">configure_receiver_name</string>
+    <string name="tutorial__configure_receiver_room_add__id">configure_receiver_room_add</string>
+    <string name="tutorial__configure_receiver_room_select__id">configure_receiver_room_select</string>
+    <string name="tutorial__configure_receiver_brand_select__id">configure_receiver_brand_select</string>
+    <string name="tutorial__configure_receiver_model_select__id">configure_receiver_model_select</string>
+    <string name="tutorial__configure_receiver_master_select__id">configure_receiver_master_select</string>
+    <string name="tutorial__configure_receiver_slave_select__id">configure_receiver_slave_select</string>
+    <string name="tutorial__configure_receiver_seed_configuration__id">configure_receiver_seed_configuration</string>
+    <string name="tutorial__configure_receiver_repetition_amount__id">configure_receiver_repetition_amount</string>
+    <string name="tutorial__configure_receiver_custom_gateways__id">configure_receiver_custom_gateways</string>
+
+    <!-- Configure Scene -->
+    <string name="tutorial__configure_scene_name__id">configure_scene_name</string>
+    <string name="tutorial__configure_scene_devices__id">configure_scene_devices</string>
+    <string name="tutorial__configure_scene_states__id">configure_scene_states</string>
+
+</resources>

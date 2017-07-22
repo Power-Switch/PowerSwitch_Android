@@ -16,21 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.google_play_services.playstore;
+package eu.power_switch.shared.event;
+
+import android.content.Intent;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
- * Exception thrown when encountering an invalid Base64 input character.
- *
- * @author nelson
+ * Created by Markus on 22.07.2017.
  */
-public class Base64DecoderException extends Exception {
-    private static final long serialVersionUID = 1L;
+@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Value
+public class ActivityResultEvent extends EventBusEvent {
 
-    public Base64DecoderException() {
-        super();
-    }
+    int    requestCode;
+    int    resultCode;
+    Intent data;
 
-    public Base64DecoderException(String s) {
-        super(s);
-    }
 }

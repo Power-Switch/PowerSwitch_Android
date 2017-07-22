@@ -28,11 +28,12 @@
     <string name="close">Schließen</string>
     <string name="dismiss">Ausblenden</string>
     <string name="unknown_error">Unbekannter Fehler</string>
+    <string name="details">Details</string>
 
     <string name="open_settings">Einstellungen öffnen</string>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Navigationsleiste öffnen</string>
+    <string name="drawer_close">Navigationsleiste schließen</string>
 
     <!-- main menu -->
     <string name="menu_home">Home</string>
@@ -60,16 +61,21 @@
     <string name="save">Speichern</string>
     <string name="create">Erstellen</string>
     <string name="delete">Löschen</string>
+
     <string name="all_changes_will_be_lost">Alle Änderungen gehen verloren!</string>
+
     <string name="missing_permission">Fehlende Berechtigung</string>
+
     <string name="missing_external_storage_permission">Fehlende Berechtigung für den Speicherzugriff</string>
     <string name="missing_location_permission">Fehlende Berechtigung zur Ortsbestimmung</string>
     <string name="missing_phone_permission">Fehlende Berechtigung für Telefonie</string>
     <string name="missing_sms_permission">Fehlende Berechtigung für SMS</string>
     <string name="missing_multiple_permissions">Mehrere fehlende Berechtigungen</string>
     <string name="missing_contacts_permission">Fehlende Berechtigung für Kontakte</string>
+
     <string name="permission_granted">Berechtigung erhalten</string>
     <string name="permission_denied">Keine Berechtigung</string>
+
     <string name="no_active_gateway">Kein aktives Gateway</string>
     <string name="missing_wifi_connection">Keine WLAN Verbindung</string>
     <string name="missing_network_connection">Keine Netzwerkverbindung</string>
@@ -90,5 +96,7 @@
 
     <string name="total">Gesamt</string>
     <string name="subprocess">Unteraufgabe</string>
+
+    <string name="custom_buttons">Eigene Buttons</string>
 
 </resources>

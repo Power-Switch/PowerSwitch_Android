@@ -20,25 +20,26 @@
 <resources>
 
     <!-- Package name -->
-    <string name="PACKAGE_NAME">eu.power_switch</string>
+    <string name="PACKAGE_NAME" translatable="false">eu.power_switch</string>
 
     <!-- Doze -->
     <string name="disable_battery_optimizations_title">Disable battery optimizations</string>
     <string name="disable_battery_optimizations_message">PowerSwitch can automatically execute tasks in the background. To be able to do this even when your phone is in standby (doze) and make a network connection you need to \"Ignore Optimisations\" for this app. This is important for Timers, Geofences, Wearable functionality and probably more features in the future.</string>
 
     <!-- Wear DataApi -->
-    <string name="RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME">receiver_action_trigger</string>
-    <string name="REQUEST_DATA_UPDATE_CAPABILITY_NAME">request_data_update</string>
-    <string name="DATA_EXCHANGE_CAPABILITY_NAME">data_exchange</string>
+    <string name="RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME" translatable="false">receiver_action_trigger</string>
+    <string name="REQUEST_DATA_UPDATE_CAPABILITY_NAME" translatable="false">request_data_update</string>
+    <string name="DATA_EXCHANGE_CAPABILITY_NAME" translatable="false">data_exchange</string>
 
-    <string name="powerswitch_app_name">PowerSwitch</string>
-    <string name="powerswitch_plugin_name">PowerSwitch Action Plugin</string>
+    <string name="powerswitch_app_name" translatable="false">PowerSwitch</string>
+    <string name="powerswitch_plugin_name" translatable="false">PowerSwitch Action Plugin</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="close">Close</string>
     <string name="dismiss">Dismiss</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="details">Details</string>
 
     <string name="open_settings">Open Settings</string>
 
@@ -71,23 +72,26 @@
     <string name="save">Save</string>
     <string name="create">Create</string>
     <string name="delete">Delete</string>
-    <string name="all_changes_will_be_lost">All changes will be lost!</string>
-    <string name="missing_external_storage_permission">Missing Permission for External Storage</string>
-    <string name="permission_granted">Permission granted</string>
-    <string name="permission_denied">Permission denied</string>
-    <string name="no_active_gateway">No active Gateway</string>
-    <string name="missing_wifi_connection">No WLAN connection</string>
-    <string name="missing_network_connection">No Network connection</string>
 
-    <string name="no_elements">No elements</string>
+    <string name="all_changes_will_be_lost">All changes will be lost!</string>
 
     <string name="missing_permission">Missing permission</string>
+
+    <string name="missing_external_storage_permission">Missing Permission for External Storage</string>
     <string name="missing_location_permission">Missing location permission</string>
     <string name="missing_phone_permission">Missing phone permission</string>
     <string name="missing_contacts_permission">Missing contacts permission</string>
     <string name="missing_sms_permission">Missing SMS permission</string>
     <string name="missing_multiple_permissions">Missing multiple permissions</string>
-    <string name="details">Details</string>
+
+    <string name="permission_granted">Permission granted</string>
+    <string name="permission_denied">Permission denied</string>
+
+    <string name="no_elements">No elements</string>
+
+    <string name="no_active_gateway">No active Gateway</string>
+    <string name="missing_wifi_connection">No WLAN connection</string>
+    <string name="missing_network_connection">No Network connection</string>
 
     <string name="report">Report</string>
     <string name="share_plain_text">Share plain text</string>
@@ -106,14 +110,14 @@
     <string name="subprocess">Subprocess</string>
 
     <!-- supported gateways, brands and models -->
-    <string-array name="gateway_array">
+    <string-array name="gateway_array" translatable="false">
         <item>Brematic GWY433</item>
         <item>ConnAir</item>
         <!--<item>EZcontrol XS1</item>-->
         <item>ITGW-433</item>
         <item>RaspyRFM</item>
     </string-array>
-    <string-array name="brand_array">
+    <string-array name="brand_array" translatable="false">
         <item>BAT</item>
         <item>Brennenstuhl</item>
         <item>Elro</item>
@@ -127,17 +131,17 @@
         <item>Universal</item>
         <item>Vivanco</item>
     </string-array>
-    <string-array name="model_bat_array">
+    <string-array name="model_bat_array" translatable="false">
         <item>RC 3500-A IP44 DE</item>
         <item>RC AAA1000-A IP44 Outdoor</item>
         <!--<item>RC AAA3680-A IP20</item>-->
     </string-array>
-    <string-array name="model_brennenstuhl_array">
+    <string-array name="model_brennenstuhl_array" translatable="false">
         <item>RCS 1000 N Comfort</item>
         <item>RCS 1044 N Comfort</item>
         <!--<item>RC 3600</item> -->
     </string-array>
-    <string-array name="model_elro_array">
+    <string-array name="model_elro_array" translatable="false">
         <item>AB440D 200W</item>
         <item>AB440D 300W</item>
         <item>AB440ID</item>
@@ -148,10 +152,10 @@
         <item>AB440WD</item>
         <!-- <item>AB600D</item> -->
     </string-array>
-    <string-array name="model_hama_array">
+    <string-array name="model_hama_array" translatable="false">
         <item>Hama</item>
     </string-array>
-    <string-array name="model_intertechno_array">
+    <string-array name="model_intertechno_array" translatable="false">
         <item>CMR 300</item>
         <item>CMR 500</item>
         <item>CMR 1000</item>
@@ -183,31 +187,33 @@
         <item>PAR 1500</item>
         <item>YCR 1000</item>
     </string-array>
-    <string-array name="model_intertek_array">
+    <string-array name="model_intertek_array" translatable="false">
         <item>Model 1919361</item>
     </string-array>
-    <string-array name="model_mumbi_array">
+    <string-array name="model_mumbi_array" translatable="false">
         <item>m-FS300</item>
     </string-array>
-    <string-array name="model_rev_array">
+    <string-array name="model_rev_array" translatable="false">
         <item>Ritter</item>
         <item>Telecontrol</item>
     </string-array>
-    <string-array name="model_rohrmotor24_array">
+    <string-array name="model_rohrmotor24_array" translatable="false">
         <item>RMF Motor</item>
         <item>RMF-R1</item>
         <item>RMF-R1 UP</item>
     </string-array>
-    <string-array name="model_pollin_electronic_array">
+    <string-array name="model_pollin_electronic_array" translatable="false">
         <item>Set 2605</item>
     </string-array>
     <string-array name="model_universal_array">
-        <item>Custom Buttons</item>
+        <item>@string/custom_buttons</item>
         <!--<item>HX2262 Compat.</item>-->
     </string-array>
-    <string-array name="model_vivanco_array">
+    <string-array name="model_vivanco_array" translatable="false">
         <item>FSS 31000W</item>
         <item>FSS 33600W</item>
     </string-array>
+
+    <string name="custom_buttons">Custom Buttons</string>
 
 </resources>

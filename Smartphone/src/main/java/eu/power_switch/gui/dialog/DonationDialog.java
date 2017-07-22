@@ -26,22 +26,28 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.ArrayList;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClient.BillingResponse;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsResponseListener;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.google_play_services.playstore.Base64;
-import eu.power_switch.google_play_services.playstore.IabHelper;
-import eu.power_switch.google_play_services.playstore.IabResult;
-import eu.power_switch.google_play_services.playstore.Inventory;
-import eu.power_switch.google_play_services.playstore.Purchase;
-import eu.power_switch.google_play_services.playstore.SkuDetails;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
+import eu.power_switch.shared.event.ActivityResultEvent;
 import timber.log.Timber;
 
 /**
@@ -49,9 +55,22 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 01.10.2015.
  */
-public class DonationDialog extends EventBusSupportDialogFragment {
+public class DonationDialog extends EventBusSupportDialogFragment implements BillingClientStateListener, PurchasesUpdatedListener {
 
-    public static IabHelper iapHelper;
+
+    private static final String SKU_DONATE_10 = "donate_10";
+    private static final String SKU_DONATE_5  = "donate_5";
+    private static final String SKU_DONATE_2  = "donate_2";
+    private static final String SKU_DONATE_1  = "donate_1";
+
+    private static final String SKU_TEST_PURCHASED        = "android.test.purchased";
+    private static final String SKU_TEST_CANCELED         = "android.test.canceled";
+    private static final String SKU_TEST_REFUNDED         = "android.test.refunded";
+    private static final String SKU_TEST_ITEM_UNAVAILABLE = "android.test.item_unavailable";
+
+    private static final int REQUEST_CODE = 123;
+
+    private static final List<String> IAP_IDS_LIST = Arrays.asList(SKU_DONATE_10, SKU_DONATE_5, SKU_DONATE_2, SKU_DONATE_1);
 
     @BindView(R.id.button_donate_10)
     Button       donate10;
@@ -66,20 +85,8 @@ public class DonationDialog extends EventBusSupportDialogFragment {
     @BindView(R.id.layoutLoading)
     LinearLayout layoutLoading;
 
-    private static final String SKU_DONATE_10 = "donate_10";
-    private static final String SKU_DONATE_5  = "donate_5";
-    private static final String SKU_DONATE_2  = "donate_2";
-    private static final String SKU_DONATE_1  = "donate_1";
-
-    private static final String SKU_TEST_PURCHASED        = "android.test.purchased";
-    private static final String SKU_TEST_CANCELED         = "android.test.canceled";
-    private static final String SKU_TEST_REFUNDED         = "android.test.refunded";
-    private static final String SKU_TEST_ITEM_UNAVAILABLE = "android.test.item_unavailable";
-
-    private static final List<String> IAP_IDS_LIST = Arrays.asList(SKU_DONATE_10, SKU_DONATE_5, SKU_DONATE_2, SKU_DONATE_1);
-
-    private static final int requestCode = 123;
-
+    private BillingClient billingClient;
+    private boolean       billingServiceIsConnected;
 
     @NonNull
     @Override
@@ -140,141 +147,187 @@ public class DonationDialog extends EventBusSupportDialogFragment {
         super.onCreate(savedInstanceState);
 
         try {
-            String key                    = smartphonePreferencesHandler.getPublicKeyString();
-            String base64EncodedPublicKey = new String(Base64.decode(key));
-            iapHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
+            billingClient = new BillingClient.Builder(getActivity()).setListener(this)
+                    .build();
 
-            iapHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                public void onIabSetupFinished(IabResult result) {
-                    if (!result.isSuccess()) {
-                        // Oh noes, there was a problem.
-                        statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
-                        Timber.e("Problem setting up In-app Billing: " + result);
-                        dismiss();
-                        return;
-                    }
-                    // Hooray, IAB is fully set up!
+            connectBillingService();
 
-                    iapHelper.queryInventoryAsync(true, IAP_IDS_LIST, new IabHelper.QueryInventoryFinishedListener() {
-                        @Override
-                        public void onQueryInventoryFinished(final IabResult result, final Inventory inventory) {
-                            if (result.isFailure()) {
-                                // handle error
-                                statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
-                                dismiss();
-                                return;
-                            }
+            // ======================== OLD =========================
 
-                            final SkuDetails skuDetails10 = inventory.getSkuDetails(SKU_DONATE_10);
-                            final SkuDetails skuDetails5  = inventory.getSkuDetails(SKU_DONATE_5);
-                            final SkuDetails skuDetails2  = inventory.getSkuDetails(SKU_DONATE_2);
-                            final SkuDetails skuDetails1  = inventory.getSkuDetails(SKU_DONATE_1);
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    donate10.setText(skuDetails10.getPrice());
-                                    donate5.setText(skuDetails5.getPrice());
-                                    donate2.setText(skuDetails2.getPrice());
-                                    donate1.setText(skuDetails1.getPrice());
-
-                                    layoutLoading.setVisibility(View.GONE);
-                                    layoutDonationButtons.setVisibility(View.VISIBLE);
-                                }
-                            });
-
-                            consumePreviousPurchases();
-                        }
-                    });
-                }
-            });
+//            String key                    = smartphonePreferencesHandler.getPublicKeyString();
+//            String base64EncodedPublicKey = new String(Base64.decode(key));
+//            iapHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
 
         } catch (Exception e) {
+            statusMessageHandler.showErrorMessage(getActivity(), e);
             Timber.e(e);
-            e.printStackTrace();
+            dismiss();
         }
     }
 
-    private void initiatePurchase(String skuId) {
-        IabHelper.OnIabPurchaseFinishedListener purchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-            @Override
-            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-                // check the returned data signature, the orderId, and the developerPayload string
-                // in the Purchase object to make sure that you are getting the expected values.
-                // You should verify that the orderId is a unique value that you have not previously processed,
-                // and the developerPayload string matches the token that you sent previously with the purchase request.
-                // As a further security precaution, you should perform the verification on your own secure server.
+    private void connectBillingService() {
+        if (!billingServiceIsConnected) {
+            billingClient.startConnection(this);
+        }
+    }
 
-                if (result.isFailure()) {
-                    statusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
-                    return;
+    @Override
+    public void onBillingSetupFinished(int billingResponseCode) {
+        if (billingResponseCode == BillingResponse.OK) {
+            billingServiceIsConnected = true;
+            // The billing client is ready. You can query purchases here.
+
+            billingClient.querySkuDetailsAsync(BillingClient.SkuType.INAPP, IAP_IDS_LIST, new SkuDetailsResponseListener() {
+                @Override
+                public void onSkuDetailsResponse(SkuDetails.SkuDetailsResult result) {
+                    // Process the result.
+                    switch (result.getResponseCode()) {
+                        case BillingResponse.OK:
+                            List<SkuDetails> skuDetailsList = result.getSkuDetailsList();
+                            for (SkuDetails skuDetails : skuDetailsList) {
+                                String sku   = skuDetails.getSku();
+                                String price = skuDetails.getPrice();
+
+                                switch (sku) {
+                                    case SKU_DONATE_1:
+                                        donate1.setText(price);
+                                        break;
+                                    case SKU_DONATE_2:
+                                        donate2.setText(price);
+                                        break;
+                                    case SKU_DONATE_5:
+                                        donate5.setText(price);
+                                        break;
+                                    case SKU_DONATE_10:
+                                        donate10.setText(price);
+                                        break;
+                                }
+                            }
+
+                            layoutLoading.setVisibility(View.GONE);
+                            layoutDonationButtons.setVisibility(View.VISIBLE);
+
+                            consumePreviousPurchases();
+
+                            break;
+                        case BillingResponse.FEATURE_NOT_SUPPORTED:
+                        case BillingResponse.SERVICE_DISCONNECTED:
+                        case BillingResponse.USER_CANCELED:
+                        case BillingResponse.SERVICE_UNAVAILABLE:
+                        case BillingResponse.BILLING_UNAVAILABLE:
+                        case BillingResponse.ITEM_UNAVAILABLE:
+                        case BillingResponse.DEVELOPER_ERROR:
+                        case BillingResponse.ITEM_ALREADY_OWNED:
+                        case BillingResponse.ITEM_NOT_OWNED:
+                        default:
+                            Timber.w("unhandled result response code: " + result.getResponseCode());
+                        case BillingResponse.ERROR:
+                            statusMessageHandler.showInfoMessage(getContext(), "Error: " + result.getResponseCode(), Snackbar.LENGTH_LONG);
+                            dismiss();
+                            break;
+
+                    }
+                }
+            });
+
+        } else {
+            statusMessageHandler.showInfoMessage(getContext(), "Error: " + billingResponseCode, Snackbar.LENGTH_LONG);
+            Timber.e("Problem setting up In-app Billing: " + billingResponseCode);
+            dismiss();
+        }
+    }
+
+    @Override
+    public void onBillingServiceDisconnected() {
+        // Try to restart the connection on the next request to the
+        // In-app Billing service by calling the startConnection() method.
+        billingServiceIsConnected = false;
+
+        Timber.d("In-app billing service disconnected");
+    }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
+        switch (responseCode) {
+            case BillingResponse.OK:
+
+                if (purchases != null) {
+                    for (Purchase purchase : purchases) {
+                        consumePurchase(purchase);
+                    }
                 }
 
-                consumePurchase(purchase);
+                getDialog().dismiss();
 
-                statusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
-                getDialog().cancel();
-            }
-        };
-        SecureRandom random = new SecureRandom();
+                break;
+            case BillingResponse.USER_CANCELED:
+                statusMessageHandler.showInfoMessage(getContext(), "Cancelled by user", Toast.LENGTH_LONG);
+                break;
+            case BillingResponse.FEATURE_NOT_SUPPORTED:
+            case BillingResponse.SERVICE_DISCONNECTED:
+            case BillingResponse.SERVICE_UNAVAILABLE:
+            case BillingResponse.BILLING_UNAVAILABLE:
+            case BillingResponse.ITEM_UNAVAILABLE:
+            case BillingResponse.DEVELOPER_ERROR:
+            case BillingResponse.ITEM_ALREADY_OWNED:
+            case BillingResponse.ITEM_NOT_OWNED:
+            default:
+                Timber.w("unhandled result response code: " + responseCode);
+            case BillingResponse.ERROR:
+                statusMessageHandler.showInfoMessage(getContext(), "Error: " + responseCode, Snackbar.LENGTH_LONG);
+                dismiss();
+                break;
 
-        String requestString = new BigInteger(130, random).toString(32);
-        iapHelper.launchPurchaseFlow(getActivity(), skuId, requestCode, purchaseFinishedListener, requestString);
+        }
     }
 
     private void consumePurchase(Purchase purchase) {
-        iapHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener() {
+        billingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
             @Override
-            public void onConsumeFinished(Purchase purchase, IabResult result) {
-                if (result.isFailure()) {
-                    statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+            public void onConsumeResponse(String outToken, int responseCode) {
+                if (responseCode == BillingResponse.OK) {
+                    // Handle the success of the consume operation.
+                    // For example, increase the number of coins inside the user's basket.
+                    dismiss();
+                    statusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
+                } else {
+                    statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + responseCode, Snackbar.LENGTH_LONG);
                 }
             }
         });
     }
 
+    private void initiatePurchase(String skuId) {
+        BillingFlowParams.Builder builder = new BillingFlowParams.Builder().setSku(skuId)
+                .setType(BillingClient.SkuType.INAPP);
+        int responseCode = billingClient.launchBillingFlow(getActivity(), builder.build());
+    }
+
     private void consumePreviousPurchases() {
-        iapHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
-            @Override
-            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                if (result.isFailure()) {
-                    statusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
-                    return;
-                }
-
-                ArrayList<Purchase> purchases = new ArrayList<>();
-                for (String skuId : IAP_IDS_LIST) {
-                    if (inv.hasPurchase(skuId)) {
-                        purchases.add(inv.getPurchase(skuId));
-                    }
-                }
-
-                iapHelper.consumeAsync(purchases, new IabHelper.OnConsumeMultiFinishedListener() {
+        Purchase.PurchasesResult purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
+        if (purchasesResult.getResponseCode() == BillingResponse.OK) {
+            List<Purchase> purchases = purchasesResult.getPurchasesList();
+            for (Purchase purchase : purchases) {
+                billingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
                     @Override
-                    public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results) {
-                        for (IabResult r : results) {
-                            if (r.isFailure()) {
-                                statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + r.getMessage(), Snackbar.LENGTH_LONG);
-                                return;
-                            }
+                    public void onConsumeResponse(String outToken, int responseCode) {
+                        if (responseCode == BillingResponse.OK) {
+                            Timber.i("Previous purchase consumed");
+                        } else {
+                            Timber.e("Error consuming previous purchase: " + responseCode);
                         }
                     }
                 });
             }
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (iapHelper != null) {
-            try {
-                iapHelper.dispose();
-            } catch (Exception e) {
-                Timber.e("Error disposing In-App purchase helper", e);
-            }
         }
-        iapHelper = null;
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActivityResult(ActivityResultEvent activityResultEvent) {
+        Timber.d("activity result received");
+
+        // TODO: this may be not needed anymore with the play billing library
+    }
+
 }

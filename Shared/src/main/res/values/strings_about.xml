@@ -19,7 +19,7 @@
 
 <resources>
 
-    <string name="app_version">1.6.7</string>
+    <string name="app_version" translatable="false">1.6.7</string>
 
     <!-- application information -->
     <string name="app_description_html">
@@ -45,7 +45,7 @@
     </string>
 
     <string name="license">License</string>
-    <string name="gpl_v3_description_html">
+    <string name="gpl_v3_description_html" translatable="false">
     <![CDATA[
         PowerSwitch by Max Rosin & Markus Ressel<br />
         Copyright (&#169;) 2015  Markus Ressel<br />
@@ -65,7 +65,7 @@
     ]]>
     </string>
 
-    <string name="github">GitHub</string>
-    <string name="changelog">Changelog</string>
+    <string name="github" translatable="false">GitHub</string>
+    <string name="changelog" translatable="false">Changelog</string>
 
 </resources>

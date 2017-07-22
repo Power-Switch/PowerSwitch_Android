@@ -46,7 +46,6 @@ public abstract class PersistenceBindingsModule {
             default:
                 return sqlitePersistenceHandler;
         }
-
     }
 
     @Provides
