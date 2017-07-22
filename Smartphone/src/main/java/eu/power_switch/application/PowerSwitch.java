@@ -39,6 +39,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
@@ -173,7 +174,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
      * @return true if the app is in night mode
      */
     public static boolean isNightModeActive() {
-        Calendar now = Calendar.getInstance();
+        GregorianCalendar now = new GregorianCalendar();
 
         // center of germany as fallback until location is automatically detected
         double lat = 51.221379;
@@ -181,14 +182,21 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
         int offsetMinutes = 30;
 
-        Calendar sunrise = SunHelper.getSunrise(now, lat, lon);
-        Calendar sunset  = SunHelper.getSunset(now, lat, lon);
+        GregorianCalendar sunrise = SunHelper.getSunrise(now, lat, lon);
+        GregorianCalendar sunset  = SunHelper.getSunset(now, lat, lon);
         if (sunrise != null && sunset != null) {
             sunrise.add(Calendar.MINUTE, offsetMinutes);
             sunset.add(Calendar.MINUTE, -offsetMinutes);
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            Timber.v("Sunrise: " + dateFormat.format(sunrise.getTime()));
+            Timber.v("Sunset: " + dateFormat.format(sunset.getTime()));
+
             if (now.before(sunrise) || now.after(sunset)) {
+                Timber.d("night mode active");
                 return true;
+            } else {
+                return false;
             }
         }
 

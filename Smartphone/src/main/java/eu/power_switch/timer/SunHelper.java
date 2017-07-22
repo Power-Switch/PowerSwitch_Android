@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 
 import net.e175.klaus.solarpositioning.SPA;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -35,16 +34,16 @@ public final class SunHelper {
     private static final int DELTA_T = 68;
 
     @Nullable
-    public static Calendar getSunrise(Calendar calendar, double latitude, double longitude) {
+    public static GregorianCalendar getSunrise(GregorianCalendar calendar, double latitude, double longitude) {
         return getTransitSet(calendar, latitude, longitude)[0];
     }
 
     @Nullable
-    public static Calendar getSunset(Calendar calendar, double latitude, double longitude) {
+    public static GregorianCalendar getSunset(GregorianCalendar calendar, double latitude, double longitude) {
         return getTransitSet(calendar, latitude, longitude)[2];
     }
 
-    private static GregorianCalendar[] getTransitSet(Calendar calendar, double latitude, double longitude) {
+    private static GregorianCalendar[] getTransitSet(GregorianCalendar calendar, double latitude, double longitude) {
         GregorianCalendar instance = new GregorianCalendar();
         instance.setTimeInMillis(calendar.getTimeInMillis());
 
