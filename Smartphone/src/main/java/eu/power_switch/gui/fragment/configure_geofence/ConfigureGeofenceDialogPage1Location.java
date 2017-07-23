@@ -146,11 +146,6 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                             LatLng location = result.getResult()
                                     .get(0);
 
-                            if (location == null) {
-                                Timber.w("Location is null, ignoring");
-                                return;
-                            }
-
                             searchAddressTextInputLayout.setError(null);
 
                             if (geofenceView == null) {
@@ -457,11 +452,11 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
 
     @Override
     public void onMapLoaded() {
-        Timber.d("Map fully loaded");
+        Timber.v("Map fully loaded");
         mapViewHandler.takeSnapshot(new GoogleMap.SnapshotReadyCallback() {
             @Override
             public void onSnapshotReady(Bitmap bitmap) {
-                Timber.d("Snapshot Ready");
+                Timber.v("Snapshot Ready");
                 getConfiguration().setSnapshot(bitmap);
 
                 try {
@@ -501,6 +496,8 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     @Override
     public void onStop() {
         super.onStop();
+        mapViewHandler.getMapView()
+                .onStop();
     }
 
     @Override

@@ -210,6 +210,6 @@
     <string name="title_sendLogsEmail">Send crash report via E-Mail</string>
     <string name="dialogMessage_sendLogsEmail">PowerSwitch will now collect internal logs and some anonymous data about your device. This info will then be shared to your favorite E-Mail client, where you can (hopefully) give additional feedback. If you have not selected a default e-mail client just select your favorite one.</string>
 
-    <string name="key_last_coordinate">last_coordinate</string>
+    <string name="key_last_coordinate" translatable="false">last_coordinate</string>
 
 </resources>

@@ -27,7 +27,7 @@ import java.util.List;
 public class AsyncTaskResult<T> {
 
     private Exception exception;
-    private List<T> elements;
+    private List<T>   elements;
 
     public AsyncTaskResult(Exception e) {
         this.exception = e;
@@ -40,7 +40,21 @@ public class AsyncTaskResult<T> {
     }
 
     public boolean isSuccess() {
-        return exception == null && elements != null;
+        if (exception != null) {
+            return false;
+        }
+
+        if (elements == null) {
+            return false;
+        }
+
+        if (elements.size() == 1) {
+            if (elements.get(0) == null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Exception getException() {
