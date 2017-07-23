@@ -1,27 +1,25 @@
 /*
- *  PowerSwitch by Max Rosin & Markus Ressel
- *  Copyright (C) 2015  Markus Ressel
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.map;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
@@ -36,17 +34,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import eu.power_switch.R;
-import eu.power_switch.shared.exception.location.AddressNotFoundException;
-import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
 import timber.log.Timber;
 
 /**
@@ -244,67 +237,6 @@ public class MapViewHandler implements OnMapReadyCallback {
         Marker marker = markers.get(id);
         marker.remove();
         markers.remove(id);
-    }
-
-    /**
-     * Find a address description for a given coordinate
-     *
-     * @param latLng coordinate
-     *
-     * @return address description
-     *
-     * @throws AddressNotFoundException
-     */
-    public String findAddress(LatLng latLng) throws AddressNotFoundException {
-        /* get latitude and longitude from the address */
-        Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 5);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-
-
-                String addressAsString = address.getAddressLine(0);
-
-                Timber.d("Address; ", addressAsString);
-                return addressAsString;
-            } else {
-                throw new AddressNotFoundException("latitude: " + latLng.latitude + ", longitude: " + latLng.longitude);
-            }
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-
-        return null;
-    }
-
-    /**
-     * Find Coordinates for a given address
-     *
-     * @param address address as text
-     *
-     * @return coordinate near the given address
-     */
-    public LatLng findCoordinates(String address) throws CoordinatesNotFoundException {
-        /* get latitude and longitude from the address */
-        Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geoCoder.getFromLocationName(address, 5);
-            if (addresses.size() > 0) {
-                Double lat = (addresses.get(0)
-                        .getLatitude());
-                Double lon = (addresses.get(0)
-                        .getLongitude());
-
-                Timber.d("lat-lon", lat + "......." + lon);
-                final LatLng location = new LatLng(lat, lon);
-                return location;
-            }
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-
-        return null;
     }
 
     /**

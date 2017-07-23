@@ -1,19 +1,19 @@
 /*
- *  PowerSwitch by Max Rosin & Markus Ressel
- *  Copyright (C) 2015  Markus Ressel
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.fragment.configure_geofence;
@@ -22,6 +22,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,6 +48,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -55,8 +58,8 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.map.MapViewHandler;
+import eu.power_switch.location.GeoCodingHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
-import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
 import timber.log.Timber;
 
 /**
@@ -81,6 +84,9 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     ProgressBar searchAddressProgress;
     @BindView(R.id.mapView)
     MapView     mapView;
+
+    @Inject
+    GeoCodingHandler geoCodingHandler;
 
     private MapViewHandler                   mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
@@ -122,7 +128,12 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     @Override
                     protected AsyncTaskResult<LatLng> doInBackground(String... params) {
                         try {
-                            LatLng location = mapViewHandler.findCoordinates(params[0]);
+                            Address address  = geoCodingHandler.findAddress(params[0]);
+                            LatLng  location = null;
+                            if (address != null) {
+                                location = geoCodingHandler.getLocation(address);
+                            }
+
                             return new AsyncTaskResult<>(location);
                         } catch (Exception e) {
                             return new AsyncTaskResult<>(e);
@@ -154,7 +165,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
 
                             findAddress(location);
                         } else {
-                            if (result.getException() instanceof CoordinatesNotFoundException) {
+                            if (result.getException() == null) {
                                 searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
                             } else {
                                 searchAddressTextInputLayout.setError(getString(R.string.unknown_error));
@@ -408,8 +419,14 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             @Override
             protected AsyncTaskResult<String> doInBackground(LatLng... addresses) {
                 try {
-                    String address = mapViewHandler.findAddress(addresses[0]);
-                    return new AsyncTaskResult<>(address);
+                    Address address            = geoCodingHandler.findAddress(addresses[0]);
+                    String  addressDescription = null;
+
+                    if (address != null) {
+                        addressDescription = address.getAddressLine(0);
+                    }
+
+                    return new AsyncTaskResult<>(addressDescription);
                 } catch (Exception e) {
                     Timber.e(e);
                     return new AsyncTaskResult<>(e);

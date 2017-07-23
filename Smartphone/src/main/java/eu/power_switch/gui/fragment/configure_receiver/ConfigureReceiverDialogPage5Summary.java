@@ -1,19 +1,19 @@
 /*
- *  PowerSwitch by Max Rosin & Markus Ressel
- *  Copyright (C) 2015  Markus Ressel
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.fragment.configure_receiver;
@@ -36,9 +36,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.clipboard.ClipboardHelper;
+import eu.power_switch.clipboard.ClipboardHandler;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
@@ -83,6 +85,9 @@ public class ConfigureReceiverDialogPage5Summary extends ConfigurationDialogPage
     @BindView(R.id.button_copySeed)
     android.widget.Button buttonCopySeed;
 
+    @Inject
+    ClipboardHandler clipboardHandler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,8 +97,7 @@ public class ConfigureReceiverDialogPage5Summary extends ConfigurationDialogPage
             @Override
             public void onClick(View view) {
                 try {
-                    ClipboardHelper.copyToClipboard(getActivity(),
-                            getString(R.string.seed),
+                    clipboardHandler.copyToClipboard(getString(R.string.seed),
                             seedTextView.getText()
                                     .toString());
                     statusMessageHandler.showInfoMessage(getContentView(), R.string.copied_to_clipboard, Snackbar.LENGTH_LONG);
