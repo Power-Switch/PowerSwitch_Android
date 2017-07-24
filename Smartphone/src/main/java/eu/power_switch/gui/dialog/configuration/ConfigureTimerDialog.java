@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -73,39 +68,29 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         Timer timer = getConfiguration().getTimer();
 
         if (timer != null) {
-            try {
-                getConfiguration().setTimer(timer);
+            getConfiguration().setTimer(timer);
 
-                getConfiguration().setActive(timer.isActive());
-                getConfiguration().setName(timer.getName());
+            getConfiguration().setActive(timer.isActive());
+            getConfiguration().setName(timer.getName());
 
-                getConfiguration().setExecutionTime(timer.getExecutionTime());
-                getConfiguration().setRandomizerValue(timer.getRandomizerValue());
+            getConfiguration().setExecutionTime(timer.getExecutionTime());
+            getConfiguration().setRandomizerValue(timer.getRandomizerValue());
 
-                getConfiguration().setExecutionInterval(timer.getExecutionInterval());
-                getConfiguration().setExecutionType(timer.getExecutionType());
+            getConfiguration().setExecutionInterval(timer.getExecutionInterval());
+            getConfiguration().setExecutionType(timer.getExecutionType());
 
-                if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-                    WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
-                    getConfiguration().setExecutionDays(weekdayTimer.getExecutionDays());
-                } else {
+            if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
+                WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
+                getConfiguration().setExecutionDays(weekdayTimer.getExecutionDays());
+            } else {
 
-                }
-
-                getConfiguration().setActions(timer.getActions());
-
-            } catch (Exception e) {
-                Timber.e(e);
             }
+
+            getConfiguration().setActions(timer.getActions());
         }
     }
 
@@ -174,36 +159,17 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
         }
 
         TimersFragment.notifyTimersChanged();
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.timer_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            androidAlarmHandler.cancelAlarm(getConfiguration().getTimer());
+    protected void deleteConfiguration() throws Exception {
+        androidAlarmHandler.cancelAlarm(getConfiguration().getTimer());
 
-                            persistenceHandler.deleteTimer(getConfiguration().getTimer()
-                                    .getId());
+        persistenceHandler.deleteTimer(getConfiguration().getTimer()
+                .getId());
 
-                            // notify scenes fragment
-                            TimersFragment.notifyTimersChanged();
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // notify scenes fragment
+        TimersFragment.notifyTimersChanged();
     }
 
 }

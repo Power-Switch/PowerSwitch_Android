@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -75,28 +70,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle args) {
-        try {
-            getConfiguration().setExistingApartments(persistenceHandler.getAllApartments());
-        } catch (Exception e) {
-            dismiss();
-            statusMessageHandler.showErrorMessage(getContext(), e);
-        }
+    protected void initializeFromExistingData(Bundle args) throws Exception {
+        getConfiguration().setExistingApartments(persistenceHandler.getAllApartments());
 
         Apartment apartment = getConfiguration().getApartment();
         if (apartment != null) {
-            try {
-                getConfiguration().setName(apartment.getName());
-                getConfiguration().setAssociatedGateways(apartment.getAssociatedGateways());
-            } catch (Exception e) {
-                dismiss();
-                statusMessageHandler.showErrorMessage(getContext(), e);
-            }
-
+            getConfiguration().setName(apartment.getName());
+            getConfiguration().setAssociatedGateways(apartment.getAssociatedGateways());
         }
     }
 
@@ -150,48 +130,30 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
         }
 
         ApartmentFragment.notifyActiveApartmentChanged(getActivity());
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.apartment_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            Long existingApartmentId = getConfiguration().getApartment()
-                                    .getId();
-                            if (smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID)
-                                    .equals(existingApartmentId)) {
-                                persistenceHandler.deleteApartment(existingApartmentId);
+    protected void deleteConfiguration() throws Exception {
+        Long existingApartmentId = getConfiguration().getApartment()
+                .getId();
+        if (smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID)
+                .equals(existingApartmentId)) {
+            persistenceHandler.deleteApartment(existingApartmentId);
 
-                                // update current Apartment selection
-                                List<Apartment> apartments = persistenceHandler.getAllApartments();
-                                if (apartments.isEmpty()) {
-                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
-                                } else {
-                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
-                                            apartments.get(0)
-                                                    .getId());
-                                }
-                            } else {
-                                persistenceHandler.deleteApartment(existingApartmentId);
-                            }
+            // update current Apartment selection
+            List<Apartment> apartments = persistenceHandler.getAllApartments();
+            if (apartments.isEmpty()) {
+                smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
+            } else {
+                smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
+                        apartments.get(0)
+                                .getId());
+            }
+        } else {
+            persistenceHandler.deleteApartment(existingApartmentId);
+        }
 
-                            ApartmentFragment.notifyActiveApartmentChanged(getActivity());
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_removed, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        ApartmentFragment.notifyActiveApartmentChanged(getActivity());
     }
 
 }

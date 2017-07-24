@@ -19,11 +19,7 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,7 +32,6 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.obj.receiver.Receiver;
 import timber.log.Timber;
 
@@ -45,20 +40,12 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 13.10.2015.
  */
-public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<ReceiverNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    private List<Receiver>      receivers;
-    private Context             context;
-    private OnStartDragListener onStartDragListener;
-    private OnItemMovedListener onItemMovedListener;
+public class ReceiverNameRecyclerViewAdapter extends SwipeDismissRecyclerViewAdapter<ReceiverNameRecyclerViewAdapter.ViewHolder> {
+    private List<Receiver> receivers;
 
-    public ReceiverNameRecyclerViewAdapter(Context context, List<Receiver> receivers, OnStartDragListener onStartDragListener) {
+    public ReceiverNameRecyclerViewAdapter(Context context, List<Receiver> receivers) {
+        super(context);
         this.receivers = receivers;
-        this.context = context;
-        this.onStartDragListener = onStartDragListener;
-    }
-
-    public void setOnItemMovedListener(OnItemMovedListener onItemMovedListener) {
-        this.onItemMovedListener = onItemMovedListener;
     }
 
     @Override
@@ -73,15 +60,12 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
         final Receiver receiver = receivers.get(position);
         holder.receiverName.setText(receiver.getName());
 
-        holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    onStartDragListener.onStartDrag(holder);
-                }
-                return false;
-            }
-        });
+        super.onBindViewHolder(holder, position);
+    }
+
+    @Override
+    protected View getDragHandle(ViewHolder viewHolder) {
+        return viewHolder.dragHandle;
     }
 
     // Return the total count of items
@@ -102,19 +86,18 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
             }
         }
 
-        notifyItemMoved(fromPosition, toPosition);
-        if (onItemMovedListener != null) {
-            onItemMovedListener.onItemMoved(fromPosition, toPosition);
-        }
+        super.onItemMove(fromPosition, toPosition);
     }
 
     @Override
     public void onItemDismiss(int position) {
         Timber.d("Item " + position + " dismissed");
         receivers.remove(position);
+
+        super.onItemDismiss(position);
     }
 
-    public class ViewHolder extends ButterKnifeViewHolder implements ItemTouchHelperViewHolder {
+    public class ViewHolder extends SwipeDismissViewHolder {
         @BindView(R.id.linear_layout_main)
         LinearLayout mainLayout;
         @BindView(R.id.txt_name)
@@ -128,21 +111,9 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
         }
 
         @Override
-        public void onItemSelected() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float toElevation = context.getResources()
-                        .getDimension(R.dimen.list_element_elevation_while_moving);
-                AnimationHandler.animateElevation(mainLayout, 0, toElevation, 200);
-            }
+        protected View getItemLayout() {
+            return mainLayout;
         }
 
-        @Override
-        public void onItemClear() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float fromElevation = context.getResources()
-                        .getDimension(R.dimen.list_element_elevation_while_moving);
-                AnimationHandler.animateElevation(mainLayout, fromElevation, 0, 200);
-            }
-        }
     }
 }

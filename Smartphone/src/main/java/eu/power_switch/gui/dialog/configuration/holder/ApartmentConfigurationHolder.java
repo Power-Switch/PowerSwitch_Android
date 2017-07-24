@@ -57,7 +57,7 @@ public class ApartmentConfigurationHolder extends ConfigurationHolder {
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         if (name == null || TextUtils.isEmpty(name.trim())) {
             return false;
         }

@@ -56,7 +56,7 @@ public class TimerConfigurationHolder extends ConfigurationHolder {
     private List<Action> actions;
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         if (TextUtils.isEmpty(name)) {
             return false;
         }

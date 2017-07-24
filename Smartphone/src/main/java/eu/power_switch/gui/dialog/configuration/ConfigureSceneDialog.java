@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -68,23 +63,13 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         Scene scene = getConfiguration().getScene();
 
         if (scene != null) {
             // init dialog using existing scene
-            try {
-                getConfiguration().setName(scene.getName());
-                getConfiguration().setSceneItems(scene.getSceneItems());
-
-            } catch (Exception e) {
-                Timber.e(e);
-            }
+            getConfiguration().setName(scene.getName());
+            getConfiguration().setSceneItems(scene.getSceneItems());
         }
     }
 
@@ -127,40 +112,20 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
 
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
-
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.scene_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteScene(getConfiguration().getScene()
-                                    .getId());
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteScene(getConfiguration().getScene()
+                .getId());
 
-                            // notify scenes fragment
-                            ScenesFragment.notifySceneChanged();
+        // notify scenes fragment
+        ScenesFragment.notifySceneChanged();
 
-                            // update scene widgets
-                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
+        // update scene widgets
+        SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                            // update wear data
-                            UtilityService.forceWearDataUpdate(getActivity());
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
     }
 }

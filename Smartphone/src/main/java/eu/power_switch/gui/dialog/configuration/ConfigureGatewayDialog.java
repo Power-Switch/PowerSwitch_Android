@@ -18,14 +18,10 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -45,7 +41,6 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
-import timber.log.Timber;
 
 /**
  * Dialog to edit a Gateway
@@ -71,33 +66,24 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         Gateway gateway = getConfiguration().getGateway();
 
         if (gateway != null) {
-            try {
-                getConfiguration().setName(gateway.getName());
-                getConfiguration().setModel(gateway.getModel());
+            getConfiguration().setName(gateway.getName());
+            getConfiguration().setModel(gateway.getModel());
 
-                getConfiguration().setLocalAddress(gateway.getLocalHost());
-                getConfiguration().setLocalPort(gateway.getLocalPort());
-                getConfiguration().setWanAddress(gateway.getWanHost());
-                getConfiguration().setWanPort(gateway.getWanPort());
+            getConfiguration().setLocalAddress(gateway.getLocalHost());
+            getConfiguration().setLocalPort(gateway.getLocalPort());
+            getConfiguration().setWanAddress(gateway.getWanHost());
+            getConfiguration().setWanPort(gateway.getWanPort());
 
-                getConfiguration().setSsids(gateway.getSsids());
+            getConfiguration().setSsids(gateway.getSsids());
 
-                List<Apartment> associatedApartments = persistenceHandler.getAssociatedApartments(gateway.getId());
-                for (Apartment associatedApartment : associatedApartments) {
-                    getConfiguration().getApartmentIds()
-                            .add(associatedApartment.getId());
-                }
-            } catch (Exception e) {
-                Timber.e(e);
+            List<Apartment> associatedApartments = persistenceHandler.getAssociatedApartments(gateway.getId());
+            for (Apartment associatedApartment : associatedApartments) {
+                getConfiguration().getApartmentIds()
+                        .add(associatedApartment.getId());
             }
         }
     }
@@ -241,31 +227,13 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
         }
 
         GatewaySettingsFragment.notifyGatewaysChanged();
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.gateway_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteGateway(getConfiguration().getGateway()
-                                    .getId());
-                            GatewaySettingsFragment.notifyGatewaysChanged();
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteGateway(getConfiguration().getGateway()
+                .getId());
+        GatewaySettingsFragment.notifyGatewaysChanged();
     }
 
 }

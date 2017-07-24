@@ -41,11 +41,6 @@
 
     <string name="create_timer">Timer erstellen</string>
 
-    <string name="timer_saved">Timer gespeichert</string>
-    <string name="timer_deleted">Timer gelöscht</string>
-
     <string name="add_action">Aktion hinzufügen</string>
-
-    <string name="timer_will_be_gone_forever">Der Timer wird für immer verloren sein!</string>
 
 </resources>

@@ -57,7 +57,7 @@ public class GeofenceConfigurationHolder extends ConfigurationHolder {
     private List<Action> exitActions = new ArrayList<>();
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         if (TextUtils.isEmpty(name)) {
             return false;
         }

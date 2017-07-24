@@ -21,12 +21,6 @@
 
     <string name="configure_apartment">Wohnung einrichten</string>
 
-    <string name="apartment_will_be_gone_forever">Sie wird für immer verloren sein!</string>
-    <string name="apartment_removed">Wohnung entfernt</string>
-    <string name="apartment_saved">Wohnung gespeichert</string>
-
-    <string name="remove_apartment_message">Die Wohnung und alle in ihr enthaltenen Räume und Szenen werden für immer verloren sein!</string>
-
     <string name="apartment">Wohnung</string>
 
     <string name="associated_gateways">Verknüpfte Gateways</string>

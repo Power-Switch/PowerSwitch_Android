@@ -48,7 +48,7 @@ import eu.power_switch.event.RoomChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.gui.dialog.EditRoomOrderDialog;
+import eu.power_switch.gui.dialog.ConfigureRoomOrderDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
@@ -199,9 +199,9 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:
-                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(apartmentId);
-                editRoomOrderDialog.setTargetFragment(this, 0);
-                editRoomOrderDialog.show(getFragmentManager(), null);
+                ConfigureRoomOrderDialog configureRoomOrderDialog = ConfigureRoomOrderDialog.newInstance(apartmentId);
+                configureRoomOrderDialog.setTargetFragment(this, 0);
+                configureRoomOrderDialog.show(getFragmentManager(), null);
                 break;
             default:
                 break;

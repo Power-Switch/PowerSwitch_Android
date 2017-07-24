@@ -27,12 +27,12 @@ import lombok.Value;
  * Created by Markus on 24.07.2017.
  */
 @Value
-class PageEntry<Configuration extends ConfigurationHolder> {
+public class PageEntry<Configuration extends ConfigurationHolder> {
 
     @StringRes
-    int pageTitleRes;
+    private int pageTitleRes;
 
     @NonNull
-    Class<? extends ConfigurationDialogPage<Configuration>> pageClass;
+    private Class<? extends ConfigurationDialogPage<Configuration>> pageClass;
 
 }

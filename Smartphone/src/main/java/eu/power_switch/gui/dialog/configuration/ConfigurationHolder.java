@@ -33,6 +33,6 @@ public abstract class ConfigurationHolder {
      *
      * @return true if valid, false otherwise
      */
-    public abstract boolean isValid();
+    public abstract boolean isValid() throws Exception;
 
 }

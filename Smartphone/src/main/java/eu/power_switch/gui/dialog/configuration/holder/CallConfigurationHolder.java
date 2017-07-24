@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 public class CallConfigurationHolder extends ConfigurationHolder {
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
 
         // TODO:
 

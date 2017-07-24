@@ -43,11 +43,6 @@
 
     <string name="create_timer">Create Timer</string>
 
-    <string name="timer_saved">Timer saved</string>
-    <string name="timer_deleted">Timer deleted</string>
-
     <string name="add_action">Add Action</string>
-
-    <string name="timer_will_be_gone_forever">The Timer will be gone forever!</string>
 
 </resources>

@@ -30,7 +30,6 @@
     <string name="network">Network</string>
     <string name="summary">Summary</string>
 
-    <string name="receiver_saved">Receiver saved</string>
 
     <string name="no_room_selected">No Room selected</string>
     <string name="receiver_already_exists">This Receiver name already exists</string>
@@ -57,8 +56,6 @@
 
     <string name="universal_buttons">Universal Buttons</string>
     <string name="enter_network_signal">Enter Network Signal</string>
-    <string name="receiver_will_be_gone_forever">Receiver will be gone forever!</string>
-    <string name="receiver_deleted">Receiver deleted</string>
 
     <string name="pair_manual">More infos about the pairing process can be found in the manual of your Receiver</string>
 

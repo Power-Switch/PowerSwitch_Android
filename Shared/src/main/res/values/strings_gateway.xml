@@ -56,7 +56,6 @@
     <string name="associated_gateways_for_room_description">Optional: Select Gateways that should always be used for this Room. If you dont select anything it will default to the Apartment configuration.</string>
     <string name="use_custom_gateway_selection">Use custom gateway selection</string>
 
-    <string name="gateway_saved">Gateway successfully saved</string>
     <string name="gateway_found">Gateway found</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway already exists. It has been enabled.</string>
     <string name="error_enabling_gateway">Error enabling Gateway</string>
@@ -64,9 +63,6 @@
     <string name="cant_understand_gateway">Can\'t understand Gateway :(</string>
     <string name="no_gateway_found">No Gateway found</string>
     <string name="malformed_url">Malformed URL</string>
-    <string name="gateway_will_be_gone_forever">It will be lost forever!</string>
-    <string name="gateway_created">Gateway created</string>
-    <string name="gateway_removed">Gateway removed</string>
 
     <string name="gateway_not_associated_with_any_apartment">This Gateway is not associated with any apartment. It will not be used even if enabled! Go to apartment overview and add it to one or more apartments first.</string>
 

@@ -18,12 +18,7 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -59,12 +54,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed<CallConf
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
             callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
@@ -110,33 +100,14 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed<CallConf
 //        }
 
 //        CallEventsFragment.notifyCallEventsChanged();
-//        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.call_event_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteCallEvent(callEventId);
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteCallEvent(callEventId);
 
-                            // notify scenes fragment
-                            CallEventsFragment.notifyCallEventsChanged();
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // notify scenes fragment
+        CallEventsFragment.notifyCallEventsChanged();
     }
 
 }

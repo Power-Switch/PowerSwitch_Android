@@ -51,7 +51,7 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfigurationHolder> implements OnStartDragListener {
+public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfigurationHolder> implements OnStartDragListener, OnItemMovedListener {
 
     @BindView(R.id.editText_room_name)
     EditText        name;
@@ -105,7 +105,10 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
             }
         });
 
-        receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
+        receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers);
+        receiverNameRecyclerViewAdapter.setOnStartDragListener(this);
+        receiverNameRecyclerViewAdapter.setOnItemMovedListener(this);
+
         receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
             @Override
             public void onItemMoved(int fromPosition, int toPosition) {
@@ -180,10 +183,15 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
         itemTouchHelper.startDrag(viewHolder);
     }
 
+    @Override
+    public void onItemMoved(int fromPosition, int toPosition) {
+        getConfiguration().setReceivers(receivers);
+        notifyConfigurationChanged();
+    }
+
     private String getCurrentRoomName() {
         return name.getText()
                 .toString()
                 .trim();
     }
-
 }

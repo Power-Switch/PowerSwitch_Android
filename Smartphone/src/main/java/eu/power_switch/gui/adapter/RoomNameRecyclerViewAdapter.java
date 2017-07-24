@@ -19,11 +19,7 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,7 +32,6 @@ import java.util.Collections;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.obj.Room;
 import timber.log.Timber;
 
@@ -45,15 +40,12 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 13.10.2015.
  */
-public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    private ArrayList<Room>     rooms;
-    private Context             context;
-    private OnStartDragListener onStartDragListener;
+public class RoomNameRecyclerViewAdapter extends SwipeDismissRecyclerViewAdapter<RoomNameRecyclerViewAdapter.ViewHolder> {
+    private ArrayList<Room> rooms;
 
-    public RoomNameRecyclerViewAdapter(Context context, ArrayList<Room> rooms, OnStartDragListener onStartDragListener) {
+    public RoomNameRecyclerViewAdapter(Context context, ArrayList<Room> rooms) {
+        super(context);
         this.rooms = rooms;
-        this.context = context;
-        this.onStartDragListener = onStartDragListener;
     }
 
     @Override
@@ -68,15 +60,12 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
         final Room room = rooms.get(position);
         holder.roomName.setText(room.getName());
 
-        holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    onStartDragListener.onStartDrag(holder);
-                }
-                return false;
-            }
-        });
+        super.onBindViewHolder(holder, position);
+    }
+
+    @Override
+    protected View getDragHandle(ViewHolder viewHolder) {
+        return viewHolder.dragHandle;
     }
 
     // Return the total count of items
@@ -97,16 +86,18 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
             }
         }
 
-        notifyItemMoved(fromPosition, toPosition);
+        super.onItemMove(fromPosition, toPosition);
     }
 
     @Override
     public void onItemDismiss(int position) {
         Timber.d("Item " + position + " dismissed");
         rooms.remove(position);
+
+        super.onItemDismiss(position);
     }
 
-    public class ViewHolder extends ButterKnifeViewHolder implements ItemTouchHelperViewHolder {
+    public class ViewHolder extends SwipeDismissViewHolder {
         @BindView(R.id.linear_layout_main)
         LinearLayout mainLayout;
         @BindView(R.id.txt_name)
@@ -116,25 +107,12 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.dragHandle.setImageDrawable(IconicsHelper.getReorderHandleIcon(context));
+            this.dragHandle.setImageDrawable(IconicsHelper.getReorderHandleIcon(itemView.getContext()));
         }
 
         @Override
-        public void onItemSelected() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float toElevation = context.getResources()
-                        .getDimension(R.dimen.list_element_elevation_while_moving);
-                AnimationHandler.animateElevation(mainLayout, 0, toElevation, 200);
-            }
-        }
-
-        @Override
-        public void onItemClear() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float fromElevation = context.getResources()
-                        .getDimension(R.dimen.list_element_elevation_while_moving);
-                AnimationHandler.animateElevation(mainLayout, fromElevation, 0, 200);
-            }
+        protected View getItemLayout() {
+            return mainLayout;
         }
     }
 }

@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +151,24 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteExistingConfigurationFromDatabase();
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                        .setMessage(R.string.this_action_is_irreversible)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    deleteConfiguration();
+
+                                    statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.item_removed, Toast.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    statusMessageHandler.showErrorMessage(getTargetFragment(), e);
+                                }
+                                // close dialog
+                                dismiss();
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
             }
         });
 
@@ -171,7 +189,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
                             .setMessage(R.string.all_changes_will_be_lost)
                             .show();
                 } else {
-                    getDialog().dismiss();
+                    dismiss();
                 }
             }
         });
@@ -190,35 +208,48 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
             @Override
             public void onClick(View v) {
                 if (!modified) {
-                    getDialog().dismiss();
+                    dismiss();
                 } else {
                     try {
                         saveConfiguration();
+                        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.item_saved, Toast.LENGTH_LONG);
                     } catch (Exception e) {
-                        statusMessageHandler.showErrorMessage(getActivity(), e);
+                        statusMessageHandler.showErrorMessage(getTargetFragment(), e);
                     }
-                    getDialog().dismiss();
+                    dismiss();
                 }
             }
         });
 
-        init(inflater, container, savedInstanceState);
-
-        // hide/show delete button if existing data is initialized
-        initializeFromExistingData(getArguments());
-
         setupTabAdapter();
 
-        if (getConfiguration().isValid()) {
+        // hide/show delete button if existing data is initialized
+        try {
+            initializeFromExistingData(getArguments());
+        } catch (Exception e) {
+            statusMessageHandler.showErrorMessage(getTargetFragment(), e);
+            dismiss();
+        }
+
+        if (isDeletable() && isValid()) {
             imageButtonDelete.setVisibility(View.VISIBLE);
         } else {
             imageButtonDelete.setVisibility(View.GONE);
         }
-        setSaveButtonState(getConfiguration().isValid());
+        setSaveButtonState(isValid());
 
         setModified(false);
 
         return rootView;
+    }
+
+    /**
+     * Override this method if you don't want the delete button to show up.
+     *
+     * @return true if the configuration of this dialog can be deleted
+     */
+    protected boolean isDeletable() {
+        return true;
     }
 
     /**
@@ -244,20 +275,11 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     }
 
     /**
-     * Initialize this dialog
-     *
-     * @param inflater           LayoutInflater
-     * @param container          ViewGroup
-     * @param savedInstanceState Bundle
-     */
-    protected abstract void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
-
-    /**
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
      */
-    protected abstract void initializeFromExistingData(Bundle arguments);
+    protected abstract void initializeFromExistingData(Bundle arguments) throws Exception;
 
     @StringRes
     protected abstract int getDialogTitle();
@@ -282,14 +304,14 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
                             .setPositiveButton(android.R.string.yes, new OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    getDialog().cancel();
+                                    cancel();
                                 }
                             })
                             .setNeutralButton(android.R.string.no, null)
                             .setMessage(R.string.all_changes_will_be_lost)
                             .show();
                 } else {
-                    getDialog().cancel();
+                    cancel();
                 }
             }
         };
@@ -372,7 +394,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
      * Delete the existing configuration of the entity from your persistence handler in this method.
      * The dialog will be closed automatically.
      */
-    protected abstract void deleteExistingConfigurationFromDatabase();
+    protected abstract void deleteConfiguration() throws Exception;
 
     /**
      * Checks if the current dialog configuration is valid

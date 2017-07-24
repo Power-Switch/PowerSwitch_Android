@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -65,28 +60,18 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         Room room = getConfiguration().getRoom();
 
         if (room != null) {
             // init dialog using existing receiver
-            try {
-                List<Room> rooms = persistenceHandler.getAllRooms();
+            List<Room> rooms = persistenceHandler.getAllRooms();
 
-                getConfiguration().setExistingRooms(rooms);
+            getConfiguration().setExistingRooms(rooms);
 
-                getConfiguration().setName(room.getName());
-                getConfiguration().setReceivers(room.getReceivers());
-                getConfiguration().setAssociatedGateways(room.getAssociatedGateways());
-
-            } catch (Exception e) {
-                Timber.e(e);
-            }
+            getConfiguration().setName(room.getName());
+            getConfiguration().setReceivers(room.getReceivers());
+            getConfiguration().setAssociatedGateways(room.getAssociatedGateways());
         }
     }
 
@@ -123,43 +108,23 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
 
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
-
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .setMessage(R.string.room_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteRoom(getConfiguration().getRoom()
-                                    .getId());
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteRoom(getConfiguration().getRoom()
+                .getId());
 
-                            // notify rooms fragment
-                            RoomsFragment.notifyRoomChanged();
-                            // scenes could change too if room was used in a scene
-                            ScenesFragment.notifySceneChanged();
+        // notify rooms fragment
+        RoomsFragment.notifyRoomChanged();
+        // scenes could change too if room was used in a scene
+        ScenesFragment.notifySceneChanged();
 
-                            // update room widgets
-                            RoomWidgetProvider.forceWidgetUpdate(getActivity());
+        // update room widgets
+        RoomWidgetProvider.forceWidgetUpdate(getActivity());
 
-                            // update wear data
-                            UtilityService.forceWearDataUpdate(getActivity());
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
     }
 
 }

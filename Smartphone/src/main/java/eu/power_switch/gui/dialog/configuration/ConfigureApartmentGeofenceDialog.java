@@ -18,15 +18,11 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 
-import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
@@ -58,33 +54,14 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .
-                        setMessage(R.string.geofence_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
-                                    .getId());
-                            geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
-                                    .getId());
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
+                .getId());
+        geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
+                .getId());
 
-                            // same for timers
-                            ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // same for timers
+        ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
     }
 
 }

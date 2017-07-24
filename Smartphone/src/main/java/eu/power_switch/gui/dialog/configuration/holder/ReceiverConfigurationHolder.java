@@ -98,7 +98,7 @@ public class ReceiverConfigurationHolder extends ConfigurationHolder {
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         if (name == null || name.trim()
                 .equals("")) {
             return false;

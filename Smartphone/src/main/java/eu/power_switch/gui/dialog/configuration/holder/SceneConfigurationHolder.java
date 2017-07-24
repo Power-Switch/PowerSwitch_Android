@@ -45,7 +45,7 @@ public class SceneConfigurationHolder extends ConfigurationHolder {
     private List<SceneItem> sceneItems;
 
     @Override
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         if (TextUtils.isEmpty(name)) {
             return false;
         }

@@ -67,11 +67,22 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
     private List<Gateway>  gateways            = new ArrayList<>();
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        try {
+            long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
+            apartment = persistenceHandler.getApartment(apartmentId);
+            gateways = persistenceHandler.getAllGateways();
+        } catch (Exception e) {
+            statusMessageHandler.showErrorMessage(getContentView(), e);
+        }
+
+        createGatewayViews();
+
+        initExistingData();
 
         CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
@@ -83,18 +94,6 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         };
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
-
-        try {
-            long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
-            apartment = persistenceHandler.getApartment(apartmentId);
-            gateways = persistenceHandler.getAllGateways();
-        } catch (Exception e) {
-            statusMessageHandler.showErrorMessage(getContentView(), e);
-        }
-
-        updateGatewayViews();
-
-        initExistingData();
 
         updateCustomGatewaySelectionVisibility();
 
@@ -131,7 +130,7 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         }
     }
 
-    private void updateGatewayViews() {
+    private void createGatewayViews() {
         try {
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
             previouslyCheckedGateways.addAll(getCheckedGateways());

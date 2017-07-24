@@ -73,6 +73,10 @@
     <string name="create">Create</string>
     <string name="delete">Delete</string>
 
+    <string name="this_action_is_irreversible">This action is irreversible!</string>
+    <string name="item_removed">Removed</string>
+    <string name="item_saved">Saved</string>
+
     <string name="all_changes_will_be_lost">All changes will be lost!</string>
 
     <string name="missing_permission">Missing permission</string>

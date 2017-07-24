@@ -18,15 +18,10 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,12 +72,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
     }
 
     @Override
-    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("Opening " + getClass().getSimpleName() + "...");
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
         Geofence geofence = getConfiguration().getGeofence();
 
         if (geofence != null) {
@@ -208,38 +198,17 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
 
         ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
         CustomGeofencesFragment.notifyCustomGeofencesChanged();
-
-        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                .
-                        setMessage(R.string.geofence_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
-                                    .getId());
-                            geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
-                                    .getId());
+    protected void deleteConfiguration() throws Exception {
+        persistenceHandler.deleteGeofence(getConfiguration().getGeofence()
+                .getId());
+        geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
+                .getId());
 
-                            // same for timers
-                            CustomGeofencesFragment.notifyCustomGeofencesChanged();
-
-                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            statusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, null)
-                .show();
+        // same for timers
+        CustomGeofencesFragment.notifyCustomGeofencesChanged();
     }
 
     @Override

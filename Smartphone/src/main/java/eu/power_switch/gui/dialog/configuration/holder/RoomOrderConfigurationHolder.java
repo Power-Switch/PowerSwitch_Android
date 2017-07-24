@@ -18,16 +18,10 @@
 
 package eu.power_switch.gui.dialog.configuration.holder;
 
-import android.text.TextUtils;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
-import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.constants.DatabaseConstants;
+import eu.power_switch.obj.Room;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,39 +30,15 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class GatewayConfigurationHolder extends ConfigurationHolder {
+public class RoomOrderConfigurationHolder extends ConfigurationHolder {
 
-    private Gateway gateway;
+    private long apartmentId;
 
-    private String name;
-
-    private String model;
-
-    private String  localAddress = "";
-    private Integer localPort    = DatabaseConstants.INVALID_GATEWAY_PORT;
-    private String  wanAddress   = "";
-    private Integer wanPort      = DatabaseConstants.INVALID_GATEWAY_PORT;
-
-    private Set<String> ssids = new HashSet<>(0);
-
-    private List<Long> apartmentIds = new ArrayList<>(0);
+    private List<Room> rooms = null;
 
     @Override
     public boolean isValid() throws Exception {
-        if (name == null || TextUtils.isEmpty(name.trim())) {
-            return false;
-        }
-
-        if (TextUtils.isEmpty(model)) {
-            return false;
-        }
-
-        // as long as one of the address fields is filled in its ok
-        if (TextUtils.isEmpty(localAddress) && TextUtils.isEmpty(wanAddress)) {
-            return false;
-        }
-
-        return true;
+        return rooms != null;
     }
 
 }

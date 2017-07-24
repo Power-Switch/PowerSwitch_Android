@@ -25,9 +25,7 @@
     <!-- edit room dialog -->
     <string name="configure_room">Configure Room</string>
     <string name="room_already_exists">Room already exists</string>
-    <string name="room_will_be_gone_forever">Room will be gone forever!</string>
     <string name="room_saved">Room saved</string>
-    <string name="room_deleted">Room deleted</string>
 
     <string name="order">Order</string>
 

@@ -52,7 +52,6 @@
     <string name="associated_gateways_for_room_description">Optional: Wähle Gateways aus, die für alle Empfänger dieses Raums immer verwendet werden sollen. Wenn du nichts auswählst wird die Konfiguration der Wohnung verwendet.</string>
     <string name="use_custom_gateway_selection">Manuelle Gateway Auswahl nutzen</string>
 
-    <string name="gateway_saved">Gateway gespeichert</string>
     <string name="gateway_found">Gateway gefunden</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway existiert bereits. Es wurde aktiviert.</string>
     <string name="error_enabling_gateway">Fehler beim aktivieren des Gateways</string>
@@ -60,10 +59,6 @@
     <string name="cant_understand_gateway">Das Gateway spricht eine fremde Sprache :(</string>
     <string name="no_gateway_found">Kein Gateway gefunden</string>
     <string name="malformed_url">Ungültige URL</string>
-
-    <string name="gateway_will_be_gone_forever">Das Gateway wird für immer verloren sein!</string>
-    <string name="gateway_created">Gateway erstellt</string>
-    <string name="gateway_removed">Gateway entfernt</string>
 
     <string name="gateway_not_associated_with_any_apartment">Dieses Gateway ist mit keiner Wohnung verknüpft. Selbst im aktivierten Zustand wird es nicht verwendet! Gehe zur Wohnungsübersicht und verknüpfe es mit einer oder mehreren Wohnungen.</string>
 
