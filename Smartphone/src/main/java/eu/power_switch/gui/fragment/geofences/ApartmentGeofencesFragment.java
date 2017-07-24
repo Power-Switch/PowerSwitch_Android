@@ -51,6 +51,7 @@ import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -96,8 +97,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(),
-                geofences, geofenceApiHandler, persistenceHandler,
+        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler, persistenceHandler,
                 statusMessageHandler);
         getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -109,13 +109,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                // TODO: fix this
-                Timber.w("needs fix");
-
-//                ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = ConfigureApartmentGeofenceDialog.newInstance(
-//                        geofenceIdApartmentMap.get(geofence.getId())
-//                                .getId(), recyclerViewFragment);
-//                configureApartmentGeofenceDialog.show(getFragmentManager(), null);
+                ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = ConfigureApartmentGeofenceDialog.newInstance(
+                        geofenceIdApartmentMap.get(geofence.getId())
+                                .getId(),
+                        geofence,
+                        recyclerViewFragment);
+                configureApartmentGeofenceDialog.show(getFragmentManager(), null);
             }
         });
 

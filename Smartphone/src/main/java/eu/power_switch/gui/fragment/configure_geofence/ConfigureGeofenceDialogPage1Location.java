@@ -44,7 +44,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -313,9 +312,9 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
 
         mapViewHandler.setOnMapLoadedListener(this);
         final GoogleMap.OnMapLoadedCallback listener = this;
-        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
+            public void onCameraMove() {
                 if (cameraChangedBySystem) {
                     mapViewHandler.setOnMapLoadedListener(listener);
                     cameraChangedBySystem = false;
@@ -443,6 +442,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     notifyConfigurationChanged();
                 } else {
                     searchAddressEditText.setText("");
+                    getConfiguration().setName("Geofence");
                 }
 
                 searchAddressEditText.setEnabled(true);

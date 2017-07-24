@@ -21,12 +21,10 @@ package eu.power_switch.gui.dialog.configuration;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -36,14 +34,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -79,14 +76,45 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
 
     @Getter
     @Setter
-    private boolean              modified;
+    private boolean                                      modified;
     @Getter
-    private FragmentPagerAdapter tabAdapter;
+    private ConfigurationDialogTabAdapter<Configuration> tabAdapter;
 
     @Getter
     @Setter
     private Configuration configuration;
 
+    /**
+     * NOT YET WORKING
+     * <p>
+     * Use this method to instantiate a configuration dialog
+     *
+     * @param clazz the dialog class that should be instantiated
+     *
+     * @return Instance of the configuration dialog
+     */
+//    @Deprecated
+//    public static <ConfigurationDialog extends ConfigurationDialogTabbed<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogTabbed newInstance(
+//            @NonNull Class<ConfigurationDialog> clazz, @NonNull Fragment targetFragment) {
+//        Bundle args = new Bundle();
+//
+//        if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
+//            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogTabbed.class.getName() + " or subclass!");
+//        }
+//
+//        try {
+//            Constructor<ConfigurationDialog>         constructor = clazz.getConstructor();
+//            ConfigurationDialogTabbed<Configuration> dialog      = constructor.newInstance();
+//
+////            Constructor<Configuration> configConstructor =
+//
+//            dialog.setTargetFragment(targetFragment, 0);
+//            dialog.setArguments(args);
+//            return dialog;
+//        } catch (Exception e) {
+//            throw new RuntimeException("Couldn't instantiate configuration dialog!", e);
+//        }
+//    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,7 +192,11 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
                 if (!modified) {
                     getDialog().dismiss();
                 } else {
-                    saveCurrentConfigurationToDatabase();
+                    try {
+                        saveConfiguration();
+                    } catch (Exception e) {
+                        statusMessageHandler.showErrorMessage(getActivity(), e);
+                    }
                     getDialog().dismiss();
                 }
             }
@@ -174,6 +206,9 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
 
         // hide/show delete button if existing data is initialized
         initializeFromExistingData(getArguments());
+
+        setupTabAdapter();
+
         if (getConfiguration().isValid()) {
             imageButtonDelete.setVisibility(View.VISIBLE);
         } else {
@@ -186,10 +221,21 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
         return rootView;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings("unused")
-    public void onConfigurationChanged(ConfigurationChangedEvent configurationChangedEvent) {
-        notifyConfigurationChanged();
+    /**
+     * Used to notify parent Dialog that configuration has changed
+     * <p>
+     * Call this method when the configuration of the dialog has changed and UI has to be updated.
+     * This will check the dialog for validity and set the bottom bar buttons accordingly.
+     * This will also mark the dialog as modified so a confirmation dialog is shown when aborting.
+     */
+    public void notifyConfigurationChanged() {
+        setModified(true);
+
+        try {
+            setSaveButtonState(isValid());
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     @Override
@@ -217,23 +263,9 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     protected abstract int getDialogTitle();
 
     /**
-     * Set FragmentPagerAdapter of this configuration dialog
-     *
-     * @param fragmentPagerAdapter FragmentPagerAdapter
+     * For each page of your ConfigurationDialog add a list item idicating it's name and Class to load
      */
-    protected void setTabAdapter(FragmentPagerAdapter fragmentPagerAdapter) {
-        tabAdapter = fragmentPagerAdapter;
-
-        tabViewPager.setAdapter(tabAdapter);
-        tabViewPager.setOffscreenPageLimit(tabAdapter.getCount());
-
-        tabLayout.setupWithViewPager(tabViewPager);
-
-        if (getTabAdapter().getCount() == 1) {
-            tabLayout.setVisibility(View.GONE);
-            updateBottomBarButtons();
-        }
-    }
+    protected abstract void addPageEntries(List<PageEntry<Configuration>> pageEntries);
 
     @NonNull
     @Override
@@ -281,20 +313,6 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     }
 
     /**
-     * Checks if the current dialog configuration is valid
-     *
-     * @return true if the current configuration is valid, false otherwise
-     */
-    protected boolean isValid() {
-        try {
-            return getConfiguration().isValid();
-        } catch (Exception e) {
-            Timber.e(e);
-            return false;
-        }
-    }
-
-    /**
      * Defines if the Dialog is cancelable on touch outside of the dialog
      * <p/>
      * Default: False
@@ -318,16 +336,55 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     }
 
     /**
-     * Call this method when the configuration of the dialog has changed and UI has to be updated
-     * f.ex. bottom bar buttons
+     * Setup a FragmentPagerAdapter for this configuration dialog
      */
-    protected void notifyConfigurationChanged() {
-        setModified(true);
+    private void setupTabAdapter() {
+        // create a list of pageEntries
+        List<PageEntry<Configuration>> pages = new ArrayList<>();
 
+        // let the dialog implementation add it's pages
+        addPageEntries(pages);
+
+        // and create a tab adapter for those pages
+        tabAdapter = new ConfigurationDialogTabAdapter<>(this, getTargetFragment(), pages);
+
+        tabViewPager.setAdapter(tabAdapter);
+        tabViewPager.setOffscreenPageLimit(tabAdapter.getCount());
+
+        tabLayout.setupWithViewPager(tabViewPager);
+
+        if (getTabAdapter().getCount() == 1) {
+            tabLayout.setVisibility(View.GONE);
+            updateBottomBarButtons();
+        }
+    }
+
+    /**
+     * This method is called when the user wants to save the current configuration.
+     * Save the current configuration of the entity to your persistence handler.
+     * The dialog will be closed automatically.
+     */
+    protected abstract void saveConfiguration() throws Exception;
+
+    /**
+     * This method is called when the user wants to delete the existing configuration.
+     * This implies that an existing configuration was opened in the first place.
+     * Delete the existing configuration of the entity from your persistence handler in this method.
+     * The dialog will be closed automatically.
+     */
+    protected abstract void deleteExistingConfigurationFromDatabase();
+
+    /**
+     * Checks if the current dialog configuration is valid
+     *
+     * @return true if the current configuration is valid, false otherwise
+     */
+    private boolean isValid() {
         try {
-            setSaveButtonState(isValid());
+            return getConfiguration().isValid();
         } catch (Exception e) {
             Timber.e(e);
+            return false;
         }
     }
 
@@ -346,7 +403,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
      *
      * @param enabled true: green and clickable, false: gray and NOT clickable
      */
-    protected void setSaveButtonState(boolean enabled) {
+    private void setSaveButtonState(boolean enabled) {
         if (enabled) {
             imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color.active_green));
             imageButtonSave.setClickable(true);
@@ -355,27 +412,5 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
             imageButtonSave.setClickable(false);
         }
     }
-
-    /**
-     * This method is called when the user wants to save the current configuration to database and close the dialog
-     * Save the current configuration of your object to database in this method
-     */
-    @CallSuper
-    private void saveCurrentConfigurationToDatabase() {
-        try {
-            saveConfiguration();
-        } catch (Exception e) {
-            statusMessageHandler.showErrorMessage(getActivity(), e);
-        }
-        getDialog().dismiss();
-    }
-
-    protected abstract void saveConfiguration() throws Exception;
-
-    /**
-     * This method is called when the user wants to delete the existing configuration from database (if one exists) and      * close
-     * the dialog. Delete the existing configuration of your object from the database in this method.
-     */
-    protected abstract void deleteExistingConfigurationFromDatabase();
 
 }

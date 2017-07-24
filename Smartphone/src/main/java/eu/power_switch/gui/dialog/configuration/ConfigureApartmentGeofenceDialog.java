@@ -24,17 +24,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1Location;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 
 /**
@@ -44,38 +38,23 @@ import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
  */
 public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
-    public static ConfigureApartmentGeofenceDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(null, targetFragment);
+    public static ConfigureApartmentGeofenceDialog newInstance(long apartmentId, @NonNull Fragment targetFragment) {
+        return newInstance(apartmentId, null, targetFragment);
     }
 
-    public static ConfigureApartmentGeofenceDialog newInstance(@Nullable Geofence geofence, @NonNull Fragment targetFragment) {
+    public static ConfigureApartmentGeofenceDialog newInstance(long apartmentId, @Nullable Geofence geofence, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureApartmentGeofenceDialog fragment                    = new ConfigureApartmentGeofenceDialog();
         GeofenceConfigurationHolder      geofenceConfigurationHolder = new GeofenceConfigurationHolder();
         if (geofence != null) {
+            geofenceConfigurationHolder.setApartmentId(apartmentId);
             geofenceConfigurationHolder.setGeofence(geofence);
         }
         fragment.setConfiguration(geofenceConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    protected void initializeFromExistingData(Bundle arguments) {
-        Long apartmentId = getConfiguration().getApartmentId();
-
-        if (apartmentId != null) {
-            // TODO
-//            try {
-//                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-//            } catch (Exception e) {
-//                statusMessageHandler.showErrorMessage(getContext(), e);
-//            }
-        }
-
-        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
@@ -106,68 +85,6 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                 })
                 .setNeutralButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
-        private ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog;
-        private Fragment                                               targetFragment;
-
-        public CustomTabAdapter(ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.targetFragment = targetFragment;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return parentDialog.getString(R.string.location);
-                case 1:
-                    return parentDialog.getString(R.string.enter);
-                case 2:
-                    return parentDialog.getString(R.string.exit);
-                case 3:
-                    return parentDialog.getString(R.string.summary);
-            }
-
-            return "" + (position + 1);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment;
-
-            switch (i) {
-                case 0:
-                default:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage1Location.class, parentDialog);
-                    break;
-                case 1:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage2EnterActions.class, parentDialog);
-                    break;
-                case 2:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage3ExitActions.class, parentDialog);
-                    break;
-                case 3:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage4Summary.class, parentDialog);
-                    break;
-            }
-
-            fragment.setTargetFragment(targetFragment, 0);
-
-            return fragment;
-        }
-
-        /**
-         * @return the number of pages to display
-         */
-        @Override
-        public int getCount() {
-            return 4;
-        }
     }
 
 }

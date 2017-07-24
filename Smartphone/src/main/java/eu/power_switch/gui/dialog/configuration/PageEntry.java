@@ -16,18 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.adapter;
+package eu.power_switch.gui.dialog.configuration;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+
+import lombok.Value;
 
 /**
- * Created by Markus on 17.02.2016.
+ * Created by Markus on 24.07.2017.
  */
-public abstract class ConfigurationDialogTabAdapter extends FragmentPagerAdapter {
+@Value
+class PageEntry<Configuration extends ConfigurationHolder> {
 
-    public ConfigurationDialogTabAdapter(FragmentManager fm) {
-        super(fm);
-    }
+    @StringRes
+    int pageTitleRes;
+
+    @NonNull
+    Class<? extends ConfigurationDialogPage<Configuration>> pageClass;
 
 }

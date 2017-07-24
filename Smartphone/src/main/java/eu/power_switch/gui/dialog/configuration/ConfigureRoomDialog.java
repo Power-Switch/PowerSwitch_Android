@@ -18,13 +18,11 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -32,7 +30,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Gateways;
@@ -91,13 +88,17 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                 Timber.e(e);
             }
         }
-
-        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
     protected int getDialogTitle() {
         return R.string.configure_room;
+    }
+
+    @Override
+    protected void addPageEntries(List<PageEntry<RoomConfigurationHolder>> pageEntries) {
+        pageEntries.add(new PageEntry<>(R.string.name, ConfigureRoomDialogPage1.class));
+        pageEntries.add(new PageEntry<>(R.string.network, ConfigureRoomDialogPage2Gateways.class));
     }
 
     @Override
@@ -159,60 +160,6 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                 })
                 .setNeutralButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
-        private Context                                            context;
-        private ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog;
-        private Fragment                                           targetFragment;
-
-        public CustomTabAdapter(ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
-            super(fm);
-            this.context = parentDialog.getActivity();
-            this.parentDialog = parentDialog;
-            this.targetFragment = targetFragment;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return context.getString(R.string.name);
-                case 1:
-                    return context.getString(R.string.network);
-            }
-
-            return "" + (position + 1);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment;
-
-            switch (i) {
-                case 0:
-                default:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage1.class, parentDialog);
-                    break;
-                case 1:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage2Gateways.class, parentDialog);
-                    break;
-            }
-
-            fragment.setTargetFragment(targetFragment, 0);
-
-            return fragment;
-        }
-
-        /**
-         * @return the number of pages to display
-         */
-        @Override
-        public int getCount() {
-            return 2;
-        }
     }
 
 }

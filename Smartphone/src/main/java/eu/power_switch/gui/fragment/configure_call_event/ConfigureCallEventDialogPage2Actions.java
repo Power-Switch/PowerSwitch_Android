@@ -45,6 +45,7 @@ import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddCallEventActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
+import eu.power_switch.gui.dialog.configuration.holder.CallConfigurationHolder;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -52,7 +53,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPage {
+public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPage<CallConfigurationHolder> {
 
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> actions = new ArrayList<>();

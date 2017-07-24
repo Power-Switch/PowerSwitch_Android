@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2Type;
@@ -152,13 +150,20 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                 statusMessageHandler.showErrorMessage(getContext(), e);
             }
         }
-
-        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
     protected int getDialogTitle() {
         return R.string.configure_receiver;
+    }
+
+    @Override
+    protected void addPageEntries(List<PageEntry<ReceiverConfigurationHolder>> pageEntries) {
+        pageEntries.add(new PageEntry<>(R.string.name, ConfigureReceiverDialogPage1Name.class));
+        pageEntries.add(new PageEntry<>(R.string.type, ConfigureReceiverDialogPage2Type.class));
+        pageEntries.add(new PageEntry<>(R.string.channel, ConfigureReceiverDialogPage3Setup.class));
+        pageEntries.add(new PageEntry<>(R.string.network, ConfigureReceiverDialogPage4Gateway.class));
+        pageEntries.add(new PageEntry<>(R.string.summary, ConfigureReceiverDialogPage5Summary.class));
     }
 
     @Override
@@ -274,73 +279,6 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                 })
                 .setNeutralButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
-        private ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog;
-        private Fragment                                               targetFragment;
-
-        public CustomTabAdapter(ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.targetFragment = targetFragment;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return parentDialog.getString(R.string.name);
-                case 1:
-                    return parentDialog.getString(R.string.type);
-                case 2:
-                    return parentDialog.getString(R.string.channel);
-                case 3:
-                    return parentDialog.getString(R.string.network);
-                case 4:
-                    return parentDialog.getString(R.string.summary);
-            }
-
-            return "" + (position + 1);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment;
-
-            switch (i) {
-                case 0:
-                default:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage1Name.class, parentDialog);
-                    break;
-                case 1:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage2Type.class, parentDialog);
-                    break;
-                case 2:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage3Setup.class, parentDialog);
-                    break;
-                case 3:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage4Gateway.class, parentDialog);
-                    break;
-                case 4:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage5Summary.class, parentDialog);
-                    break;
-            }
-
-            fragment.setTargetFragment(targetFragment, 0);
-
-            return fragment;
-        }
-
-        /**
-         * @return the number of pages to display
-         */
-        @Override
-        public int getCount() {
-            return 5;
-        }
     }
 
 }

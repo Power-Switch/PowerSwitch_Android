@@ -42,6 +42,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
+import eu.power_switch.gui.dialog.configuration.holder.CallConfigurationHolder;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -49,7 +50,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPage {
+public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPage<CallConfigurationHolder> {
 
     @BindView(R.id.textView_contacts)
     TextView textViewContacts;

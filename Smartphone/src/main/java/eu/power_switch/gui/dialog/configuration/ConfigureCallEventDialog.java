@@ -18,18 +18,17 @@
 
 package eu.power_switch.gui.dialog.configuration;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import eu.power_switch.R;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.CallConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1Contacts;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3Summary;
@@ -41,7 +40,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
+public class ConfigureCallEventDialog extends ConfigurationDialogTabbed<CallConfigurationHolder> {
 
     /**
      * ID of existing Call Event to Edit
@@ -69,15 +68,19 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
             callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment(), callEventId));
-        } else {
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment()));
         }
     }
 
     @Override
     protected int getDialogTitle() {
         return R.string.configure_call_event;
+    }
+
+    @Override
+    protected void addPageEntries(List<PageEntry<CallConfigurationHolder>> pageEntries) {
+        pageEntries.add(new PageEntry<>(R.string.contacts, ConfigureCallEventDialogPage1Contacts.class));
+        pageEntries.add(new PageEntry<>(R.string.actions, ConfigureCallEventDialogPage2Actions.class));
+        pageEntries.add(new PageEntry<>(R.string.summary, ConfigureCallEventDialogPage3Summary.class));
     }
 
     @Override
@@ -134,77 +137,6 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                 })
                 .setNeutralButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-        private Context  context;
-        private long     callEventId;
-        private Fragment targetFragment;
-
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
-            super(fm);
-            this.context = context;
-            this.callEventId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
-            super(fm);
-            this.context = context;
-            this.callEventId = id;
-            this.targetFragment = targetFragment;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return context.getString(R.string.contacts);
-                case 1:
-                    return context.getString(R.string.actions);
-                case 2:
-                    return context.getString(R.string.summary);
-            }
-
-            return "" + (position + 1);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment;
-
-            switch (i) {
-                case 0:
-                default:
-                    fragment = new ConfigureCallEventDialogPage1Contacts();
-                    break;
-                case 1:
-                    fragment = new ConfigureCallEventDialogPage2Actions();
-                    break;
-                case 2:
-                    fragment = new ConfigureCallEventDialogPage3Summary();
-                    break;
-            }
-
-            fragment.setTargetFragment(targetFragment, 0);
-
-            if (callEventId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(CALL_EVENT_ID_KEY, callEventId);
-                fragment.setArguments(bundle);
-            }
-
-            return fragment;
-        }
-
-        /**
-         * @return the number of pages to display
-         */
-        @Override
-        public int getCount() {
-            return 3;
-        }
     }
 
 }

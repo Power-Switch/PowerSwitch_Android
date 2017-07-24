@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
@@ -100,13 +98,16 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             }
 
         }
-
-        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
     protected int getDialogTitle() {
         return R.string.configure_apartment;
+    }
+
+    @Override
+    protected void addPageEntries(List<PageEntry<ApartmentConfigurationHolder>> pageEntries) {
+        pageEntries.add(new PageEntry<>(R.string.name, ConfigureApartmentDialogPage1Name.class));
     }
 
     @Override
@@ -163,15 +164,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                             Long existingApartmentId = getConfiguration().getApartment()
                                     .getId();
                             if (smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID)
-                                    .equals(
-                                    existingApartmentId)) {
+                                    .equals(existingApartmentId)) {
                                 persistenceHandler.deleteApartment(existingApartmentId);
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = persistenceHandler.getAllApartments();
                                 if (apartments.isEmpty()) {
-                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
-                                            SettingsConstants.INVALID_APARTMENT_ID);
+                                    smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
                                     smartphonePreferencesHandler.setValue(KEY_CURRENT_APARTMENT_ID,
                                             apartments.get(0)
@@ -195,50 +194,4 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                 .show();
     }
 
-    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
-        private ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog;
-        private Fragment                                                targetFragment;
-
-        public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.targetFragment = targetFragment;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return parentDialog.getString(R.string.name);
-                case 1:
-                    return parentDialog.getString(R.string.location);
-            }
-
-            return "" + (position + 1);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment = null;
-
-            switch (i) {
-                case 0:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureApartmentDialogPage1Name.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-                    break;
-            }
-
-            return fragment;
-        }
-
-        /**
-         * @return the number of pages to display
-         */
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
 }

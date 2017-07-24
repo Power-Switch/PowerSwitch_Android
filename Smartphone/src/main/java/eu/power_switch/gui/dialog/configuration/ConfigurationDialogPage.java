@@ -23,15 +23,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.reflect.Constructor;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistenceHandler;
 import timber.log.Timber;
@@ -58,8 +55,8 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
      *
      * @return Instance of the configuration dialog page
      */
-    public static <T extends ConfigurationDialogPage<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogPage newInstance(
-            @NonNull Class<T> clazz, @NonNull ConfigurationDialogTabbed<Configuration> parentDialog) {
+    public static <DialogPage extends ConfigurationDialogPage<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogPage newInstance(
+            @NonNull Class<DialogPage> clazz, @NonNull ConfigurationDialogTabbed<Configuration> parentDialog) {
         Bundle args = new Bundle();
 
         if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
@@ -67,7 +64,7 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
         }
 
         try {
-            Constructor<T>                         constructor = clazz.getConstructor();
+            Constructor<DialogPage>                constructor = clazz.getConstructor();
             ConfigurationDialogPage<Configuration> fragment    = constructor.newInstance();
             fragment.setParentConfigurationDialog(parentDialog);
             fragment.setArguments(args);
@@ -78,11 +75,10 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
     }
 
     /**
-     * Used to notify parent Dialog that configuration has changed
+     * {@see ConfigurationDialogTabbed.notifyConfigurationChanged()}
      */
     public void notifyConfigurationChanged() {
-        EventBus.getDefault()
-                .post(new ConfigurationChangedEvent());
+        parentDialog.notifyConfigurationChanged();
     }
 
     /**
