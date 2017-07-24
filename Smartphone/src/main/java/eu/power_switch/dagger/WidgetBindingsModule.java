@@ -24,6 +24,9 @@ import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.widget.provider.RoomWidgetProvider;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Created by Markus on 12.07.2017.
@@ -42,5 +45,14 @@ public abstract class WidgetBindingsModule {
 
     @ContributesAndroidInjector
     abstract WidgetIntentReceiver widgetIntentReceiver();
+
+    @ContributesAndroidInjector
+    abstract ReceiverWidgetProvider receiverWidgetProvider();
+
+    @ContributesAndroidInjector
+    abstract RoomWidgetProvider roomWidgetProvider();
+
+    @ContributesAndroidInjector
+    abstract SceneWidgetProvider sceneWidgetProvider();
 
 }

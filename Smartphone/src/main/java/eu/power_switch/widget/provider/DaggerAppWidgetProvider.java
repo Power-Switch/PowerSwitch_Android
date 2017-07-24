@@ -16,34 +16,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity.butterknife;
+package eu.power_switch.widget.provider;
 
-import android.os.Bundle;
+import android.appwidget.AppWidgetProvider;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.CallSuper;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 
-import butterknife.ButterKnife;
-import eu.power_switch.gui.activity.DaggerSupportActivityBase;
+import dagger.android.AndroidInjection;
 
 /**
- * Base class for a ButterKnife backed activity
+ * Dagger 2 injectible AppWidgetProvider
  * <p>
- * Created by Markus on 30.06.2017.
+ * Created by Markus on 24.07.2017.
  */
-public abstract class ButterKnifeSupportActivityBase extends DaggerSupportActivityBase {
+public class DaggerAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     @CallSuper
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(getLayoutRes());
-        ButterKnife.bind(this);
+    public void onReceive(Context context, Intent intent) {
+        AndroidInjection.inject(this, context);
+        super.onReceive(context, intent);
     }
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
-
-
 }

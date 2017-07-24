@@ -19,7 +19,6 @@
 package eu.power_switch.widget.provider;
 
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +42,7 @@ import timber.log.Timber;
 /**
  * This class is responsible for updating existing Room widgets
  */
-public class RoomWidgetProvider extends AppWidgetProvider {
+public class RoomWidgetProvider extends DaggerAppWidgetProvider {
 
     @Inject
     PersistenceHandler persistenceHandler;

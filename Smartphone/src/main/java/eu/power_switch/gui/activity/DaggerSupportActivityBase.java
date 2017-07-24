@@ -48,7 +48,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 /**
  * Created by Markus on 30.06.2017.
  */
-public abstract class SupportActivityBase extends AppCompatActivity implements HasFragmentInjector, HasSupportFragmentInjector {
+public abstract class DaggerSupportActivityBase extends AppCompatActivity implements HasFragmentInjector, HasSupportFragmentInjector {
 
     /**
      * Normal activity style

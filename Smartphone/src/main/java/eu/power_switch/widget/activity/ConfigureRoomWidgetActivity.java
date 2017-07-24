@@ -56,7 +56,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
 
     @BindView(R.id.spinner_widgetApartment)
     Spinner spinnerApartment;
-    @BindView(R.id.spinner_room)
+    @BindView(R.id.spinner_widgetRoom)
     Spinner spinnerRoom;
 
     @BindView(R.id.button_widgetSave)

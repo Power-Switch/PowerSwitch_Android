@@ -20,14 +20,10 @@ package eu.power_switch.widget.provider;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -51,7 +47,7 @@ import timber.log.Timber;
 /**
  * This class is responsible for updating existing Receiver widgets
  */
-public class ReceiverWidgetProvider extends AppWidgetProvider {
+public class ReceiverWidgetProvider extends DaggerAppWidgetProvider {
 
     @Inject
     PersistenceHandler persistenceHandler;
@@ -106,13 +102,15 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                             // set button action
                             RemoteViews buttonView = new RemoteViews(context.getResources()
                                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
-                            SpannableString s = new SpannableString(button.getName());
-                            s.setSpan(new StyleSpan(Typeface.BOLD),
-                                    0,
-                                    button.getName()
-                                            .length(),
-                                    0);
-                            buttonView.setTextViewText(R.id.button_widget_universal, s);
+
+//                            SpannableString s = new SpannableString();
+//                            s.setSpan(new StyleSpan(Typeface.BOLD),
+//                                    0,
+//                                    button.getName()
+//                                            .length(),
+//                                    0);
+
+                            buttonView.setTextViewText(R.id.button_widget_universal, button.getName());
                             boolean highlightLastButton = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                             if (highlightLastButton && receiver.getLastActivatedButtonId()
                                     .equals(button.getId())) {

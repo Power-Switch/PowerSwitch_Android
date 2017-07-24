@@ -18,8 +18,6 @@
   -->
 
 <Button
-    android:id="@+id/button_widget_universal"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"/>
+    android:id="@+id/button_widget_universal"
+    style="@style/widget_button"/>

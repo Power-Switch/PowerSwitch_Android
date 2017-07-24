@@ -35,7 +35,8 @@
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
-        android:text="@string/loading"/>
+        android:text="@string/loading"
+        android:textColor="@color/textColorPrimary"/>
 
     <LinearLayout
         android:id="@+id/linearlayout_room_widget"
@@ -49,16 +50,12 @@
 
         <Button
             android:id="@+id/button_on"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/widget_button"
             android:text="@string/on"/>
 
         <Button
             android:id="@+id/button_off"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            style="@style/widget_button"
             android:text="@string/off"/>
 
     </LinearLayout>

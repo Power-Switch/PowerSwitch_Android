@@ -35,7 +35,8 @@
         android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
-        android:text="@string/loading"/>
+        android:text="@string/loading"
+        android:textColor="@color/textColorPrimary"/>
 
     <LinearLayout
         android:id="@+id/linearlayout_receiver_widget"

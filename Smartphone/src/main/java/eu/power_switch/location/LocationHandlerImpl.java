@@ -99,8 +99,12 @@ public class LocationHandlerImpl implements LocationHandler {
                     .addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            lastLocation = location;
-                            Timber.d("LastLocation: " + location.getLatitude() + " " + location.getLongitude());
+                            if (location != null) {
+                                lastLocation = location;
+                                Timber.d("LastLocation: " + location.getLatitude() + " " + location.getLongitude());
+                            } else {
+                                Timber.w("getLastLocation result was null");
+                            }
                         }
                     });
         }
