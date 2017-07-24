@@ -156,6 +156,15 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
 
                 final CheckBox checkBox = gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
+                if (!previouslyCheckedGateways.isEmpty()) {
+                    for (Gateway previousGateway : previouslyCheckedGateways) {
+                        if (previousGateway.getId()
+                                .equals(gateway.getId())) {
+                            checkBox.setChecked(true);
+                            break;
+                        }
+                    }
+                }
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
@@ -166,15 +175,6 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
                 checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
-                if (!previouslyCheckedGateways.isEmpty()) {
-                    for (Gateway previousGateway : previouslyCheckedGateways) {
-                        if (previousGateway.getId()
-                                .equals(gateway.getId())) {
-                            checkBox.setChecked(true);
-                            break;
-                        }
-                    }
-                }
                 gatewayCheckboxList.add(checkBox);
 
                 gatewayLayout.setOnClickListener(new View.OnClickListener() {

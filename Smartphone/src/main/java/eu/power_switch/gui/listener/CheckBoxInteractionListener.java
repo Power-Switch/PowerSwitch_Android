@@ -60,7 +60,7 @@ public abstract class CheckBoxInteractionListener implements CompoundButton.OnCh
 
             userSelect = false;
         } else {
-            onCheckedChangedByUser(buttonView, isChecked);
+            onCheckedChangedBySystem(buttonView, isChecked);
         }
     }
 

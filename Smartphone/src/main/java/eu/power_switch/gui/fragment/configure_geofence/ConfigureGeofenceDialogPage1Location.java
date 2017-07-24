@@ -110,6 +110,8 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        initializeData();
+
         mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
@@ -240,8 +242,6 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             }
         });
 
-        initializeData();
-
         return rootView;
     }
 
@@ -260,9 +260,16 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     geofenceRadiusSeekbar.setProgress((int) radius);
                     geofenceRadiusEditText.setText(String.valueOf((int) radius));
 
-                    updateGeofenceRadius(radius);
+                    if (geofenceView != null) {
+                        geofenceView.setRadius(radius);
+                    }
                 } else {
-                    updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
+                    double radius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
+                    getConfiguration().setRadius(radius);
+
+                    if (geofenceView != null) {
+                        geofenceView.setRadius(radius);
+                    }
                 }
             } catch (Exception e) {
                 Timber.e(e);
