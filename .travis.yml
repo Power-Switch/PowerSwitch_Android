@@ -25,8 +25,8 @@ android:
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-22
-    - sys-img-armeabi-v7a-android-17
+    # - sys-img-armeabi-v7a-android-22
+    # - sys-img-armeabi-v7a-android-17
 
 #before_script:
 #  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
