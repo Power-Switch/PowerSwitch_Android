@@ -23,7 +23,7 @@ buildscript {
 
         compileSdkVersion = 26
         targetSdkVersion = 26
-        buildToolsVersion = "26.0.0"
+        buildToolsVersion = "26.0.1"
 
         supportLibVersion = "25.4.0"
         supportLibWearableVersion = "2.0.3"
