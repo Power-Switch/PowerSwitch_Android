@@ -82,11 +82,8 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
         actionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         actions.clear();
 
         FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
@@ -118,8 +115,10 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
             callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
             initializeCallData(callEventId);
         }
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

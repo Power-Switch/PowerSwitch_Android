@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -62,11 +61,8 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
 
     private BroadcastReceiver broadcastReceiver;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -87,8 +83,6 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
             callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
             initializeCallData(callEventId);
         }
-
-        return rootView;
     }
 
     @Override

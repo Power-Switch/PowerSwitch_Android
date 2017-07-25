@@ -99,11 +99,8 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
         notifyConfigurationChanged();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
         buttonPlus.setOnClickListener(new View.OnClickListener() {
@@ -156,13 +153,10 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
         initializeReceiverData();
 
         updateCustomGatewaySelectionVisibility();
-
-        createTutorial();
-
-        return rootView;
     }
 
-    private void createTutorial() {
+    @Override
+    protected void showTutorial() {
         tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
                 new TutorialItem(textView_repetitionAmount,
                         R.string.tutorial__configure_receiver_repetition_amount__text,

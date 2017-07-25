@@ -151,11 +151,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         notifyConfigurationChanged();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Master/Slave
         channelMasterNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
         channelMasterListView.setAdapter(channelMasterNamesAdapter);
@@ -369,10 +366,6 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         updateUi(null);
 
         initializeReceiverData();
-
-        createTutorial();
-
-        return rootView;
     }
 
     @Override
@@ -404,7 +397,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         }
     }
 
-    private void createTutorial() {
+    @Override
+    protected void showTutorial() {
         // Master/Slave Tutorial
         tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
                 new TutorialItem(channelMasterListView,

@@ -59,11 +59,8 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
     private ArrayAdapter<String> brandNamesAdapter;
     private ArrayAdapter<String> modelNamesAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         brandNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_single_choice,
                 getResources().getStringArray(R.array.brand_array));
@@ -90,10 +87,6 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
         });
 
         initializeReceiverData();
-
-        createTutorial();
-
-        return rootView;
     }
 
     @Override
@@ -101,7 +94,8 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
         return R.layout.dialog_fragment_configure_receiver_page_2;
     }
 
-    private void createTutorial() {
+    @Override
+    protected void showTutorial() {
         tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
                 new TutorialItem(brandListView,
                         R.string.tutorial__configure_receiver_brand_select__text,

@@ -90,11 +90,8 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
                 .post(new RoomAddedEvent(newRoomName));
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,11 +141,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
         initializeReceiverData();
 
-        createTutorial();
-
         initialized = true;
-
-        return rootView;
     }
 
     private void notifyParentRoomChanged() {
@@ -161,7 +154,8 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         return R.layout.dialog_fragment_configure_receiver_page_1;
     }
 
-    private void createTutorial() {
+    @Override
+    protected void showTutorial() {
         tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
                 new TutorialItem(name,
                         TutorialTooltipView.Gravity.LEFT,

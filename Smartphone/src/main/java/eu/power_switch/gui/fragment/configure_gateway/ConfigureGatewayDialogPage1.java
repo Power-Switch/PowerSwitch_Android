@@ -79,11 +79,8 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
     private String originalWanAddress   = "";
     private String originalWanPort      = "";
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.gateway_array,
                 android.R.layout.simple_spinner_item);
@@ -124,8 +121,11 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
         localPort.addTextChangedListener(textWatcher);
         wanAddress.addTextChangedListener(textWatcher);
         wanPort.addTextChangedListener(textWatcher);
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
+
     }
 
     private void updateConfiguration() {

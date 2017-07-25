@@ -55,18 +55,17 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
 
     private boolean isInitialized = false;
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         addApartmentsToLayout();
 
         initializeGatewayData();
 
         isInitialized = true;
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     /**

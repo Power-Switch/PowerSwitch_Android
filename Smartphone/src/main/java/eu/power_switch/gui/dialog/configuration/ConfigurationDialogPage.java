@@ -21,7 +21,9 @@ package eu.power_switch.gui.dialog.configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 
@@ -138,5 +140,35 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
      */
     public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed<Configuration> configurationDialogTabbed) {
         this.parentDialog = configurationDialogTabbed;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+
+        onRootViewInflated(inflater, container, savedInstanceState);
+
+        showTutorial();
+
+        return rootView;
+    }
+
+    /**
+     * This method is called after the rootLayout was inflated and {@code onCreateView()} was executed.
+     * If necessary inflate additional views and initialize other fragment data here.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     */
+    protected abstract void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+
+    /**
+     * This method is called after {@code onCreateView()} and {@code onRootViewInflated()}.
+     * Create and show tutorials that should be shown right after fragment creation in this method.
+     */
+    protected void showTutorial() {
+        // Override this if you want to show a tutorial
     }
 }

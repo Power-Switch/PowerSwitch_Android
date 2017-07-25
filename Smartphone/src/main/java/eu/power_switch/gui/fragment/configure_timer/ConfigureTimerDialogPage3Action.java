@@ -59,11 +59,8 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
     private List<Action> currentActions = new ArrayList<>();
     private ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initializeTimerData();
 
         final Fragment fragment = this;
@@ -88,8 +85,10 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     /**

@@ -88,11 +88,8 @@ public class ConfigureReceiverDialogPage5Summary extends ConfigurationDialogPage
     @Inject
     ClipboardHandler clipboardHandler;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         buttonCopySeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,8 +107,6 @@ public class ConfigureReceiverDialogPage5Summary extends ConfigurationDialogPage
         updateUi();
 
         initializeReceiverData();
-
-        return rootView;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

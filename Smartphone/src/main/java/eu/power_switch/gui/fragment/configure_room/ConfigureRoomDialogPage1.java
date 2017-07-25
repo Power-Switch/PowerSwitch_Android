@@ -27,7 +27,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
@@ -82,11 +81,8 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
         notifyConfigurationChanged();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initExistingData();
 
         name.addTextChangedListener(new TextWatcher() {
@@ -122,8 +118,10 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(receiverNameRecyclerViewAdapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

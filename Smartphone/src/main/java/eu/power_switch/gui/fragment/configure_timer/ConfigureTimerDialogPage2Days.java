@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.configure_timer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
@@ -56,11 +55,8 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
     @BindView(R.id.toggleButton_sunday)
     ToggleButton toggleButtonSunday;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initializeTimerData();
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -77,8 +73,10 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
         toggleButtonFriday.setOnCheckedChangeListener(onCheckedChangeListener);
         toggleButtonSaturday.setOnCheckedChangeListener(onCheckedChangeListener);
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     /**

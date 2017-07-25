@@ -24,7 +24,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -52,11 +51,8 @@ public class ConfigureRoomOrderDialogPage extends ConfigurationDialogPage<RoomOr
     private RoomNameRecyclerViewAdapter roomNameRecyclerViewAdapter;
     private ItemTouchHelper             itemTouchHelper;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         roomNameRecyclerViewAdapter = new RoomNameRecyclerViewAdapter(getContext(), rooms);
         roomNameRecyclerViewAdapter.setOnStartDragListener(this);
         roomNameRecyclerViewAdapter.setOnItemMovedListener(this);
@@ -71,8 +67,10 @@ public class ConfigureRoomOrderDialogPage extends ConfigurationDialogPage<RoomOr
         itemTouchHelper.attachToRecyclerView(recyclerViewRooms);
 
         initExistingData();
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

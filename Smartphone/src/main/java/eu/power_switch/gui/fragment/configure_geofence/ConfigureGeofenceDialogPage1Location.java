@@ -105,11 +105,8 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
         notifyConfigurationChanged();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initializeData();
 
         mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
@@ -241,8 +238,10 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                 mapViewHandler.moveCamera(getCurrentLocation(), false);
             }
         });
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

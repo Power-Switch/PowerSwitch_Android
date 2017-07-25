@@ -66,11 +66,8 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
     private CustomRecyclerViewAdapter customRecyclerViewAdapter;
     private ArrayList<Room>           rooms;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rooms = new ArrayList<>();
         customRecyclerViewAdapter = new CustomRecyclerViewAdapter(getActivity(), rooms);
         recyclerViewSelectedReceivers.setAdapter(customRecyclerViewAdapter);
@@ -79,10 +76,14 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
         initializeSceneData();
+    }
 
-        createTutorial();
-
-        return rootView;
+    @Override
+    protected void showTutorial() {
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(recyclerViewSelectedReceivers,
+                        R.string.tutorial__configure_scene_states__text,
+                        R.string.tutorial__configure_scene_states__id));
     }
 
     @Override
@@ -99,13 +100,6 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         updateSceneItemList();
         getConfiguration().setSceneItems(customRecyclerViewAdapter.getSceneItems());
         notifyConfigurationChanged();
-    }
-
-    private void createTutorial() {
-        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
-                new TutorialItem(recyclerViewSelectedReceivers,
-                        R.string.tutorial__configure_scene_states__text,
-                        R.string.tutorial__configure_scene_states__id));
     }
 
     @Nullable

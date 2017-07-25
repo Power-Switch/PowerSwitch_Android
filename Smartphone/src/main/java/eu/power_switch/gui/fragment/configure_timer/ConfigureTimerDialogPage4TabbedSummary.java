@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.configure_timer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -52,14 +51,9 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     @BindView(R.id.textView_action)
     TextView textViewAction;
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateUi();
-
-        return rootView;
     }
 
     @Override

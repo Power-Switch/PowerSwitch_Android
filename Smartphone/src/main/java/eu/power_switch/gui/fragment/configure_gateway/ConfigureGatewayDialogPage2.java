@@ -63,11 +63,8 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
 
     private SsidRecyclerViewAdapter ssidRecyclerViewAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initializeGatewayData();
 
         ssidRecyclerViewAdapter = new SsidRecyclerViewAdapter(getActivity(), ssids);
@@ -105,8 +102,11 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
                 addSsidDialog.show(getFragmentManager(), null);
             }
         });
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
+
     }
 
     /**

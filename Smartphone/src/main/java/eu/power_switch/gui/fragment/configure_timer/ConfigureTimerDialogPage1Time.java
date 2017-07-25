@@ -25,7 +25,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -57,11 +56,8 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
     @BindView(R.id.seekbarRandomizer)
     SeekBar         seekBarRandomizer;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initializeTimerData();
 
         updateUi();
@@ -114,8 +110,10 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
         });
 
         checkValidity();
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     /**

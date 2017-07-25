@@ -66,11 +66,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
     private boolean isInitialized;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         addGatewaysToLayout();
 
         initializeApartmentData();
@@ -97,8 +94,11 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
         name.addTextChangedListener(textWatcher);
 
         isInitialized = true;
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
+        // TODO:
     }
 
     @Override

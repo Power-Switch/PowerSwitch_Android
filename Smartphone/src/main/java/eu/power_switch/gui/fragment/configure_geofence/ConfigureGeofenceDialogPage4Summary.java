@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,14 +59,9 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
     @BindView(R.id.textView_geofence_radius)
     TextView  textViewGeofenceRadius;
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         updateUi();
-
-        return rootView;
     }
 
     @Override

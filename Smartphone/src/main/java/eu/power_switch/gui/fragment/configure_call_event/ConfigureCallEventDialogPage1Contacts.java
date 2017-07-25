@@ -84,11 +84,8 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
                 .sendBroadcast(intent);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
         recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
         phoneNumberRecyclerViewAdapter.setOnDeleteClickListener(new PhoneNumberRecyclerViewAdapter.OnItemClickListener() {
@@ -132,8 +129,10 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
             callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
             initializeCallData(callEventId);
         }
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

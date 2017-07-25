@@ -85,11 +85,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                 .post(new SceneSelectedReceiversChangedEvent());
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         try {
             long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             existingScenes = persistenceHandler.getScenes(apartmentId);
@@ -122,24 +119,23 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
 
         checkValidity();
 
-        createTutorial();
+        showTutorial();
 
         isInitialized = true;
-
-        return rootView;
     }
 
     @Override
-    protected int getLayoutRes() {
-        return R.layout.dialog_fragment_configure_scene_page_1;
-    }
-
-    private void createTutorial() {
+    protected void showTutorial() {
         tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
                 new TutorialItem(name, R.string.tutorial__configure_scene_name__text, R.string.tutorial__configure_scene_name__id),
                 new TutorialItem(receiverScrollView,
                         R.string.tutorial__configure_scene_devices__text,
                         R.string.tutorial__configure_scene_devices__id));
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_scene_page_1;
     }
 
     private void addReceiversToLayout() {

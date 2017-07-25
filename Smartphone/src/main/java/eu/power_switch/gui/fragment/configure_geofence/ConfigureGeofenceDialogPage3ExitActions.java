@@ -81,11 +81,8 @@ public class ConfigureGeofenceDialogPage3ExitActions extends ConfigurationDialog
         updateConfiguration(currentExitActions);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final Fragment fragment = this;
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +110,10 @@ public class ConfigureGeofenceDialogPage3ExitActions extends ConfigurationDialog
         initializeData();
 
         updateConfiguration(currentExitActions);
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override

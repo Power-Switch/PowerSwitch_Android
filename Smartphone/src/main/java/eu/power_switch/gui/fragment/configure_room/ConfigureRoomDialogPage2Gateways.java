@@ -67,11 +67,8 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
     private List<Gateway>  gateways            = new ArrayList<>();
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void onRootViewInflated(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         try {
             long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
             apartment = persistenceHandler.getApartment(apartmentId);
@@ -96,8 +93,10 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         updateCustomGatewaySelectionVisibility();
+    }
 
-        return rootView;
+    @Override
+    protected void showTutorial() {
     }
 
     @Override
