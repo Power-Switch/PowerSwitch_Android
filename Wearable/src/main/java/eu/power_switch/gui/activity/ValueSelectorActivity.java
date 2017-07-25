@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SnapHelper;
-import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WearableRecyclerView;
 import android.view.View;
 
@@ -32,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.dagger.android.DaggerWearableActivity;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.gui.view.SettingsListSnapHelper;
 import eu.power_switch.network.service.UtilityService;
@@ -46,13 +45,11 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 18.07.2016.
  */
-public class ValueSelectorActivity<T> extends WearableActivity {
+public class ValueSelectorActivity<T> extends DaggerWearableActivity {
 
     public static final String KEY_VALUES = "values";
 
     private List<T> values;
-
-    private WearablePreferencesHandler wearablePreferencesHandler;
 
     public static <T extends Serializable> void newInstance(Context context, List<T> values) {
         Intent intent = new Intent(context, ValueSelectorActivity.class);
@@ -62,10 +59,6 @@ public class ValueSelectorActivity<T> extends WearableActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate
-        wearablePreferencesHandler = new WearablePreferencesHandler(this);
-        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_selector);
 

@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.dagger;
+package eu.power_switch.dagger.module;
 
 import android.content.Context;
 
@@ -24,34 +24,45 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import eu.power_switch.persistence.PersistenceHandler;
-import eu.power_switch.persistence.data.demo_mode.DemoModePersistenceHandler;
-import eu.power_switch.persistence.data.sqlite.handler.SqlitePersistenceHandler;
-import eu.power_switch.shared.application.RunConfig;
+import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.fragment.RoomsFragment;
+import eu.power_switch.gui.fragment.ScenesFragment;
+import eu.power_switch.gui.fragment.SettingsFragment;
+import eu.power_switch.network.service.ListenerService;
+import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
- * Created by Markus on 12.07.2017.
+ * Created by Markus on 25.07.2017.
  */
 @Module
-public abstract class PersistenceBindingsModule {
+public abstract class AndroidBindingsModule {
 
-    @Provides
-    public static PersistenceHandler providePersistenceHandler(RunConfig runConfig, DemoModePersistenceHandler demoModePersistenceHandler,
-                                                               SqlitePersistenceHandler sqlitePersistenceHandler) {
-        switch (runConfig.getMode()) {
-            case DEMO:
-                return demoModePersistenceHandler;
-            case NORMAL:
-            default:
-                return sqlitePersistenceHandler;
-        }
-    }
+    // Main
+
+    @ContributesAndroidInjector
+    abstract MainActivity mainActivity();
+
+    @ContributesAndroidInjector
+    abstract RoomsFragment roomsFragment();
+
+    @ContributesAndroidInjector
+    abstract ScenesFragment scenesFragment();
+
+    @ContributesAndroidInjector
+    abstract SettingsFragment settingsFragment();
 
     @Provides
     @Singleton
     public static WearablePreferencesHandler provideWearablePreferencesHandler(Context context) {
         return new WearablePreferencesHandler(context);
     }
+
+    @ContributesAndroidInjector
+    abstract ListenerService listenerService();
+
+    @ContributesAndroidInjector
+    abstract UtilityService utilityService();
 
 }

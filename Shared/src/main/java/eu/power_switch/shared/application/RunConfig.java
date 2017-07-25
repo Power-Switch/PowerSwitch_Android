@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.application;
+package eu.power_switch.shared.application;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -44,7 +44,6 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
-import dagger.android.HasActivityInjector;
 import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
@@ -79,7 +78,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 11.08.2015.
  */
-public class PowerSwitch extends DaggerApplication implements HasActivityInjector {
+public class PowerSwitch extends DaggerApplication {
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
@@ -101,12 +100,6 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
     @Inject
     LocationHandler locationHandler;
-
-    @Override
-    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder()
-                .create(this);
-    }
 
     public PowerSwitch() {
         // save original uncaught exception handler
@@ -142,6 +135,12 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
                 System.exit(2); //Prevents the service/app from freezing
             }
         });
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder()
+                .create(this);
     }
 
     /**

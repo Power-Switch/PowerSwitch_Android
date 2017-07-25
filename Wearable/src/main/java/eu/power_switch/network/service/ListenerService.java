@@ -29,7 +29,6 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +36,9 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import eu.power_switch.dagger.android.DaggerWearableListenerService;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
@@ -52,14 +54,15 @@ import eu.power_switch.shared.wearable.CommunicationHelper;
  * A Wear listener service, used to receive inbound messages from
  * other devices.
  */
-public class ListenerService extends WearableListenerService {
+public class ListenerService extends DaggerWearableListenerService {
 
     public static final String DATA_UPDATED       = "eu.power_switch.data_updated";
     public static final String KEY_APARTMENT_DATA = "apartment_data";
     public static final String KEY_ROOM_DATA      = "room_data";
     public static final String KEY_SCENE_DATA     = "scene_data";
 
-    private WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(this);
+    @Inject
+    WearablePreferencesHandler wearablePreferencesHandler;
 
     /**
      * Extract Apartment info from DataMap Array

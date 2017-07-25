@@ -27,8 +27,8 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import eu.power_switch.application.PowerSwitch;
-import eu.power_switch.application.RunConfig;
 import eu.power_switch.persistence.preferences.DeveloperPreferencesHandler;
+import eu.power_switch.shared.application.RunConfig;
 
 /**
  * Created by Markus on 11.07.2017.

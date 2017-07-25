@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,9 +36,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
-import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -47,19 +44,16 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 07.06.2016.
  */
-public class RoomsFragment extends Fragment {
+public class RoomsFragment extends FragmentBase {
 
     private static final String REFRESH_VIEW = "eu.power_switch.rooms.refresh_view";
 
     private RecyclerView            roomsRecyclerView;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
-    private DataApiHandler          dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
     private LinearLayout      layoutLoading;
     private LinearLayout      layoutEmpty;
-
-    private WearablePreferencesHandler wearablePreferencesHandler;
 
     /**
      * Used to notify Rooms Fragment (this) that data has changed
@@ -77,9 +71,6 @@ public class RoomsFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
-
-        dataApiHandler = new DataApiHandler(getActivity());
-        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {

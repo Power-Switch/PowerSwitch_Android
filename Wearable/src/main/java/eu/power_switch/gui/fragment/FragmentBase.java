@@ -16,29 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.dagger;
+package eu.power_switch.gui.fragment;
 
-import dagger.Module;
-import dagger.Provides;
-import eu.power_switch.location.LocationHandler;
-import eu.power_switch.location.LocationHandlerImpl;
-import eu.power_switch.shared.application.RunConfig;
+import javax.inject.Inject;
+
+import dagger.android.DaggerFragment;
+import eu.power_switch.network.DataApiHandler;
+import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**
- * Created by Markus on 12.07.2017.
+ * Created by Markus on 25.07.2017.
  */
-@Module
-public abstract class LocationBindingsModule {
 
-    @Provides
-    public static LocationHandler provideLocationHandler(RunConfig runConfig, LocationHandlerImpl locationHandlerImpl) {
-        switch (runConfig.getMode()) {
-            case DEMO:
-                return locationHandlerImpl;
-            case NORMAL:
-            default:
-                return locationHandlerImpl;
-        }
-    }
+public class FragmentBase extends DaggerFragment {
+
+    @Inject
+    protected WearablePreferencesHandler wearablePreferencesHandler;
+
+    @Inject
+    protected DataApiHandler dataApiHandler;
 
 }

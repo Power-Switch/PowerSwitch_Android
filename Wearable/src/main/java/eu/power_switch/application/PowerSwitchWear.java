@@ -18,13 +18,14 @@
 
 package eu.power_switch.application;
 
-import android.app.Application;
-
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 import eu.power_switch.BuildConfig;
+import eu.power_switch.dagger.DaggerAppComponent;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -33,7 +34,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 12.08.2015.
  */
-public class PowerSwitchWear extends Application {
+public class PowerSwitchWear extends DaggerApplication {
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
@@ -56,6 +57,12 @@ public class PowerSwitchWear extends Application {
 //                System.exit(2); //Prevents the service/app from freezing
             }
         });
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder()
+                .create(this);
     }
 
     @Override

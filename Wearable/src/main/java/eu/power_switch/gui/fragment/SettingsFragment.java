@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +38,6 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
 import eu.power_switch.gui.view.SettingsListSnapHelper;
-import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.BooleanSettingsItem;
@@ -54,24 +52,18 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 07.06.2016.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends FragmentBase {
 
     private BroadcastReceiver broadcastReceiver;
-    private DataApiHandler    dataApiHandler;
 
     private ArrayList<SettingsItem> settings = new ArrayList<>();
     private SettingsListAdapter settingsListAdapter;
     private boolean ownModification = false;
 
-    private WearablePreferencesHandler wearablePreferencesHandler;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-
-        dataApiHandler = new DataApiHandler(getActivity());
-        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {

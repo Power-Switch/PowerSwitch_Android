@@ -18,7 +18,6 @@
 
 package eu.power_switch.network.service;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
@@ -33,6 +32,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import dagger.android.DaggerIntentService;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
@@ -42,7 +42,7 @@ import timber.log.Timber;
 /**
  * Created by Markus on 09.06.2016.
  */
-public class UtilityService extends IntentService {
+public class UtilityService extends DaggerIntentService {
 
     public UtilityService() {
         super("UtilityService (Wear)");

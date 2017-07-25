@@ -32,7 +32,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.drawer.WearableActionDrawer;
 import android.support.wearable.view.drawer.WearableDrawerLayout;
 import android.support.wearable.view.drawer.WearableNavigationDrawer;
@@ -48,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.WearableThemeHelper;
+import eu.power_switch.dagger.android.DaggerWearableActivity;
 import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
@@ -63,7 +62,7 @@ import timber.log.Timber;
 /**
  * Main Activity holding all app related views
  */
-public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
+public class MainActivity extends DaggerWearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
     private static final int         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     public static        String      apartmentName                                 = "";
@@ -81,7 +80,6 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     private RelativeLayout relativeLayoutStatus;
     private FrameLayout    contentFrameLayout;
 
-    private WearablePreferencesHandler wearablePreferencesHandler;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -92,10 +90,6 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        wearablePreferencesHandler = new WearablePreferencesHandler(this);
-        // set Theme before anything else in onCreate
-        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

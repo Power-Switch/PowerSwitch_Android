@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.gui.animation.ActionResponse;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Button;
@@ -49,6 +52,7 @@ import timber.log.Timber;
 /**
  * Created by Markus on 03.06.2015.
  */
+@Singleton
 public class DataApiHandler {
 
     private static GoogleApiClient            googleApiClient;
@@ -57,6 +61,7 @@ public class DataApiHandler {
     private        Context                    context;
     private        WearablePreferencesHandler wearablePreferencesHandler;
 
+    @Inject
     public DataApiHandler(Context context) {
         this.context = context;
         this.wearablePreferencesHandler = new WearablePreferencesHandler(context);

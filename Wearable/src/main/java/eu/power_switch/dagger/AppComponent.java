@@ -18,27 +18,22 @@
 
 package eu.power_switch.dagger;
 
-import dagger.Module;
-import dagger.Provides;
-import eu.power_switch.location.LocationHandler;
-import eu.power_switch.location.LocationHandlerImpl;
-import eu.power_switch.shared.application.RunConfig;
+import javax.inject.Singleton;
 
-/**
- * Created by Markus on 12.07.2017.
- */
-@Module
-public abstract class LocationBindingsModule {
+import dagger.Component;
+import dagger.android.AndroidInjectionModule;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
+import eu.power_switch.application.PowerSwitchWear;
+import eu.power_switch.dagger.module.AndroidBindingsModule;
+import eu.power_switch.dagger.module.AppModule;
 
-    @Provides
-    public static LocationHandler provideLocationHandler(RunConfig runConfig, LocationHandlerImpl locationHandlerImpl) {
-        switch (runConfig.getMode()) {
-            case DEMO:
-                return locationHandlerImpl;
-            case NORMAL:
-            default:
-                return locationHandlerImpl;
-        }
+@Singleton
+@Component(modules = {AppModule.class, AndroidBindingsModule.class, AndroidInjectionModule.class, AndroidSupportInjectionModule.class})
+interface AppComponent extends AndroidInjector<PowerSwitchWear> {
+
+    @Component.Builder
+    abstract class Builder extends AndroidInjector.Builder<PowerSwitchWear> {
     }
 
 }
