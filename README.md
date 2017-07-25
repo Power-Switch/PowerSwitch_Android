@@ -8,7 +8,9 @@ https://power-switch.eu
 
 | Master       | Beta | Dev               |
 |--------------|------|-------------------|
-| ![Master](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=master) | ![Beta](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=beta) | ![Dev](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=dev) |
+| [![Master](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=master)](https://travis-ci.org/Power-Switch/PowerSwitch_Android/branches) | [![Beta](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=beta)](https://travis-ci.org/Power-Switch/PowerSwitch_Android/branches) | [![Dev](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=dev)](https://travis-ci.org/Power-Switch/PowerSwitch_Android/branches) |
+| [![codebeat badge](https://codebeat.co/badges/f6441874-bf26-42c6-bddf-ed179cfb23a1)](https://codebeat.co/projects/github-com-power-switch-powerswitch_android-master) | [![codebeat badge](https://codebeat.co/badges/4c952a20-ab3a-4b73-9a98-3bdaf3291c45)](https://codebeat.co/projects/github-com-power-switch-powerswitch_android-beta) | [![codebeat badge](https://codebeat.co/badges/7f1d08da-0dde-440f-a4be-9977ef0aa327)](https://codebeat.co/projects/github-com-power-switch-powerswitch_android-dev) |
+
 
 # Wieso? Weshalb? Warum?
 
