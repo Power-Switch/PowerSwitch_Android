@@ -31,6 +31,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.tutorial.TutorialHandler;
 import timber.log.Timber;
 
 /**
@@ -40,6 +41,9 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
 
     @Inject
     protected PersistenceHandler persistenceHandler;
+
+    @Inject
+    protected TutorialHandler tutorialHandler;
 
     @BindView(R.id.contentView)
     @Nullable

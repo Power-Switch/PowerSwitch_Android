@@ -39,16 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
-import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
-import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -58,6 +48,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.ThemeHelper;
+import eu.power_switch.tutorial.TutorialItem;
 
 import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
@@ -73,6 +64,9 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     TextInputLayout floatingName;
     @BindView(R.id.editText_scene_name)
     EditText        name;
+
+    @BindView(R.id.receiver_scrollView)
+    View receiverScrollView;
 
     @BindView(R.id.linearLayout_selectableReceivers)
     LinearLayout linearLayout_selectableReceivers;
@@ -141,49 +135,11 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     }
 
     private void createTutorial() {
-        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
-            @Override
-            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
-                                         View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
-            @Override
-            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
-                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(name, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_scene_name__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_scene_name__id)
-                .build();
-
-        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(linearLayout_selectableReceivers, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_scene_devices__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_scene_devices__id)
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1)
-                .addItem(message2)
-                .execute();
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(name, R.string.tutorial__configure_scene_name__text, R.string.tutorial__configure_scene_name__id),
+                new TutorialItem(receiverScrollView,
+                        R.string.tutorial__configure_scene_devices__text,
+                        R.string.tutorial__configure_scene_devices__id));
     }
 
     private void addReceiversToLayout() {

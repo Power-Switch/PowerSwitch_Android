@@ -33,15 +33,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
-import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
@@ -49,6 +40,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.Brand;
+import eu.power_switch.tutorial.TutorialItem;
 
 /**
  * "Type" Fragment used in Configure Receiver Dialog
@@ -110,49 +102,14 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
     }
 
     private void createTutorial() {
-        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
-            @Override
-            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
-                                         View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
-            @Override
-            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
-                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(brandListView, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_brand_select__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_name__id)
-                .build();
-
-        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(modelListView, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_model_select__text)
-                        .gravity(TutorialTooltipView.Gravity.TOP)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_model_select__id)
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1)
-                .addItem(message2)
-                .execute();
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(brandListView,
+                        R.string.tutorial__configure_receiver_brand_select__text,
+                        R.string.tutorial__configure_receiver_brand_select__id),
+                new TutorialItem(modelListView,
+                        R.string.tutorial__configure_receiver_model_select__text,
+                        TutorialTooltipView.Gravity.TOP,
+                        R.string.tutorial__configure_receiver_model_select__id));
     }
 
     private Brand getSelectedBrand() {

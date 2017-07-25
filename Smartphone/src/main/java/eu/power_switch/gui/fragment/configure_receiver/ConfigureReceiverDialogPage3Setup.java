@@ -51,16 +51,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
-import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
-import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHandler;
@@ -82,6 +72,7 @@ import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.persistence.data.sqlite.handler.ReceiverReflectionMagic;
 import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
+import eu.power_switch.tutorial.TutorialItem;
 import timber.log.Timber;
 
 /**
@@ -414,65 +405,21 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
     }
 
     private void createTutorial() {
-        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
-            @Override
-            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
-                                         View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
-            @Override
-            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
-                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
         // Master/Slave Tutorial
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(channelMasterListView, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_master_select__text)
-                        .gravity(TutorialTooltipView.Gravity.TOP)
-                        .size(500, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_master_select__id)
-                .build();
-
-        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(channelSlaveListView, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_slave_select__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(500, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_slave_select__id)
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1)
-                .addItem(message2)
-                .execute();
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(channelMasterListView,
+                        R.string.tutorial__configure_receiver_master_select__text,
+                        TutorialTooltipView.Gravity.TOP,
+                        R.string.tutorial__configure_receiver_master_select__id),
+                new TutorialItem(channelSlaveListView,
+                        R.string.tutorial__configure_receiver_slave_select__text,
+                        R.string.tutorial__configure_receiver_slave_select__id));
 
         // AutoPair Tutorial
-        TutorialTooltipBuilder messageSeed = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(textInputEditTextSeed)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).
-                        text(R.string.tutorial__configure_receiver_seed_configuration__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_seed_configuration__id)
-                .build();
-        TutorialTooltip.show(messageSeed);
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(textInputEditTextSeed,
+                        R.string.tutorial__configure_receiver_seed_configuration__text,
+                        R.string.tutorial__configure_receiver_seed_configuration__id));
 
     }
 

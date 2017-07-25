@@ -43,15 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
-import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
-import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
@@ -61,6 +52,7 @@ import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
+import eu.power_switch.tutorial.TutorialItem;
 import timber.log.Timber;
 
 import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
@@ -170,64 +162,25 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
     }
 
     private void createTutorial() {
-        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
-            @Override
-            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
-                                         View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
-            @Override
-            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
-                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
-                tutorialTooltipView.remove(true);
-            }
-        };
-
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(name, TutorialTooltipView.Gravity.LEFT)
-                .indicator(new IndicatorBuilder().offset(50, 0)
-                        .onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_name__text)
-                        .gravity(TutorialTooltipView.Gravity.RIGHT)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_name__id)
-                .build();
-
-        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(addRoomFAB, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().color(Color.WHITE)
-                        .onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_add__text)
-                        .gravity(TutorialTooltipView.Gravity.LEFT)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_room_add__id)
-                .build();
-
-        TutorialTooltipBuilder message3 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
-                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
-                        .build())
-                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_select__text)
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(onClickListener)
-                        .build())
-                .oneTimeUse(R.string.tutorial__configure_receiver_room_select__id)
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1)
-                .addItem(message2)
-                .addItem(message3)
-                .execute();
+        tutorialHandler.showDefaultTutorialTooltipAsChain(getParentConfigurationDialog().getDialog(),
+                new TutorialItem(name,
+                        TutorialTooltipView.Gravity.LEFT,
+                        50,
+                        0,
+                        R.string.tutorial__configure_receiver_name__text,
+                        TutorialTooltipView.Gravity.RIGHT,
+                        R.string.tutorial__configure_receiver_name__id),
+                new TutorialItem(addRoomFAB,
+                        TutorialTooltipView.Gravity.CENTER,
+                        Color.WHITE,
+                        R.string.tutorial__configure_receiver_room_add__text,
+                        TutorialTooltipView.Gravity.LEFT,
+                        R.string.tutorial__configure_receiver_room_add__id),
+                new TutorialItem(roomsListView,
+                        TutorialTooltipView.Gravity.CENTER,
+                        R.string.tutorial__configure_receiver_room_select__text,
+                        TutorialTooltipView.Gravity.BOTTOM,
+                        R.string.tutorial__configure_receiver_room_select__id));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

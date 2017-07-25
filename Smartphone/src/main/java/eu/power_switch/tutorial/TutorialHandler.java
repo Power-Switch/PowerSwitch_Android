@@ -18,13 +18,26 @@
 
 package eu.power_switch.tutorial;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.view.View;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
+import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
 import it.sephiroth.android.library.tooltip.Tooltip;
 
@@ -74,5 +87,69 @@ public class TutorialHandler {
                         .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
                         .build())
                 .show();
+    }
+
+    /**
+     * Show a floating TutorialTooltip
+     *
+     * @param dialog        the dialog to attach this TutorialTooltip to
+     * @param tutorialItems a list of item descriptions for the tooltips
+     */
+    public void showDefaultTutorialTooltipAsChain(Dialog dialog, TutorialItem... tutorialItems) {
+        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
+            @Override
+            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
+                                         View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        TutorialTooltipChainBuilder chainBuilder = new TutorialTooltipChainBuilder();
+
+        for (TutorialItem tutorialItem : tutorialItems) {
+            // build indicator
+            IndicatorBuilder indicatorBuilder = new IndicatorBuilder().offset(tutorialItem.getAnchorOffsetX(), tutorialItem.getAnchorOffsetY())
+                    .onClick(onIndicatorClickedListener);
+            if (tutorialItem.getIndicatorColor() != null) {
+                indicatorBuilder.color(tutorialItem.getIndicatorColor());
+            }
+            indicatorBuilder.build();
+
+            @ColorInt int backgroundColor = ThemeHelper.getThemeAttrColor(context, android.R.attr.windowBackground);
+//            @ColorInt int backgroundColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorPrimary);
+            @ColorInt int textColor = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+
+            // build message
+            MessageBuilder messageBuilder = new MessageBuilder(dialog.getContext()).text(tutorialItem.getMessageRes())
+                    .gravity(tutorialItem.getMessageGravity())
+                    .offset(tutorialItem.getMessageOffsetX(), tutorialItem.getMessageOffsetY())
+                    .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                    .backgroundColor(backgroundColor)
+                    .textColor(textColor)
+                    .onClick(onClickListener)
+                    .build();
+
+            // build tooltip
+            TutorialTooltipBuilder tooltipBuilder = new TutorialTooltipBuilder(dialog.getContext()).attachToDialog(dialog)
+                    .anchor(tutorialItem.getAnchor(), tutorialItem.getAnchorGravity())
+                    .indicator(indicatorBuilder)
+                    .message(messageBuilder)
+                    .oneTimeUse(tutorialItem.getOneTimeKey())
+                    .build();
+
+            // add to chain
+            chainBuilder.addItem(tooltipBuilder);
+        }
+
+        // execute chain
+        chainBuilder.execute();
     }
 }
