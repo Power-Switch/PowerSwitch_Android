@@ -38,6 +38,7 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 

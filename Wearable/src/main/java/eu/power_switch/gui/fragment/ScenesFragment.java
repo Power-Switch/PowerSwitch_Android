@@ -18,13 +18,8 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,12 +27,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.PreferenceChangedEvent;
+import eu.power_switch.event.SceneDataChangedEvent;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
-import eu.power_switch.shared.constants.WearableSettingsConstants;
-import timber.log.Timber;
 
 /**
  * Fragment holding all scenes
@@ -46,52 +45,23 @@ import timber.log.Timber;
  */
 public class ScenesFragment extends FragmentBase {
 
-    private static final String REFRESH_VIEW = "eu.power_switch.scenes.refresh_view";
+    @BindView(R.id.scenes_recyclerView)
+    RecyclerView scenesRecyclerView;
 
-    private RecyclerView             scenesRecyclerView;
+    @BindView(R.id.layoutLoading)
+    LinearLayout layoutLoading;
+    @BindView(R.id.layoutEmpty)
+    LinearLayout layoutEmpty;
+
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-
-    private BroadcastReceiver          broadcastReceiver;
-    private LinearLayout               layoutLoading;
-    private LinearLayout               layoutEmpty;
-
-    /**
-     * Used to notify Scenes Fragment (this) that data has changed
-     *
-     * @param context any suitable context
-     */
-    public static void notifyDataChanged(Context context) {
-        Intent intent = new Intent(REFRESH_VIEW);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                if (REFRESH_VIEW.equals(intent.getAction())) {
-                    refreshUI();
-                } else if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
-                    refreshUI();
-                }
-            }
-        };
-
-        layoutLoading = rootView.findViewById(R.id.layoutLoading);
-
-        layoutEmpty = rootView.findViewById(R.id.layoutEmpty);
         layoutEmpty.setVisibility(View.GONE);
 
-        scenesRecyclerView = rootView.findViewById(R.id.scenes_recyclerView);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(),
                 scenesRecyclerView,
                 MainActivity.sceneList,
@@ -107,6 +77,23 @@ public class ScenesFragment extends FragmentBase {
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_scenes;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onSceneDataChanged(SceneDataChangedEvent e) {
+        refreshUI();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPreferenceChanged(PreferenceChangedEvent e) {
+        refreshUI();
     }
 
     private void refreshUI() {
@@ -125,15 +112,10 @@ public class ScenesFragment extends FragmentBase {
     @Override
     public void onStart() {
         super.onStart();
+
         if (dataApiHandler != null) {
             dataApiHandler.connect();
         }
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(REFRESH_VIEW);
-        intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -142,8 +124,6 @@ public class ScenesFragment extends FragmentBase {
             dataApiHandler.disconnect();
         }
 
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

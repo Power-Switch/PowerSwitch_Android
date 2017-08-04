@@ -16,20 +16,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.shared.constants;
+package eu.power_switch.butterknife;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+
+import butterknife.ButterKnife;
+import eu.power_switch.dagger.android.DaggerWearableActivity;
 
 /**
- * Class holding constants related to Wearable app settings
- * <p/>
- * Created by Markus on 13.11.2015.
+ * Created by Markus on 31.07.2017.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class WearableSettingsConstants {
 
-    public static final String WEARABLE_SETTINGS_CHANGED = "WEARABLE_SETTINGS_CHANGED";
-    public static final String WEARABLE_THEME_CHANGED    = "WEARABLE_THEME_CHANGED";
+public abstract class ButterKnifeWearableActivity extends DaggerWearableActivity {
+
+    @Override
+    @CallSuper
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(getLayoutRes());
+        ButterKnife.bind(this);
+    }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
 }

@@ -37,6 +37,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.persistence.PersistenceHandler;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import timber.log.Timber;
 
 /**

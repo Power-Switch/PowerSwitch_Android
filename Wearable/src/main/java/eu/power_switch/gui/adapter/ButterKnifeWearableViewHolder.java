@@ -16,29 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity.eventbus;
+package eu.power_switch.gui.adapter;
 
-import eu.power_switch.gui.activity.butterknife.ButterKnifeActivity;
-import eu.power_switch.shared.event.EventBusHelper;
+import android.support.wear.widget.WearableRecyclerView;
+import android.view.View;
+
+import butterknife.ButterKnife;
 
 /**
- * Base class for an EventBus backed Activity
+ * Base class for a RecyclerView.ViewHolder backed by ButterKnife
  * <p>
- * Created by Markus on 02.07.2017.
+ * Created by Markus on 30.06.2017.
  */
-public abstract class EventBusActivity extends ButterKnifeActivity {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+public abstract class ButterKnifeWearableViewHolder extends WearableRecyclerView.ViewHolder {
 
-        EventBusHelper.tryRegister(this);
+    public ButterKnifeWearableViewHolder(View itemView) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
     }
 
-    @Override
-    protected void onStop() {
-        EventBusHelper.tryUnregister(this);
-
-        super.onStop();
-    }
 }

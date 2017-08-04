@@ -36,6 +36,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 

@@ -18,8 +18,8 @@
 
 package eu.power_switch.gui.fragment.eventbus;
 
-import eu.power_switch.gui.EventBusHelper;
 import eu.power_switch.gui.fragment.butterknife.ButterKnifeFragment;
+import eu.power_switch.shared.event.EventBusHelper;
 
 /**
  * Base class for an EventBus backed Fragment

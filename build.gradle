@@ -25,9 +25,10 @@ buildscript {
         targetSdkVersion = 26
         buildToolsVersion = "26.0.1"
 
-        supportLibVersion = "25.4.0"
-        supportLibWearableVersion = "2.0.3"
-        playServicesVersion = "11.0.2"
+        supportLibVersion = "26.0.0"
+        supportLibWearableVersion = "2.0.4"
+        supportLibWearableUiVersion = "26.0.0"
+        playServicesVersion = "11.0.4"
         dagger2Version = "2.11"
         butterknifeVersion = "8.6.0"
         lombokVersion = "1.16.16"

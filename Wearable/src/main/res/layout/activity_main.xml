@@ -17,7 +17,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.wearable.view.drawer.WearableDrawerLayout
+<android.support.wear.widget.drawer.WearableDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -58,13 +58,11 @@
 
     </RelativeLayout>
 
-    <android.support.wearable.view.drawer.WearableNavigationDrawer
+    <android.support.wear.widget.drawer.WearableNavigationDrawerView
         android:id="@+id/top_navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_grey">
-
-    </android.support.wearable.view.drawer.WearableNavigationDrawer>
+        android:background="@color/dark_grey"/>
 
     <!--<android.support.wearable.view.drawer.WearableActionDrawer-->
     <!--android:id="@+id/bottom_action_drawer"-->
@@ -72,4 +70,4 @@
     <!--android:layout_height="match_parent"-->
     <!--android:background="@color/grey"/>-->
 
-</android.support.wearable.view.drawer.WearableDrawerLayout>
+</android.support.wear.widget.drawer.WearableDrawerLayout>

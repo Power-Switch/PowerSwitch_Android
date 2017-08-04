@@ -23,9 +23,4 @@
 
     <string name="settings">Settings</string>
 
-    <string-array name="wear_tab_names">
-        <item>@string/rooms</item>
-        <item>@string/scenes</item>
-    </string-array>
-
 </resources>

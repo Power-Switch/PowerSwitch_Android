@@ -18,9 +18,6 @@
 
 package eu.power_switch.network.service;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.google.android.gms.common.data.FreezableUtils;
@@ -29,6 +26,8 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,12 +38,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.power_switch.dagger.android.DaggerWearableListenerService;
+import eu.power_switch.event.DataChangedEvent;
+import eu.power_switch.event.PreferenceChangedEvent;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
 
@@ -55,11 +55,6 @@ import eu.power_switch.shared.wearable.CommunicationHelper;
  * other devices.
  */
 public class ListenerService extends DaggerWearableListenerService {
-
-    public static final String DATA_UPDATED       = "eu.power_switch.data_updated";
-    public static final String KEY_APARTMENT_DATA = "apartment_data";
-    public static final String KEY_ROOM_DATA      = "room_data";
-    public static final String KEY_SCENE_DATA     = "scene_data";
 
     @Inject
     WearablePreferencesHandler wearablePreferencesHandler;
@@ -183,42 +178,6 @@ public class ListenerService extends DaggerWearableListenerService {
     }
 
     /**
-     * Sends local Broadcast that underlying data has changed and UI has to be updated
-     *
-     * @param rooms
-     * @param scenes
-     */
-    public static void sendDataUpdatedBroadcast(Context context, String apartmentName, List<Room> rooms, List<Scene> scenes) {
-        Intent intent = new Intent(DATA_UPDATED);
-        intent.putExtra(KEY_APARTMENT_DATA, apartmentName);
-        intent.putExtra(KEY_ROOM_DATA, new ArrayList<>(rooms));
-        intent.putExtra(KEY_SCENE_DATA, new ArrayList<>(scenes));
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
-
-    /**
-     * Sends local Broadcast that underlying settings have changed and UI has to be updated
-     */
-    public static void sendSettingsChangedBroadcast(Context context) {
-        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
-
-    /**
-     * Sends local Broadcast that app theme has changed and app has to be restarted
-     */
-    public static void sendThemeChangedBroadcast(Context context) {
-        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
-
-    /**
      * Reacts to DataChanged Events from DataApi
      *
      * @param dataEvents
@@ -250,7 +209,8 @@ public class ListenerService extends DaggerWearableListenerService {
                         List<Scene> scenes = extractSceneDataMapItems(data);
 
                         // send data to Activity
-                        sendDataUpdatedBroadcast(this, apartmentName, rooms, scenes);
+                        EventBus.getDefault()
+                                .post(new DataChangedEvent(apartmentName, rooms, scenes));
                     } else if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem()
                             .getUri()
                             .getPath())) {
@@ -264,9 +224,11 @@ public class ListenerService extends DaggerWearableListenerService {
 
                         // notify about changes
                         if (newThemeValue != oldThemeValue) {
-                            sendThemeChangedBroadcast(this);
+                            EventBus.getDefault()
+                                    .post(new PreferenceChangedEvent<>(WearablePreferencesHandler.THEME));
                         } else {
-                            sendSettingsChangedBroadcast(this);
+                            EventBus.getDefault()
+                                    .post(new PreferenceChangedEvent<>(null));
                         }
 
                     }
@@ -276,7 +238,9 @@ public class ListenerService extends DaggerWearableListenerService {
                             .getPath())) {
                         // send data to Activity
                         // update with empty lists
-                        sendDataUpdatedBroadcast(this, "", new ArrayList<Room>(), new ArrayList<Scene>());
+
+                        EventBus.getDefault()
+                                .post(new DataChangedEvent("", new ArrayList<Room>(), new ArrayList<Scene>()));
                     }
                 }
             }

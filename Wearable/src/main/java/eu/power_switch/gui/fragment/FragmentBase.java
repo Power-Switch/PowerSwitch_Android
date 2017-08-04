@@ -18,8 +18,17 @@
 
 package eu.power_switch.gui.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import dagger.android.DaggerFragment;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
@@ -27,8 +36,7 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 /**
  * Created by Markus on 25.07.2017.
  */
-
-public class FragmentBase extends DaggerFragment {
+public abstract class FragmentBase extends DaggerFragment {
 
     @Inject
     protected WearablePreferencesHandler wearablePreferencesHandler;
@@ -36,4 +44,28 @@ public class FragmentBase extends DaggerFragment {
     @Inject
     protected DataApiHandler dataApiHandler;
 
+    private Unbinder unbinder;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(getLayoutRes(), container, false);
+
+        unbinder = ButterKnife.bind(this, rootView);
+
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    /**
+     * @return The layout resource to use for this fragment
+     */
+    @LayoutRes
+    protected abstract int getLayoutRes();
 }

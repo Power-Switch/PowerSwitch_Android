@@ -24,6 +24,7 @@ import android.view.View;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.animation.AnimationHandler;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 /**
  * Created by Markus on 24.07.2017.

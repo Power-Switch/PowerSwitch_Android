@@ -19,10 +19,8 @@
 package eu.power_switch.gui.activity;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -31,55 +29,67 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.wearable.view.drawer.WearableActionDrawer;
-import android.support.wearable.view.drawer.WearableDrawerLayout;
-import android.support.wearable.view.drawer.WearableNavigationDrawer;
-import android.view.Gravity;
-import android.view.MenuItem;
+import android.support.wear.widget.drawer.WearableDrawerLayout;
+import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.dagger.android.DaggerWearableActivity;
+import eu.power_switch.butterknife.ButterKnifeWearableActivity;
+import eu.power_switch.event.DataChangedEvent;
+import eu.power_switch.event.PreferenceChangedEvent;
+import eu.power_switch.event.RoomDataChangedEvent;
+import eu.power_switch.event.SceneDataChangedEvent;
 import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
+import eu.power_switch.gui.fragment.SettingsFragment;
 import eu.power_switch.network.DataApiHandler;
-import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
+
+import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_ROOMS;
+import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_SCENES;
+import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_SETTINGS;
 
 /**
  * Main Activity holding all app related views
  */
-public class MainActivity extends DaggerWearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
+public class MainActivity extends ButterKnifeWearableActivity {
 
     private static final int         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     public static        String      apartmentName                                 = "";
     public static        List<Room>  roomList                                      = new ArrayList<>();
     public static        List<Scene> sceneList                                     = new ArrayList<>();
     private static       boolean     isInitialized                                 = false;
-    private DataApiHandler    dataApiHandler;
-    private BroadcastReceiver broadcastReceiver;
+    private DataApiHandler dataApiHandler;
 
-    private WearableDrawerLayout     mWearableDrawerLayout;
-    private WearableNavigationDrawer mWearableNavigationDrawer;
-    private WearableActionDrawer     mWearableActionDrawer;
+    @BindView(R.id.drawer_layout)
+    WearableDrawerLayout mWearableDrawerLayout;
 
-    private TextView       textViewStatus;
-    private RelativeLayout relativeLayoutStatus;
-    private FrameLayout    contentFrameLayout;
+    // Main Wearable Drawer Layout that wraps all content
+    @BindView(R.id.content_frame)
+    FrameLayout                  contentFrameLayout;
+    @BindView(R.id.top_navigation_drawer)
+    WearableNavigationDrawerView mWearableNavigationDrawer;
 
+    @BindView(R.id.textView_Status)
+    TextView       textViewStatus;
+    @BindView(R.id.relativeLayout_status)
+    RelativeLayout relativeLayoutStatus;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -91,108 +101,95 @@ public class MainActivity extends DaggerWearableActivity implements WearableActi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         // allow always-on screen
         setAmbientEnabled();
 
         dataApiHandler = new DataApiHandler(getApplicationContext());
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("MainActivity", "received intent: " + intent.getAction());
-
-                if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
-                    apartmentName = intent.getStringExtra(ListenerService.KEY_APARTMENT_DATA);
-
-                    ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.KEY_ROOM_DATA);
-                    roomList.clear();
-                    roomList.addAll(rooms);
-
-                    RoomsFragment.notifyDataChanged(getApplicationContext());
-
-                    ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.KEY_SCENE_DATA);
-                    sceneList.clear();
-                    sceneList.addAll(scenes);
-
-                    ScenesFragment.notifyDataChanged(getApplicationContext());
-                } else if (WearableSettingsConstants.WEARABLE_THEME_CHANGED.equals(intent.getAction())) {
-                    finish();
-                    Intent restartActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(restartActivityIntent);
-                }
-            }
-        };
-
-//        // Obtain the DismissOverlayView element
-//        dismissOverlayView = (DismissOverlayView) findViewById(R.id.dismiss_overlay);
-//        dismissOverlayView.setIntroText(R.string.long_press_intro);
-//        dismissOverlayView.showIntroIfNecessary();
-//
-//        // Configure a gesture detector
-//        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-//            public void onLongPress(MotionEvent ev) {
-//                dismissOverlayView.show();
-//            }
-//        });
-
-        // Main Wearable Drawer Layout that wraps all content
-        mWearableDrawerLayout = findViewById(R.id.drawer_layout);
-        contentFrameLayout = findViewById(R.id.content_frame);
-
         // Top Navigation Drawer
-        mWearableNavigationDrawer = findViewById(R.id.top_navigation_drawer);
         NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this);
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
+        mWearableNavigationDrawer.addOnItemSelectedListener(new WearableNavigationDrawerView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int i) {
+                Fragment fragment;
+
+                switch (i) {
+                    case INDEX_ROOMS:
+                        fragment = new RoomsFragment();
+                        break;
+                    case INDEX_SCENES:
+                        fragment = new ScenesFragment();
+                        break;
+                    case INDEX_SETTINGS:
+                        fragment = new SettingsFragment();
+                        break;
+                    default:
+                        fragment = new RoomsFragment();
+                        break;
+                }
+
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .commit();
+            }
+        });
 
         // load first fragment
         int index = wearablePreferencesHandler.getValue(WearablePreferencesHandler.STARTUP_DEFAULT_TAB);
-        navigationDrawerAdapter.onItemSelected(index);
-        // TODO: Refresh Navigation drawer
-
-        // Peeks Navigation drawer on the top.
-        mWearableDrawerLayout.peekDrawer(Gravity.TOP);
-
-//        // Bottom Action Drawer
-//        mWearableActionDrawer = (WearableActionDrawer) findViewById(R.id.bottom_action_drawer);
-
-//        // Populate Action Drawer Menu
-//        Menu menu = mWearableActionDrawer.getMenu();
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.action_drawer_menu, menu);
-//        mWearableActionDrawer.setOnMenuItemClickListener(this);
-
-//        // Peeks action drawer on the bottom.
-//        mWearableDrawerLayout.peekDrawer(Gravity.BOTTOM);
-
-        // Status layout
-        relativeLayoutStatus = findViewById(R.id.relativeLayout_status);
-        textViewStatus = findViewById(R.id.textView_Status);
+        mWearableNavigationDrawer.setCurrentItem(index, false);
 
         // Get Room/Receiver/Button/Scene configuration from Smartphone App
         new FetchDataAsyncTask().execute();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-//            // Should we show an explanation?
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                // Show an expanation to the user *asynchronously* -- don't block
-//                // this thread waiting for the user's response! After the user
-//                // sees the explanation, try again to request the permission.
-//
-//            } else {
-//                // No explanation needed, we can request the permission.
-
             Timber.d("Write external storage permission is missing, asking for it...");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-//            }
         } else {
             Timber.d("Write external storage permission already granted");
+        }
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onDataChanged(DataChangedEvent e) {
+        apartmentName = e.getApartmentName();
+
+        List<Room> rooms = e.getRooms();
+        roomList.clear();
+        roomList.addAll(rooms);
+
+        EventBus.getDefault()
+                .post(new RoomDataChangedEvent(roomList));
+
+        List<Scene> scenes = e.getScenes();
+        sceneList.clear();
+        sceneList.addAll(scenes);
+
+        EventBus.getDefault()
+                .post(new SceneDataChangedEvent(sceneList));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPreferenceChanged(PreferenceChangedEvent e) {
+        if (e.getPreferenceItem() == WearablePreferencesHandler.THEME) {
+            recreate();
+
+            // TODO: check if recreate() is sufficient and remove this code if so
+//            finish();
+//            Intent restartActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+//            restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(restartActivityIntent);
         }
     }
 
@@ -227,15 +224,10 @@ public class MainActivity extends DaggerWearableActivity implements WearableActi
     @Override
     protected void onStart() {
         super.onStart();
+
         if (dataApiHandler != null) {
             dataApiHandler.connect();
         }
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ListenerService.DATA_UPDATED);
-        intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -244,8 +236,6 @@ public class MainActivity extends DaggerWearableActivity implements WearableActi
             dataApiHandler.disconnect();
         }
 
-        LocalBroadcastManager.getInstance(this)
-                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
@@ -263,24 +253,6 @@ public class MainActivity extends DaggerWearableActivity implements WearableActi
         relativeLayoutStatus.setVisibility(View.GONE);
 
         super.onExitAmbient();
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        final int itemId = menuItem.getItemId();
-
-        switch (itemId) {
-//            case R.id.menu_planet_name:
-//                toastMessage = mSolarSystem.get(mSelectedPlanet).getName();
-//                break;
-//            case R.id.menu_surface_area:
-//                toastMessage = mSolarSystem.get(mSelectedPlanet).getSurfaceArea();
-//                break;
-        }
-
-        mWearableDrawerLayout.closeDrawer(mWearableActionDrawer);
-
-        return false;
     }
 
     /**
@@ -340,13 +312,15 @@ public class MainActivity extends DaggerWearableActivity implements WearableActi
                 List<Room> rooms = (List<Room>) result.get(1);
                 roomList.addAll(rooms);
 
-                RoomsFragment.notifyDataChanged(getApplicationContext());
+                EventBus.getDefault()
+                        .post(new RoomDataChangedEvent(rooms));
 
                 sceneList.clear();
                 List<Scene> scenes = (List<Scene>) result.get(2);
                 sceneList.addAll(scenes);
 
-                ScenesFragment.notifyDataChanged(getApplicationContext());
+                EventBus.getDefault()
+                        .post(new SceneDataChangedEvent(scenes));
 
                 textViewStatus.setVisibility(View.GONE);
                 if (!isAmbient()) {

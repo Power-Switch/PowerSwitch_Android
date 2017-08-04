@@ -35,6 +35,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 /**
  * Adapter to visualize Contact items in RecyclerView

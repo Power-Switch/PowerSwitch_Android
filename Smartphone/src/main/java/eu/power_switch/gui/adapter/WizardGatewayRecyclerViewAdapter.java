@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 /**
  * Adapter to visualize Gateway items in a RecyclerView

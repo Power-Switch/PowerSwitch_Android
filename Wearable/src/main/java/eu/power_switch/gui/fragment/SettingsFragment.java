@@ -18,34 +18,32 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.SnapHelper;
-import android.support.wearable.view.CurvedChildLayoutManager;
-import android.support.wearable.view.WearableRecyclerView;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.wear.widget.WearableLinearLayoutManager;
+import android.support.wear.widget.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.PreferenceChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
-import eu.power_switch.gui.view.SettingsListSnapHelper;
-import eu.power_switch.network.service.ListenerService;
+import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.BooleanSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.settings.SingleSelectSettingsItem;
-import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
-import timber.log.Timber;
 
 /**
  * Fragment holding settings related to wearable
@@ -54,7 +52,8 @@ import timber.log.Timber;
  */
 public class SettingsFragment extends FragmentBase {
 
-    private BroadcastReceiver broadcastReceiver;
+    @BindView(R.id.wearableRecyclerView)
+    WearableRecyclerView wearableRecyclerView;
 
     private ArrayList<SettingsItem> settings = new ArrayList<>();
     private SettingsListAdapter settingsListAdapter;
@@ -63,29 +62,12 @@ public class SettingsFragment extends FragmentBase {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
-                    if (!ownModification) {
-                        refreshUI();
-                    } else {
-                        ownModification = false;
-                    }
-                }
-            }
-        };
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
         SingleSelectSettingsItem item0 = new SingleSelectSettingsItem(getActivity(),
                 IconicsHelper.getTabsIcon(getActivity()),
                 R.string.title_startupDefaultTab,
-                WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
-                R.array.wear_tab_names,
+                WearablePreferencesHandler.STARTUP_DEFAULT_TAB, R.array.wearable_tab_values, R.array.wearable_tab_names,
                 wearablePreferencesHandler) {
 
         };
@@ -111,15 +93,6 @@ public class SettingsFragment extends FragmentBase {
         settings.add(item2);
         settings.add(item3);
 
-        final WearableRecyclerView wearableRecyclerView = rootView.findViewById(R.id.wearableRecyclerView);
-        wearableRecyclerView.setCenterEdgeItems(true);
-
-        CurvedChildLayoutManager curvedChildLayoutManager = new CurvedChildLayoutManager(getActivity());
-        wearableRecyclerView.setLayoutManager(curvedChildLayoutManager);
-
-        SnapHelper snapHelper = new SettingsListSnapHelper();
-        snapHelper.attachToRecyclerView(wearableRecyclerView);
-
         settingsListAdapter = new SettingsListAdapter(getActivity(), settings);
         settingsListAdapter.setOnItemClickListener(new SettingsListAdapter.OnItemClickListener() {
             @Override
@@ -137,15 +110,44 @@ public class SettingsFragment extends FragmentBase {
                 viewHolder.value.setText(settingsItem.getCurrentValueDescription());
                 ownModification = true;
 
+                // notify listeners
+                EventBus.getDefault()
+                        .post(new PreferenceChangedEvent<>(settingsItem.getPreferenceItem()));
+
+                // push new data to cloud
                 UtilityService.forceWearSettingsUpdate(getActivity());
             }
         });
-
         wearableRecyclerView.setAdapter(settingsListAdapter);
+
+        wearableRecyclerView.setEdgeItemsCenteringEnabled(true);
+
+        WearableLinearLayoutManager layoutManager = new WearableLinearLayoutManager(getActivity());
+        layoutManager.setLayoutCallback(new SettingsListLayoutCallback(getActivity()));
+        wearableRecyclerView.setLayoutManager(layoutManager);
+
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(wearableRecyclerView);
 
         refreshUI();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_settings;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPreferenceChanged(PreferenceChangedEvent e) {
+        if (!ownModification) {
+            refreshUI();
+        } else {
+            // ignore self made changes
+            ownModification = false;
+        }
     }
 
     private void refreshUI() {
@@ -155,14 +157,10 @@ public class SettingsFragment extends FragmentBase {
     @Override
     public void onStart() {
         super.onStart();
+
         if (dataApiHandler != null) {
             dataApiHandler.connect();
         }
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -171,10 +169,6 @@ public class SettingsFragment extends FragmentBase {
             dataApiHandler.disconnect();
         }
 
-        ListenerService.sendSettingsChangedBroadcast(getActivity());
-
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

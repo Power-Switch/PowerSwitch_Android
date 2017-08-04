@@ -101,7 +101,7 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
 
         int startupDefaultTabIndex = wearablePreferencesHandler.getValue(WearablePreferencesHandler.STARTUP_DEFAULT_TAB);
         startupDefaultTab.setValueIndex(startupDefaultTabIndex);
-        String[] mainTabNames = getResources().getStringArray(R.array.wear_tab_names);
+        String[] mainTabNames = getResources().getStringArray(R.array.wearable_tab_names);
         startupDefaultTab.setSummary(mainTabNames[startupDefaultTabIndex]);
 
         boolean autoCollapseRoomsEnabled = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);

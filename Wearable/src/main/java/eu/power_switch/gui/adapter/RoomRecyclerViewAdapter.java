@@ -34,12 +34,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.shared.ThemeHelper;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
@@ -49,14 +51,12 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
  */
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
 
-    // Store a member variable for the users
-    private List<Room>                 rooms;
     private Context                    context;
+    private List<Room>                 rooms;
     private DataApiHandler             dataApiHandler;
     private RecyclerView               parentRecyclerView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
-    // Pass in the context and users array into the constructor
     public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<Room> rooms, DataApiHandler dataApiHandler,
                                    WearablePreferencesHandler wearablePreferencesHandler) {
         this.rooms = rooms;
@@ -66,27 +66,21 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         this.wearablePreferencesHandler = wearablePreferencesHandler;
     }
 
-    // Usually involves inflating a layout from XML and returning the holder
     @Override
     public RoomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflate the custom layout
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_room, parent, false);
-        // Return a new holder instance
         return new RoomRecyclerViewAdapter.ViewHolder(itemView);
     }
 
-    // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(final RoomRecyclerViewAdapter.ViewHolder holder, int position) {
-        // Get the data model based on position
         final Room room = rooms.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) parentRecyclerView.getContext()
                 .getSystemService(inflaterString);
 
-        // Set item views based on the data model
         holder.roomName.setText(room.getName());
 
         if (room.isCollapsed()) {
@@ -144,7 +138,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     }
                 }
 
-                if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     notifyDataSetChanged();
                 }
             }
@@ -162,12 +156,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.textView_receiver_name);
+            TextView receiverName = receiverLayout.findViewById(R.id.textView_receiver_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
 
             // Setup Buttons
-            TableLayout buttonLayout = (TableLayout) receiverLayout.findViewById(R.id.buttonLayout);
+            TableLayout buttonLayout = receiverLayout.findViewById(R.id.buttonLayout);
 
             int                                    buttonsPerRow = 2;
             int                                    i             = 0;
@@ -181,7 +175,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
 
-                if (button.getId() == receiver.getLastActivatedButtonId() && wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                if (button.getId() == receiver.getLastActivatedButtonId() && wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     buttonView.setTextColor(accentColor);
                 }
 
@@ -196,7 +190,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
                         receiver.setLastActivatedButtonId(button.getId());
-                        if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);
@@ -231,40 +225,34 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     }
 
     private void giveVibrationFeedback() {
-        if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
+        if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
             int duration = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATION_DURATION);
             VibrationHandler.vibrate(context, duration);
         }
     }
 
-    // Return the total count of items
     @Override
     public int getItemCount() {
         return rooms.size();
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        public TextView              roomName;
-        public LinearLayout          linearLayout_AllOnOffButtons;
-        public android.widget.Button buttonAllOn;
-        public android.widget.Button buttonAllOff;
-        public LinearLayout          linearLayoutOfReceivers;
-        public LinearLayout          footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
+        @BindView(R.id.textView_room_name)
+        TextView              roomName;
+        @BindView(R.id.linearLayout_AllOnOffButtons)
+        LinearLayout          linearLayout_AllOnOffButtons;
+        @BindView(R.id.button_AllOn)
+        android.widget.Button buttonAllOn;
+        @BindView(R.id.button_AllOff)
+        android.widget.Button buttonAllOff;
+        @BindView(R.id.layout_of_receivers)
+        LinearLayout          linearLayoutOfReceivers;
+        @BindView(R.id.list_footer)
+        LinearLayout          footer;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            this.roomName = itemView.findViewById(R.id.textView_room_name);
-            this.linearLayout_AllOnOffButtons = itemView.findViewById(R.id.linearLayout_AllOnOffButtons);
-            this.buttonAllOn = itemView.findViewById(R.id.button_AllOn);
-            this.buttonAllOff = itemView.findViewById(R.id.button_AllOff);
-            this.linearLayoutOfReceivers = itemView.findViewById(R.id.layout_of_receivers);
-            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

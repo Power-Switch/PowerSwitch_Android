@@ -28,9 +28,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
@@ -74,7 +76,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                if (wearablePreferencesHandler.<Boolean>getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
+                if (wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS)) {
                     int duration = wearablePreferencesHandler.getValue(WearablePreferencesHandler.VIBRATION_DURATION);
                     VibrationHandler.vibrate(context, duration);
                 }
@@ -91,28 +93,22 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         }
     }
 
-    // Return the total count of items
     @Override
     public int getItemCount() {
         return scenes.size();
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        public TextView              sceneName;
-        public android.widget.Button buttonActivate;
-        public LinearLayout          footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
+        @BindView(R.id.textView_scene_name)
+        TextView              sceneName;
+        @BindView(R.id.button_Activate)
+        android.widget.Button buttonActivate;
+        @BindView(R.id.list_footer)
+        LinearLayout          footer;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            this.sceneName = itemView.findViewById(R.id.textView_scene_name);
-            this.buttonActivate = itemView.findViewById(R.id.button_Activate);
-            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

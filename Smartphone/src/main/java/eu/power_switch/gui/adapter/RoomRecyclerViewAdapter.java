@@ -44,6 +44,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import timber.log.Timber;
 

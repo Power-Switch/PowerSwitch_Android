@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "eu.power_switch"
-        minSdkVersion 20
+        minSdkVersion 23
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -55,6 +55,7 @@ android {
 dependencies {
     compile "com.google.android.support:wearable:${rootProject.ext.supportLibWearableVersion}"
     provided "com.google.android.wearable:wearable:${rootProject.ext.supportLibWearableVersion}"
+    compile "com.android.support:wear:${rootProject.ext.supportLibWearableUiVersion}"
 
     // Dagger 2
     compile "com.google.dagger:dagger:${rootProject.ext.dagger2Version}"
@@ -63,6 +64,9 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.ext.dagger2Version}"
     compile "com.google.dagger:dagger-android:${rootProject.ext.dagger2Version}"
     compile "com.google.dagger:dagger-android-support:${rootProject.ext.dagger2Version}"
+
+    // Butterknife View Annotation
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     compile project(':Shared')
 }

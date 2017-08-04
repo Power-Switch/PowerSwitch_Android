@@ -34,6 +34,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.phone.sms.SmsEvent;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.constants.PhoneConstants;
 
 /**

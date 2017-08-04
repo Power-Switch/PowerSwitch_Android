@@ -40,11 +40,13 @@ public class BooleanSettingsItem extends SettingsItem<Boolean> {
         super(context, iconDrawable, description, preferenceItem, wearablePreferencesHandler);
     }
 
+    @NonNull
     @Override
     public String getCurrentValueDescription() {
         return getValueDescription(getValue());
     }
 
+    @NonNull
     @Override
     public String getValueDescription(Boolean value) {
         if (value) {

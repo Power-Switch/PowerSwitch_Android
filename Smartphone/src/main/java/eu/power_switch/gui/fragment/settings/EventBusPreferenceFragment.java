@@ -18,7 +18,7 @@
 
 package eu.power_switch.gui.fragment.settings;
 
-import eu.power_switch.gui.EventBusHelper;
+import eu.power_switch.shared.event.EventBusHelper;
 
 /**
  * Created by Markus on 15.07.2017.

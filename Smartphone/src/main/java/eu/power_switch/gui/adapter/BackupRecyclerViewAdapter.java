@@ -45,6 +45,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.ThemeHelper;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import timber.log.Timber;
 

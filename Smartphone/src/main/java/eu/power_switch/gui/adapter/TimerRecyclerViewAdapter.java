@@ -38,6 +38,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AndroidAlarmHandler;

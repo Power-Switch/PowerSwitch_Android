@@ -19,9 +19,10 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.support.wearable.view.CircledImageView;
-import android.support.wearable.view.WearableRecyclerView;
+import android.support.wear.widget.CircledImageView;
+import android.support.wear.widget.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,25 +30,39 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.settings.SingleSelectSettingsItem;
 
 /**
  * Created by Markus on 08.06.2016.
  */
-public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter {
-    private final LayoutInflater           mInflater;
-    private       Context                  context;
-    private       List<Integer>            values;
-    private       SingleSelectSettingsItem settingsItem;
-    private       OnItemClickListener      onItemClickListener;
+public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<ValueSelectorListAdapter.ItemViewHolder> {
+    private final LayoutInflater mInflater;
 
-    public ValueSelectorListAdapter(Context context, SingleSelectSettingsItem settingsItem) {
+    private Context      context;
+    private List<String> descriptions;
+    private Integer      currentValueIndex;
+
+    private OnItemClickListener onItemClickListener;
+
+    public ValueSelectorListAdapter(@NonNull Context context, @NonNull List<Integer> values, @NonNull List<String> descriptions,
+                                    @NonNull Integer currentValue) {
         this.context = context;
-        mInflater = LayoutInflater.from(context);
-        this.values = settingsItem.getAllValues();
-        this.settingsItem = settingsItem;
+        this.mInflater = LayoutInflater.from(context);
+        this.descriptions = descriptions;
+
+        for (int i = 0; i < values.size(); i++) {
+            Integer value = values.get(i);
+            if (value.equals(currentValue)) {
+                currentValueIndex = i;
+                break;
+            }
+        }
+
+        if (currentValueIndex == null) {
+            throw new IllegalArgumentException("No matching value in values found for currentValue parameter!");
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -55,37 +70,35 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter {
     }
 
     @Override
-    public WearableRecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new ItemViewHolder(mInflater.inflate(R.layout.list_item_value_selector, null));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Integer value = values.get(position);
-
-        ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
-
-        if (value.equals(settingsItem.getValue())) {
+    public void onBindViewHolder(ValueSelectorListAdapter.ItemViewHolder itemViewHolder, int position) {
+        if (position == currentValueIndex) {
             itemViewHolder.checkmark.setImageDrawable(IconicsHelper.getCheckmarkIcon(context));
         } else {
             itemViewHolder.checkmark.setImageDrawable(null);
         }
 
-        itemViewHolder.value.setText(settingsItem.getValueDescription(value));
+        itemViewHolder.value.setText(descriptions.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return descriptions.size();
     }
 
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
 
-    public final class ItemViewHolder extends WearableRecyclerView.ViewHolder {
-        public CircledImageView checkmark;
-        public TextView         value;
+    public final class ItemViewHolder extends ButterKnifeWearableViewHolder {
+        @BindView(R.id.circle)
+        CircledImageView checkmark;
+        @BindView(R.id.value)
+        TextView         value;
 
         public ItemViewHolder(final View itemView) {
             super(itemView);
@@ -102,9 +115,6 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter {
                     }
                 }
             });
-
-            checkmark = itemView.findViewById(R.id.circle);
-            value = itemView.findViewById(R.id.value);
         }
     }
 }

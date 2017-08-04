@@ -25,13 +25,13 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
 
-    <android.support.wearable.view.CircledImageView
+    <android.support.wear.widget.CircledImageView
         android:id="@+id/circle"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="4dp"
         app:circle_border_color="#FFFFFFFF"
         app:circle_border_width="2dp"
         app:circle_color="#c1c1c1"/>

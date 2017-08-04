@@ -40,16 +40,23 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
  */
 public abstract class SingleSelectSettingsItem extends SettingsItem<Integer> {
 
-    private final List<String> values;
+    private final List<Integer> values            = new ArrayList<>();
+    private final List<String>  valueDescriptions = new ArrayList<>();
 
     public SingleSelectSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, PreferenceItem<Integer> preferenceItem,
-                                    @ArrayRes int values, @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
+                                    @ArrayRes int values, @ArrayRes int valueDescriptions,
+                                    @NonNull WearablePreferencesHandler wearablePreferencesHandler) {
         super(context, iconDrawable, description, preferenceItem, wearablePreferencesHandler);
-        String[] valuesArray = context.getResources()
-                .getStringArray(values);
-        ArrayList<String> valuesList = new ArrayList<>();
-        Collections.addAll(valuesList, valuesArray);
-        this.values = valuesList;
+
+        int[] valuesArray = context.getResources()
+                .getIntArray(values);
+        for (int value : valuesArray) {
+            this.values.add(value);
+        }
+
+        String[] valueDescriptionsArray = context.getResources()
+                .getStringArray(valueDescriptions);
+        Collections.addAll(this.valueDescriptions, valueDescriptionsArray);
     }
 
     @NonNull
@@ -58,26 +65,17 @@ public abstract class SingleSelectSettingsItem extends SettingsItem<Integer> {
         return getValueDescription(getValue());
     }
 
+    @NonNull
     @Override
     public String getValueDescription(Integer value) {
-        return values.get(value);
+        return valueDescriptions.get(value);
     }
 
     /**
-     * Opens GUI to select a new value from all possible values
+     * Opens GUI to select a new value from all possible valueDescriptions
      */
     public void showValueSelector() {
-        ValueSelectorActivity.newInstance(context, getAllValues());
+        ValueSelectorActivity.newInstance(context, getPreferenceItem(), values, valueDescriptions);
     }
 
-    /**
-     * @return a list of all values
-     */
-    public List<Integer> getAllValues() {
-        List<Integer> values = new ArrayList<>();
-        for (int i = 0; i < this.values.size(); i++) {
-            values.add(i);
-        }
-        return values;
-    }
 }

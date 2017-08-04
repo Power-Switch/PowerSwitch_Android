@@ -20,8 +20,8 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.wearable.view.CircledImageView;
-import android.support.wearable.view.WearableRecyclerView;
+import android.support.wear.widget.CircledImageView;
+import android.support.wear.widget.WearableRecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.view.SettingsListItemLayout;
 import eu.power_switch.settings.SettingsItem;
@@ -36,7 +37,7 @@ import eu.power_switch.settings.SettingsItem;
 /**
  * Created by Markus on 08.06.2016.
  */
-public class SettingsListAdapter extends WearableRecyclerView.Adapter {
+public class SettingsListAdapter extends WearableRecyclerView.Adapter<SettingsListAdapter.ItemViewHolder> {
     private final LayoutInflater      mInflater;
     private       Context             context;
     private       List<SettingsItem>  settings;
@@ -53,19 +54,17 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ItemViewHolder(mInflater.inflate(R.layout.list_item_setting, null));
     }
 
     @Override
-    public void onBindViewHolder(WearableRecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ItemViewHolder viewHolder, int position) {
         SettingsItem settingsItem = settings.get(position);
 
-        ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
-
-        itemViewHolder.icon.setImageDrawable(settingsItem.getIcon());
-        itemViewHolder.description.setText(settingsItem.getDescription() + ":");
-        itemViewHolder.value.setText(settingsItem.getCurrentValueDescription());
+        viewHolder.icon.setImageDrawable(settingsItem.getIcon());
+        viewHolder.description.setText(settingsItem.getDescription() + ":");
+        viewHolder.value.setText(settingsItem.getCurrentValueDescription());
     }
 
     @Override
@@ -77,12 +76,16 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
         void onItemClick(ItemViewHolder viewHolder, int position);
     }
 
-    public final class ItemViewHolder extends WearableRecyclerView.ViewHolder {
-        public SettingsListItemLayout listItemLayout;
+    public final class ItemViewHolder extends ButterKnifeWearableViewHolder {
 
-        public CircledImageView icon;
-        public TextView         description;
-        public TextView         value;
+        @BindView(R.id.list_item)
+        public SettingsListItemLayout listItemLayout;
+        @BindView(R.id.circle)
+        public CircledImageView       icon;
+        @BindView(R.id.description)
+        public TextView               description;
+        @BindView(R.id.value)
+        public TextView               value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -98,11 +101,6 @@ public class SettingsListAdapter extends WearableRecyclerView.Adapter {
                     }
                 }
             });
-
-            listItemLayout = itemView.findViewById(R.id.list_item);
-            icon = itemView.findViewById(R.id.circle);
-            description = itemView.findViewById(R.id.description);
-            value = itemView.findViewById(R.id.value);
         }
     }
 }

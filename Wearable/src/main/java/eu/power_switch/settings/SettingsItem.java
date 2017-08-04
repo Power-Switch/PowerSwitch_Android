@@ -19,7 +19,6 @@
 package eu.power_switch.settings;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
@@ -27,6 +26,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import lombok.Getter;
 
 /**
  * Settings item used for settings list view
@@ -35,11 +35,16 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
  */
 public abstract class SettingsItem<T> {
 
-    protected Context                    context;
-    private   String                     description;
-    private   IconicsDrawable            icon;
-    private   PreferenceItem<T>          preferenceItem;
-    private   WearablePreferencesHandler wearablePreferencesHandler;
+    protected Context context;
+
+    @Getter
+    private PreferenceItem<T> preferenceItem;
+    @Getter
+    private IconicsDrawable   icon;
+    @Getter
+    private String            description;
+
+    private WearablePreferencesHandler wearablePreferencesHandler;
 
     /**
      * Constructor
@@ -60,28 +65,11 @@ public abstract class SettingsItem<T> {
     }
 
     /**
-     * Get a short text description for this setting
-     *
-     * @return text description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Get the icon for this setting
-     *
-     * @return icon
-     */
-    public Drawable getIcon() {
-        return icon;
-    }
-
-    /**
      * Get the current value of this SettingsItem
      *
      * @return value
      */
+    @NonNull
     public T getValue() {
         return wearablePreferencesHandler.getValue(preferenceItem);
     }
@@ -91,7 +79,7 @@ public abstract class SettingsItem<T> {
      *
      * @param newValue
      */
-    public void setValue(T newValue) {
+    public void setValue(@NonNull T newValue) {
         wearablePreferencesHandler.setValue(preferenceItem, newValue);
     }
 
@@ -102,6 +90,7 @@ public abstract class SettingsItem<T> {
      *
      * @return value description
      */
+    @NonNull
     public abstract String getCurrentValueDescription();
 
     /**
@@ -113,5 +102,6 @@ public abstract class SettingsItem<T> {
      *
      * @return value description
      */
+    @NonNull
     public abstract String getValueDescription(T value);
 }

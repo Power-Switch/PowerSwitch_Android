@@ -68,6 +68,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
 
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     compile "com.google.android.gms:play-services-wearable:${rootProject.ext.playServicesVersion}"
 
     // Easy preferences
@@ -75,6 +76,10 @@ dependencies {
         exclude module: 'app'
         transitive = true
     }
+
+    // Butterknife View Annotation
+    compile "com.jakewharton:butterknife:${rootProject.ext.butterknifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
     // Iconics (use SVG resources)
     compile "com.mikepenz:iconics-core:${rootProject.ext.iconicsVersion}@aar"

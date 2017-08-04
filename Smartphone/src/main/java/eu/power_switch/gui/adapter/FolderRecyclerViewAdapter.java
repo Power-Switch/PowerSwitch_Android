@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 /**
  * * Adapter to visualize Folder items in RecyclerView

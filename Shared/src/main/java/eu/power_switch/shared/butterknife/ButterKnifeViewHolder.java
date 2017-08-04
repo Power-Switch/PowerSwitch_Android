@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.adapter;
+package eu.power_switch.shared.butterknife;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

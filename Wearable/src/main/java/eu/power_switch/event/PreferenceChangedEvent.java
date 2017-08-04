@@ -16,29 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity.eventbus;
+package eu.power_switch.event;
 
-import eu.power_switch.gui.activity.butterknife.ButterKnifeActivity;
-import eu.power_switch.shared.event.EventBusHelper;
+import android.support.annotation.Nullable;
+
+import de.markusressel.typedpreferences.PreferenceItem;
+import eu.power_switch.shared.event.EventBusEvent;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
- * Base class for an EventBus backed Activity
- * <p>
- * Created by Markus on 02.07.2017.
+ * Created by Markus on 01.08.2017.
  */
-public abstract class EventBusActivity extends ButterKnifeActivity {
+@EqualsAndHashCode(callSuper = true)
+@Value
+public class PreferenceChangedEvent<T extends PreferenceItem> extends EventBusEvent {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    @Nullable
+    T preferenceItem;
 
-        EventBusHelper.tryRegister(this);
-    }
-
-    @Override
-    protected void onStop() {
-        EventBusHelper.tryUnregister(this);
-
-        super.onStop();
-    }
 }

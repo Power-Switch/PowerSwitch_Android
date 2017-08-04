@@ -25,7 +25,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <android.support.wearable.view.CircledImageView
+    <android.support.wear.widget.CircledImageView
         android:id="@+id/circle"
         android:layout_width="56dp"
         android:layout_height="56dp"

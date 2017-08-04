@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 
 /**
  * Adapter to visualize Action items in RecyclerView

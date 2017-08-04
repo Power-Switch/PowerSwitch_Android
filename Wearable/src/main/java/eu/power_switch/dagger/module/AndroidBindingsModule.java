@@ -26,6 +26,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.activity.ValueSelectorActivity;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.gui.fragment.SettingsFragment;
@@ -52,6 +53,9 @@ public abstract class AndroidBindingsModule {
 
     @ContributesAndroidInjector
     abstract SettingsFragment settingsFragment();
+
+    @ContributesAndroidInjector
+    abstract ValueSelectorActivity valueSelectorActivity();
 
     @Provides
     @Singleton

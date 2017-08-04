@@ -21,23 +21,23 @@ package eu.power_switch.gui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SnapHelper;
-import android.support.wearable.view.WearableRecyclerView;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.wear.widget.WearableLinearLayoutManager;
+import android.support.wear.widget.WearableRecyclerView;
 import android.view.View;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.R;
-import eu.power_switch.dagger.android.DaggerWearableActivity;
-import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.butterknife.ButterKnifeWearableActivity;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
-import eu.power_switch.gui.view.SettingsListSnapHelper;
+import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
-import eu.power_switch.settings.SingleSelectSettingsItem;
-import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -45,51 +45,65 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 18.07.2016.
  */
-public class ValueSelectorActivity<T> extends DaggerWearableActivity {
+public class ValueSelectorActivity extends ButterKnifeWearableActivity {
 
-    public static final String KEY_VALUES = "values";
+    public static final String KEY_PREF_ITEM_KEY = "KEY_PREF_ITEM_KEY";
+    public static final String KEY_VALUES        = "KEY_VALUES";
+    public static final String KEY_DESCRIPTIONS  = "KEY_DESCRIPTIONS";
 
-    private List<T> values;
+    @BindView(R.id.recyclerView)
+    WearableRecyclerView wearableRecyclerView;
 
-    public static <T extends Serializable> void newInstance(Context context, List<T> values) {
+    private List<Integer> values;
+    private List<String>  descriptions;
+
+    public static void newInstance(Context context, @NonNull PreferenceItem<Integer> preferenceItem, @NonNull List<Integer> allValues,
+                                   @NonNull List<String> descriptions) {
+        if (allValues.size() != descriptions.size()) {
+            throw new IllegalArgumentException("values and description size must match!");
+        }
+
         Intent intent = new Intent(context, ValueSelectorActivity.class);
-        intent.putExtra(KEY_VALUES, new ArrayList<>(values));
+        intent.putExtra(KEY_PREF_ITEM_KEY, preferenceItem.getKey(context));
+        intent.putExtra(KEY_VALUES, new ArrayList<>(allValues));
+        intent.putExtra(KEY_DESCRIPTIONS, new ArrayList<>(descriptions));
         context.startActivity(intent);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_value_selector);
 
         // allow always-on screen
         setAmbientEnabled();
 
-        values = (List<T>) getIntent().getExtras()
+        String key = (String) getIntent().getExtras()
+                .get(KEY_PREF_ITEM_KEY);
+        values = (List<Integer>) getIntent().getExtras()
                 .get(KEY_VALUES);
+        descriptions = (List<String>) getIntent().getExtras()
+                .get(KEY_DESCRIPTIONS);
+        final PreferenceItem<Integer> preferenceItem = wearablePreferencesHandler.getPreferenceItem(key);
+        Integer                       currentValue   = wearablePreferencesHandler.getValue(preferenceItem);
 
-        // TODO: make this universal for any PreferenceItem
+        wearableRecyclerView.setEdgeItemsCenteringEnabled(true);
 
-        WearableRecyclerView wearableRecyclerView = findViewById(R.id.recyclerView);
-        wearableRecyclerView.setCenterEdgeItems(true);
+        WearableLinearLayoutManager layoutManager = new WearableLinearLayoutManager(this);
+        layoutManager.setLayoutCallback(new SettingsListLayoutCallback(this));
+        wearableRecyclerView.setLayoutManager(layoutManager);
 
-        SnapHelper snapHelper = new SettingsListSnapHelper();
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(wearableRecyclerView);
 
-        final SingleSelectSettingsItem singleSelectSettingsItem = new SingleSelectSettingsItem(this,
-                IconicsHelper.getTabsIcon(this),
-                R.string.title_startupDefaultTab,
-                WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
-                R.array.wear_tab_names,
-                wearablePreferencesHandler) {
-        };
-        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, singleSelectSettingsItem);
+        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, values, descriptions, currentValue);
         listAdapter.setOnItemClickListener(new ValueSelectorListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                T value = values.get(position);
+                Integer value = values.get(position);
 
-                singleSelectSettingsItem.setValue(position);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
+
                 Timber.d("selected value: " + value);
 
                 listAdapter.notifyDataSetChanged();
@@ -101,11 +115,15 @@ public class ValueSelectorActivity<T> extends DaggerWearableActivity {
     }
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_value_selector;
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 
         // TODO: send selected value as a result
     }
-
 }
 

@@ -72,7 +72,7 @@
             @color/about_libraries_dividerLight_openSource
         </item>
 
-        <!-- MaterialDrawer specific values -->
+        <!-- MaterialDrawer specific valueDescriptions -->
         <item name="material_drawer_background">@color/material_drawer_dark_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_dark_primary_text</item>
         <item name="material_drawer_primary_icon">@color/material_drawer_dark_primary_icon</item>
@@ -135,7 +135,7 @@
             @color/about_libraries_dividerLight_openSource
         </item>
 
-        <!-- MaterialDrawer specific values -->
+        <!-- MaterialDrawer specific valueDescriptions -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
         <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>
@@ -195,7 +195,7 @@
             @color/about_libraries_dividerLight_openSource
         </item>
 
-        <!-- MaterialDrawer specific values -->
+        <!-- MaterialDrawer specific valueDescriptions -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
         <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>

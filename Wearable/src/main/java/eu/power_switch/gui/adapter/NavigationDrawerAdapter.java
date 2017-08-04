@@ -19,27 +19,22 @@
 package eu.power_switch.gui.adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.graphics.drawable.Drawable;
-import android.support.wearable.view.drawer.WearableNavigationDrawer;
+import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.fragment.RoomsFragment;
-import eu.power_switch.gui.fragment.ScenesFragment;
-import eu.power_switch.gui.fragment.SettingsFragment;
 
 /**
  * Navigation Drawer implementation
  * <p/>
  * Created by Markus on 07.06.2016.
  */
-public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNavigationDrawerAdapter {
+public class NavigationDrawerAdapter extends WearableNavigationDrawerView.WearableNavigationDrawerAdapter {
 
-    private static final int INDEX_ROOMS    = 0;
-    private static final int INDEX_SCENES   = 1;
-    private static final int INDEX_SETTINGS = 2;
+    public static final int INDEX_ROOMS    = 0;
+    public static final int INDEX_SCENES   = 1;
+    public static final int INDEX_SETTINGS = 2;
 
     private final Activity activity;
 
@@ -74,31 +69,6 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
                 return activity.getResources()
                         .getDrawable(R.drawable.wearable_ic_launcher);
         }
-    }
-
-    @Override
-    public void onItemSelected(int i) {
-        Fragment fragment;
-
-        switch (i) {
-            case INDEX_ROOMS:
-                fragment = new RoomsFragment();
-                break;
-            case INDEX_SCENES:
-                fragment = new ScenesFragment();
-                break;
-            case INDEX_SETTINGS:
-                fragment = new SettingsFragment();
-                break;
-            default:
-                fragment = new RoomsFragment();
-                break;
-        }
-
-        FragmentManager fragmentManager = activity.getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
     }
 
     @Override
