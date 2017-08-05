@@ -21,8 +21,6 @@ package eu.power_switch.gui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import eu.power_switch.gui.IconicsHelper;
-
 /**
  * Item layout for value selector
  * <p/>
@@ -46,13 +44,8 @@ public class ValueSelectorListItemLayout extends SettingsListItemLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mCircle.setImageDrawable(IconicsHelper.getCheckmarkIcon(getContext()));
+        // we dont need this textview here
+        mValue.setVisibility(GONE);
     }
 
-    public void setIconVisibility(int alpha) {
-        mCircle.getImageDrawable()
-                .setAlpha(alpha);
-        mCircle.invalidate();
-        invalidate();
-    }
 }

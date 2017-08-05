@@ -19,7 +19,6 @@
 
 <eu.power_switch.gui.view.SettingsListItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,10 +30,7 @@
         android:layout_height="56dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="12dp"
-        android:layout_marginStart="4dp"
-        app:circle_border_color="#FFFFFFFF"
-        app:circle_border_width="2dp"
-        app:circle_color="#c1c1c1"/>
+        android:layout_marginStart="4dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,7 +42,6 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.9"
             android:fontFamily="sans-serif-condensed-light"
             android:gravity="center_vertical"
             android:textColor="?android:attr/textColorPrimary"
@@ -56,7 +51,6 @@
             android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.7"
             android:fontFamily="sans-serif-condensed-light"
             android:gravity="center_vertical"
             android:textColor="?android:attr/textColorPrimary"

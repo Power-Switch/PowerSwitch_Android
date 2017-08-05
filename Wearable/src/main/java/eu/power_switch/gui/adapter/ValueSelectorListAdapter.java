@@ -46,7 +46,7 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
 
     private OnItemClickListener onItemClickListener;
 
-    public ValueSelectorListAdapter(@NonNull Context context, @NonNull List<Integer> values, @NonNull List<String> descriptions,
+    public ValueSelectorListAdapter(@NonNull Context context, @NonNull List<String> descriptions, @NonNull List<Integer> values,
                                     @NonNull Integer currentValue) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
@@ -82,7 +82,7 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
             itemViewHolder.checkmark.setImageDrawable(null);
         }
 
-        itemViewHolder.value.setText(descriptions.get(position));
+        itemViewHolder.description.setText(descriptions.get(position));
     }
 
     @Override
@@ -97,8 +97,8 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
     public final class ItemViewHolder extends ButterKnifeWearableViewHolder {
         @BindView(R.id.circle)
         CircledImageView checkmark;
-        @BindView(R.id.value)
-        TextView         value;
+        @BindView(R.id.description)
+        TextView         description;
 
         public ItemViewHolder(final View itemView) {
             super(itemView);
@@ -110,6 +110,13 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
                         if (getAdapterPosition() == RecyclerView.NO_POSITION) {
                             return;
                         }
+
+                        // mark the currently selected value
+                        int oldIndex = currentValueIndex;
+                        currentValueIndex = getAdapterPosition();
+                        // and update ui
+                        notifyItemChanged(oldIndex);
+                        notifyItemChanged(currentValueIndex);
 
                         onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }

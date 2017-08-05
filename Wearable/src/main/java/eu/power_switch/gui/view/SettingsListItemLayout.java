@@ -39,18 +39,21 @@ import eu.power_switch.shared.ThemeHelper;
  */
 public class SettingsListItemLayout extends LinearLayout {
 
-    private static final float NO_ALPHA = 1f;
+//    private static final float NO_ALPHA = 1f;
 
     protected CircledImageView mCircle;
     protected TextView         mValue;
+    protected TextView         mDescription;
 
     @ColorInt
-    private final int   mSelectedCircleColor;
+    private final int   mCircleColor;
     @ColorInt
-    private final int   mSelectedCircleBorderColor;
-    private       float mBigCircleRadius;
+    private final int   mCircleBorderColor;
+    private       float mCircleRadius;
     @ColorInt
     private int textColor = Color.WHITE;
+
+    private int currentTextAlpha = 255;
 
     public SettingsListItemLayout(Context context) {
         this(context, null);
@@ -63,9 +66,9 @@ public class SettingsListItemLayout extends LinearLayout {
     public SettingsListItemLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mSelectedCircleColor = Color.parseColor("#434343");
-        mSelectedCircleBorderColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
-        mBigCircleRadius = getResources().getDimensionPixelSize(R.dimen.big_circle_radius);
+        mCircleColor = Color.parseColor("#434343");
+        mCircleBorderColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
+        mCircleRadius = getResources().getDimensionPixelSize(R.dimen.big_circle_radius);
     }
 
     @Override
@@ -74,17 +77,14 @@ public class SettingsListItemLayout extends LinearLayout {
 
         mCircle = findViewById(R.id.circle);
         mValue = findViewById(R.id.value);
+        mDescription = findViewById(R.id.description);
 
         mValue.setTextColor(textColor);
 
-        setAlpha(NO_ALPHA);
-        setCircleBorderColor(mSelectedCircleBorderColor);
-        mCircle.setCircleRadius(mBigCircleRadius);
-        mCircle.setCircleColor(mSelectedCircleColor);
-    }
-
-    private void setCircleBorderColor(int color) {
-        mCircle.setCircleBorderColor(color);
+        mCircle.setCircleBorderWidth(2);
+        mCircle.setCircleBorderColor(mCircleBorderColor);
+        mCircle.setCircleRadius(mCircleRadius);
+        mCircle.setCircleColor(mCircleColor);
     }
 
     /**
@@ -102,6 +102,18 @@ public class SettingsListItemLayout extends LinearLayout {
      */
     public void setTextColor(@ColorInt int textColor) {
         this.textColor = textColor;
-        mValue.setTextColor(textColor);
+        updateColors();
+    }
+
+    public void setTextAlpha(int alpha) {
+        currentTextAlpha = alpha;
+        updateColors();
+    }
+
+    private void updateColors() {
+        int color = Color.argb(currentTextAlpha, Color.red(textColor), Color.green(textColor), Color.blue(textColor));
+
+        mDescription.setTextColor(color);
+        mValue.setTextColor(color);
     }
 }

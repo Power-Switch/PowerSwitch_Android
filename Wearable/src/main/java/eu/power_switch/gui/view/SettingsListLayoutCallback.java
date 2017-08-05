@@ -19,8 +19,6 @@
 package eu.power_switch.gui.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.support.wear.widget.CurvingLayoutCallback;
 import android.view.View;
@@ -33,7 +31,7 @@ public class SettingsListLayoutCallback extends CurvingLayoutCallback {
     private static final float MAX_ICON_SCALE  = 1f;
     private static final float MIN_ICON_SCALE  = 0.5f;
     private static final float MAX_ALPHA_SCALE = 1f;
-    private static final float MIN_ALPHA_SCALE = 0f;
+    private static final float MIN_ALPHA_SCALE = 0.25f;
 
     public SettingsListLayoutCallback(Context context) {
         super(context);
@@ -58,12 +56,9 @@ public class SettingsListLayoutCallback extends CurvingLayoutCallback {
             float alphaScale = ((MAX_ALPHA_SCALE - MIN_ALPHA_SCALE) * progressScale + MIN_ALPHA_SCALE) * 255;
             float iconScale  = (MAX_ICON_SCALE - MIN_ICON_SCALE) * progressScale + MIN_ICON_SCALE;
 
-            int           alpha = (int) alphaScale;
-            @ColorInt int color = Color.argb(alpha, 255, 255, 255);
-
             SettingsListItemLayout listItem = (SettingsListItemLayout) child;
             listItem.setIconScale(iconScale);
-            listItem.setTextColor(color);
+            listItem.setTextAlpha((int) alphaScale);
         }
     }
 }

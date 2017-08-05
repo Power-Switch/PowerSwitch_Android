@@ -28,6 +28,8 @@ import android.support.wear.widget.WearableLinearLayoutManager;
 import android.support.wear.widget.WearableRecyclerView;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import butterknife.BindView;
 import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.R;
 import eu.power_switch.event.EventBusWearableActivity;
+import eu.power_switch.event.PreferenceChangedEvent;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
@@ -96,7 +99,7 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(wearableRecyclerView);
 
-        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, values, descriptions, currentValue);
+        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, descriptions, values, currentValue);
         listAdapter.setOnItemClickListener(new ValueSelectorListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -106,7 +109,9 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
 
                 Timber.d("selected value: " + value);
 
-                listAdapter.notifyDataSetChanged();
+                EventBus.getDefault()
+                        .post(new PreferenceChangedEvent<>(preferenceItem));
+
                 UtilityService.forceWearSettingsUpdate(getApplicationContext());
             }
         });
