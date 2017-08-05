@@ -16,22 +16,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.event;
 
-import javax.inject.Inject;
-
-import eu.power_switch.network.DataApiHandler;
-import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import eu.power_switch.butterknife.ButterKnifeWearableActivity;
+import eu.power_switch.shared.event.EventBusHelper;
 
 /**
- * Created by Markus on 25.07.2017.
+ * Created by Markus on 05.08.2017.
  */
-public abstract class FragmentBase extends EventBusFragment {
+public abstract class EventBusWearableActivity extends ButterKnifeWearableActivity {
 
-    @Inject
-    protected WearablePreferencesHandler wearablePreferencesHandler;
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    @Inject
-    protected DataApiHandler dataApiHandler;
+        EventBusHelper.tryRegister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBusHelper.tryUnregister(this);
+
+        super.onStop();
+    }
 
 }

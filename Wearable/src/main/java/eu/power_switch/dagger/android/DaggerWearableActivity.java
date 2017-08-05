@@ -47,7 +47,7 @@ public abstract class DaggerWearableActivity extends WearableActivity implements
         AndroidInjection.inject(this);
 
         // set Theme before anything else in onCreate
-        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
+        applyTheme();
 
         super.onCreate(savedInstanceState);
     }
@@ -55,6 +55,10 @@ public abstract class DaggerWearableActivity extends WearableActivity implements
     @Override
     public AndroidInjector<Fragment> fragmentInjector() {
         return fragmentInjector;
+    }
+
+    protected void applyTheme() {
+        WearableThemeHelper.applyTheme(this, wearablePreferencesHandler);
     }
 
 }

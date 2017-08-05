@@ -46,8 +46,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.butterknife.ButterKnifeWearableActivity;
 import eu.power_switch.event.DataChangedEvent;
+import eu.power_switch.event.EventBusWearableActivity;
 import eu.power_switch.event.PreferenceChangedEvent;
 import eu.power_switch.event.RoomDataChangedEvent;
 import eu.power_switch.event.SceneDataChangedEvent;
@@ -68,7 +68,7 @@ import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_SETTINGS
 /**
  * Main Activity holding all app related views
  */
-public class MainActivity extends ButterKnifeWearableActivity {
+public class MainActivity extends EventBusWearableActivity {
 
     private static final int         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     public static        String      apartmentName                                 = "";

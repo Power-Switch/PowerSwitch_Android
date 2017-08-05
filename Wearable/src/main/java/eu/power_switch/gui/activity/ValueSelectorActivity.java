@@ -34,7 +34,7 @@ import java.util.List;
 import butterknife.BindView;
 import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.R;
-import eu.power_switch.butterknife.ButterKnifeWearableActivity;
+import eu.power_switch.event.EventBusWearableActivity;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
@@ -45,7 +45,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 18.07.2016.
  */
-public class ValueSelectorActivity extends ButterKnifeWearableActivity {
+public class ValueSelectorActivity extends EventBusWearableActivity {
 
     public static final String KEY_PREF_ITEM_KEY = "KEY_PREF_ITEM_KEY";
     public static final String KEY_VALUES        = "KEY_VALUES";
