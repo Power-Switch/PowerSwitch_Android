@@ -27,8 +27,8 @@
 
     <android.support.wear.widget.CircledImageView
         android:id="@+id/circle"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_vertical"/>
 
     <LinearLayout
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="4dp">
+        android:paddingLeft="8dp">
 
         <TextView
             android:id="@+id/description"
