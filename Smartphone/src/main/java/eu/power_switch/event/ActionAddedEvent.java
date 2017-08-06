@@ -32,8 +32,8 @@ import lombok.Value;
 @Value
 public class ActionAddedEvent extends EventBusEvent {
 
-    private int requestCode;
+    int requestCode;
 
-    private Action action;
+    Action action;
 
 }

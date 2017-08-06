@@ -18,6 +18,7 @@
 
 package eu.power_switch.event;
 
+import eu.power_switch.obj.Room;
 import eu.power_switch.shared.event.EventBusEvent;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,6 @@ import lombok.Value;
 @Value
 public class RoomAddedEvent extends EventBusEvent {
 
-    private String roomName;
+    Room room;
 
 }

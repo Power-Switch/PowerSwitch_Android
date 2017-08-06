@@ -31,11 +31,15 @@ import lombok.Value;
 @Value
 public class VariableSelectedEvent extends EventBusEvent {
 
-    private String variable;
-    private Field  field;
+    String variable;
+    Field  field;
 
     public enum Field {
-        Apartment, Room, Receiver, Button, Scene
+        Apartment,
+        Room,
+        Receiver,
+        Button,
+        Scene
     }
 
 }

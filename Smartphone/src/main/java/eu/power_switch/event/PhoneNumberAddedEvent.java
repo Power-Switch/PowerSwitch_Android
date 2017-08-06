@@ -33,6 +33,6 @@ import lombok.Value;
 @Value
 public class PhoneNumberAddedEvent extends EventBusEvent {
 
-    private Set<String> phoneNumbers;
+    Set<String> phoneNumbers;
 
 }

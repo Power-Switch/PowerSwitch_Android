@@ -114,9 +114,10 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
                 try {
                     long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
 
-                    persistenceHandler.addRoom(new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>()));
+                    Room newRoom = new Room(null, apartmentId, getRoomName(), 0, false, new ArrayList<Gateway>());
+                    persistenceHandler.addRoom(newRoom);
 
-                    ConfigureReceiverDialogPage1Name.notifyRoomAdded(getRoomName());
+                    ConfigureReceiverDialogPage1Name.notifyRoomAdded(newRoom);
 
                     RoomsFragment.notifyReceiverChanged();
 

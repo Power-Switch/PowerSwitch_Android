@@ -33,6 +33,6 @@ import lombok.Value;
 @Value
 public class GatewaySsidAddedEvent extends EventBusEvent {
 
-    private List<String> ssids;
+    List<String> ssids;
 
 }

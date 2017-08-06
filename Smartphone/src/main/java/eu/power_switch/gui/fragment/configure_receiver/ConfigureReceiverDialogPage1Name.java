@@ -82,12 +82,10 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
     /**
      * Used to notify this page that a room has been added to the list
-     *
-     * @param newRoomName name of added room
      */
-    public static void notifyRoomAdded(String newRoomName) {
+    public static void notifyRoomAdded(Room room) {
         EventBus.getDefault()
-                .post(new RoomAddedEvent(newRoomName));
+                .post(new RoomAddedEvent(room));
     }
 
     @Override
@@ -179,13 +177,18 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onRoomAdded(RoomAddedEvent e) {
+    public void onRoomAdded(RoomAddedEvent event) {
         updateRoomNamesList();
 
-        String newRoomName = e.getRoomName();
+        String newRoomName = event.getRoom()
+                .getName();
         roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
 
+        getConfiguration().getParentApartment()
+                .getRooms()
+                .add(event.getRoom());
         getConfiguration().setParentRoomName(newRoomName);
+
         notifyConfigurationChanged();
     }
 
