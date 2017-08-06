@@ -43,18 +43,17 @@ import eu.power_switch.R;
 public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<ValueSelectorListAdapter.ItemViewHolder> {
     private final LayoutInflater mInflater;
 
-    private final Context              context;
     private final WearableRecyclerView parent;
     private final List<String>         descriptions;
     private       Integer              currentValueIndex;
 
     private       OnItemClickListener onItemClickListener;
-    private final IconicsDrawable     checkmarkIcon;
+    private final IconicsDrawable     checkMarkIcon;
     private final IconicsDrawable     emptyIcon;
 
-    public ValueSelectorListAdapter(@NonNull Context context, WearableRecyclerView parent, @NonNull List<String> descriptions,
-                                    @NonNull List<Integer> values, @NonNull Integer currentValue) {
-        this.context = context;
+    public ValueSelectorListAdapter(WearableRecyclerView parent, @NonNull List<String> descriptions, @NonNull List<Integer> values,
+                                    @NonNull Integer currentValue) {
+        Context context = parent.getContext();
         this.parent = parent;
         this.mInflater = LayoutInflater.from(context);
         this.descriptions = descriptions;
@@ -71,8 +70,7 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
             throw new IllegalArgumentException("No matching value in values found for currentValue parameter!");
         }
 
-//        checkmarkIcon = IconicsHelper.getCheckmarkIcon(context);
-        checkmarkIcon = new IconicsDrawable(context, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline).sizeDp(24)
+        checkMarkIcon = new IconicsDrawable(context, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline).sizeDp(24)
                 .color(Color.WHITE);
         emptyIcon = new IconicsDrawable(context, CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline).sizeDp(24)
                 .color(Color.WHITE);
@@ -90,9 +88,9 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
     @Override
     public void onBindViewHolder(ValueSelectorListAdapter.ItemViewHolder itemViewHolder, int position) {
         if (position == currentValueIndex) {
-            itemViewHolder.checkmark.setImageDrawable(checkmarkIcon);
+            itemViewHolder.checkMark.setImageDrawable(checkMarkIcon);
         } else {
-            itemViewHolder.checkmark.setImageDrawable(emptyIcon);
+            itemViewHolder.checkMark.setImageDrawable(emptyIcon);
         }
 
         itemViewHolder.description.setText(descriptions.get(position));
@@ -109,7 +107,7 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
 
     public final class ItemViewHolder extends ButterKnifeWearableViewHolder {
         @BindView(R.id.circle)
-        CircledImageView checkmark;
+        CircledImageView checkMark;
         @BindView(R.id.description)
         TextView         description;
 

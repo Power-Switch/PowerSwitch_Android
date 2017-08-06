@@ -99,15 +99,13 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(wearableRecyclerView);
 
-        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, wearableRecyclerView, descriptions, values, currentValue);
+        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(wearableRecyclerView, descriptions, values, currentValue);
         listAdapter.setOnItemClickListener(new ValueSelectorListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Integer value = values.get(position);
-
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-
                 Timber.d("selected value: " + value);
+                wearablePreferencesHandler.setValue(preferenceItem, value);
 
                 EventBus.getDefault()
                         .post(new PreferenceChangedEvent<>(preferenceItem));
@@ -142,11 +140,5 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
         return R.layout.activity_value_selector;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // TODO: send selected value as a result
-    }
 }
 
