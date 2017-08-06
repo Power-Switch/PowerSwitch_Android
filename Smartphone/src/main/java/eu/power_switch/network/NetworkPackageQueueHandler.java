@@ -119,23 +119,21 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
                     removeQueueHead(networkPackages);
 
                     statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
-                    Timber.e("UDP Sender", e);
+                    Timber.e(e, "UDP Sender");
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                        Timber.e("UDP Sender", e1);
+                        Timber.e(e1, "UDP Sender");
                     }
                 } catch (Exception e) {
                     removeQueueHead(networkPackages);
 
                     statusMessageHandler.showErrorMessage(getApplicationContext(), e);
-                    Timber.e("UDP Sender: Unknown error while sending message in background:", e);
+                    Timber.e(e, "UDP Sender: Unknown error while sending message in background");
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                        Timber.e("UDP Sender", e1);
+                        Timber.e(e1, "UDP Sender");
                     }
                 } finally {
                     if (socket != null) {

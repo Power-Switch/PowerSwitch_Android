@@ -39,7 +39,7 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<ApartmentConfigurationHolder> {
+public class ConfigureApartmentDialog extends ConfigurationDialog<ApartmentConfigurationHolder> {
 
     /**
      * Open this dialog without predefined data

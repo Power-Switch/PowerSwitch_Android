@@ -106,10 +106,10 @@ public class ActionHandlerImpl implements ActionHandler {
                             Calendar.getInstance(),
                             context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
         } catch (ActionNotSupportedException e) {
-            Timber.e("Action not supported by Receiver!", e);
+            Timber.e(e, "Action not supported by Receiver!");
             statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
         } catch (GatewayNotSupportedException e) {
-            Timber.e("Gateway not supported by Receiver!", e);
+            Timber.e(e, "Gateway not supported by Receiver!");
             statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(context, e);
@@ -290,10 +290,10 @@ public class ActionHandlerImpl implements ActionHandler {
                             receiver.setLastActivatedButtonId(button.getId());
                             persistenceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
                         } catch (ActionNotSupportedException e) {
-                            Timber.e("Action not supported by Receiver!", e);
+                            Timber.e(e, "Action not supported by Receiver!");
                             statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
-                            Timber.e("Gateway not supported by Receiver!", e);
+                            Timber.e(e, "Gateway not supported by Receiver!");
                             statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }
@@ -369,10 +369,10 @@ public class ActionHandlerImpl implements ActionHandler {
                                 networkPackages.add(networkPackage);
                             }
                         } catch (ActionNotSupportedException e) {
-                            Timber.e("Action not supported by Receiver!", e);
+                            Timber.e(e, "Action not supported by Receiver!");
                             statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
-                            Timber.e("Gateway not supported by Receiver!", e);
+                            Timber.e(e, "Gateway not supported by Receiver!");
                             statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }

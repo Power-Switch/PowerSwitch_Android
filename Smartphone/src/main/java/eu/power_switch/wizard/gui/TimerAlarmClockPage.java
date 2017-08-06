@@ -20,8 +20,9 @@ package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
 
 /**
  * "Time based actions" page, showing the possibilities of timers and alarm clock actions.
@@ -40,7 +41,7 @@ public class TimerAlarmClockPage extends BasicPage {
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(IconicsHelper.getAlarmClockIcon(getActivity()));
+        setIcon(iconicsHelper.getWizardIcon(MaterialDesignIconic.Icon.gmi_alarm));
         setTitle(R.string.wizard_timer_alarm_clock_title);
         setDescription(R.string.wizard_timer_alarm_clock_description);
     }

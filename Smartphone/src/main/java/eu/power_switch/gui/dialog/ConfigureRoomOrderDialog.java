@@ -23,7 +23,7 @@ import android.os.Bundle;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbed;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialog;
 import eu.power_switch.gui.dialog.configuration.PageEntry;
 import eu.power_switch.gui.dialog.configuration.holder.RoomOrderConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomOrderDialogPage;
@@ -34,7 +34,7 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomOrderDialog extends ConfigurationDialogTabbed<RoomOrderConfigurationHolder> {
+public class ConfigureRoomOrderDialog extends ConfigurationDialog<RoomOrderConfigurationHolder> {
 
     public static ConfigureRoomOrderDialog newInstance(long apartmentId) {
         Bundle args = new Bundle();

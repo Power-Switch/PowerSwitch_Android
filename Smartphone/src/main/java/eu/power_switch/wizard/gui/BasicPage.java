@@ -34,8 +34,11 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.shared.ThemeHelper;
 
 /**
@@ -58,6 +61,9 @@ public class BasicPage extends WizardPage {
     TextView         description;
     @BindView(R.id.icon)
     IconicsImageView icon;
+
+    @Inject
+    protected IconicsHelper iconicsHelper;
 
     public static BasicPage newInstance(@ColorInt int color, @DrawableRes int icon, @StringRes int title, @StringRes int description) {
         Bundle args = new Bundle();

@@ -134,6 +134,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                     }
 
                     ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(recyclerViewFragment);
+                    configureReceiverDialog.setTargetFragment(RoomsFragment.this, 0);
                     configureReceiverDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     statusMessageHandler.showErrorMessage(getRecyclerView(), e);

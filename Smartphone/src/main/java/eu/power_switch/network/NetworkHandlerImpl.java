@@ -358,7 +358,7 @@ public class NetworkHandlerImpl implements NetworkHandler {
             }
             return null;
         } catch (Exception e) {
-            Timber.e("Error parsing Gateway AutoDiscover message: " + message, e);
+            Timber.e(e, "Error parsing Gateway AutoDiscover message: " + message);
             return null;
         }
     }

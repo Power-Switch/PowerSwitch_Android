@@ -415,7 +415,7 @@ public class StatusMessageHandler {
      * @param e        throwable
      */
     private void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
-        Timber.e("Error Snackbar", e);
+        Timber.e(e, "Error Snackbar");
 
         // remember the time when the exception was raised
         final Date timeRaised = new Date();
@@ -495,7 +495,7 @@ public class StatusMessageHandler {
      * @param e       throwable
      */
     public void showErrorToast(final Context context, final Throwable e) {
-        Timber.e("Error Toast: ", e);
+        Timber.e(e, "Error Toast: ");
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {

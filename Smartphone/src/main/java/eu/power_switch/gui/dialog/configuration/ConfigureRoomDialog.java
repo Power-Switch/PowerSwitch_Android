@@ -39,7 +39,7 @@ import timber.log.Timber;
 /**
  * Dialog to configure a Room
  */
-public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigurationHolder> {
+public class ConfigureRoomDialog extends ConfigurationDialog<RoomConfigurationHolder> {
 
     public static ConfigureRoomDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);

@@ -29,15 +29,12 @@ import java.util.List;
  */
 class ConfigurationDialogTabAdapter<Configuration extends ConfigurationHolder> extends FragmentPagerAdapter {
 
-    private ConfigurationDialogTabbed<Configuration> parentDialog;
-    private Fragment                                 targetFragment;
-    private List<PageEntry<Configuration>>           pages;
+    private ConfigurationDialog<Configuration> parentDialog;
+    private List<PageEntry<Configuration>>     pages;
 
-    ConfigurationDialogTabAdapter(@NonNull ConfigurationDialogTabbed<Configuration> parentDialog, @NonNull Fragment targetFragment,
-                                  @NonNull List<PageEntry<Configuration>> pageEntries) {
+    ConfigurationDialogTabAdapter(@NonNull ConfigurationDialog<Configuration> parentDialog, @NonNull List<PageEntry<Configuration>> pageEntries) {
         super(parentDialog.getChildFragmentManager());
         this.parentDialog = parentDialog;
-        this.targetFragment = targetFragment;
         this.pages = pageEntries;
     }
 
@@ -53,10 +50,10 @@ class ConfigurationDialogTabAdapter<Configuration extends ConfigurationHolder> e
     public Fragment getItem(int position) {
         PageEntry<Configuration> pageEntry = pages.get(position);
 
-        Fragment fragment = ConfigurationDialogPage.newInstance(pageEntry.getPageClass(), parentDialog);
-        fragment.setTargetFragment(targetFragment, 0);
+        ConfigurationDialogPage<Configuration> dialogPage = ConfigurationDialogPage.newInstance(pageEntry.getPageClass(), parentDialog);
+//        dialogPage.setTargetFragment(parentDialog.getTargetFragment(), 0);
 
-        return fragment;
+        return dialogPage;
     }
 
     /**

@@ -157,6 +157,9 @@ public class MainActivity extends EventBusActivity {
     @Inject
     PersistenceHandler persistenceHandler;
 
+    @Inject
+    IconicsHelper iconicsHelper;
+
     /**
      * Add class to Backstack
      *
@@ -371,8 +374,9 @@ public class MainActivity extends EventBusActivity {
 
     private void initNavigationDrawer() {
         // Set the menu icon instead of the launcher icon.
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(IconicsHelper.getMenuIcon(this));
+        final ActionBar ab       = getSupportActionBar();
+        IconicsDrawable menuIcon = iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_menu);
+        ab.setHomeAsUpIndicator(menuIcon);
         ab.setDisplayHomeAsUpEnabled(true);
 
         final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
@@ -409,7 +413,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
-                .withIcon(IconicsHelper.getRoomsScenesIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_lamp))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ROOMS_SCENES)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -430,7 +434,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
-                .withIcon(IconicsHelper.getApartmentsIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_home))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_APARTMENTS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -450,7 +454,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemGeofences = new PrimaryDrawerItem().withName(R.string.menu_geofences)
-                .withIcon(IconicsHelper.getGeofencesIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_gps_dot))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_GEOFENCES)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -470,7 +474,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemAlarmClock = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
-                .withIcon(IconicsHelper.getAlarmClockIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_alarm))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ALARM_CLOCK)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -490,7 +494,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemPhone = new PrimaryDrawerItem().withName(R.string.phone)
-                .withIcon(IconicsHelper.getPhoneIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_phone))
                 .withSelectable(true)
                 .withEnabled(PhoneHelper.isCallingSupported(this))
                 .withIdentifier(IDENTIFIER_PHONE)
@@ -510,7 +514,7 @@ public class MainActivity extends EventBusActivity {
                 });
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final IDrawerItem itemTimer = new PrimaryDrawerItem().withName(R.string.timers)
-                .withIcon(IconicsHelper.getTimerIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_time))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_TIMERS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -528,7 +532,8 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemHistory = new PrimaryDrawerItem().withName(R.string.history)
-                .withIcon(IconicsHelper.getHistoryIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_time_restore)
+                        .iconOffsetXDp(-1))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -545,7 +550,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemNfc = new PrimaryDrawerItem().withName(R.string.nfc)
-                .withIcon(IconicsHelper.getNfcIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_nfc))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_NFC)
                 .withEnabled(nfcHandler.isNfcSupported())
@@ -564,7 +569,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
-                .withIcon(IconicsHelper.getBackupRestoreIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_time_restore))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_BACKUP_RESTORE)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -584,7 +589,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemSettings = new PrimaryDrawerItem().withName(R.string.menu_settings)
-                .withIcon(IconicsHelper.getSettingsIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_settings))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_SETTINGS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -602,7 +607,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemHelp = new SecondaryDrawerItem().withName(R.string.menu_help)
-                .withIcon(IconicsHelper.getHelpIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_help))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -620,7 +625,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
-                .withIcon(IconicsHelper.getDonateIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_money))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -639,7 +644,7 @@ public class MainActivity extends EventBusActivity {
                     }
                 });
         final IDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
-                .withIcon(IconicsHelper.getAboutIcon(this))
+                .withIcon(iconicsHelper.getMenuIcon(MaterialDesignIconic.Icon.gmi_info))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ABOUT)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

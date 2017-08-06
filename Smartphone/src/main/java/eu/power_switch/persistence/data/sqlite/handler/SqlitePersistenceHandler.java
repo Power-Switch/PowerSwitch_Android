@@ -132,7 +132,7 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
         try {
             return dbHelper.getReadableDatabase();
         } catch (Exception e) {
-            Timber.e("Error getting read-only Database", e);
+            Timber.e(e, "Error getting read-only Database");
             lock.unlock();
             throw e;
         }
@@ -148,7 +148,7 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
             database.beginTransaction();
             return database;
         } catch (Exception e) {
-            Timber.e("Error getting writable Database", e);
+            Timber.e(e, "Error getting writable Database");
             lock.unlock();
             throw e;
         }
@@ -166,7 +166,7 @@ public final class SqlitePersistenceHandler implements PersistenceHandler {
                 dbHelper.close();
             }
         } catch (Exception e) {
-            Timber.e("Error closing Database", e);
+            Timber.e(e, "Error closing Database");
         } finally {
             lock.unlock();
         }

@@ -109,7 +109,7 @@ public class PowerSwitch extends DaggerApplication {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, final Throwable throwable) {
-                Timber.e("FATAL EXCEPTION", throwable);
+                Timber.e(throwable, "FATAL EXCEPTION");
 
                 try {
                     if (isUIThread()) {
@@ -123,7 +123,7 @@ public class PowerSwitch extends DaggerApplication {
                         });
                     }
                 } catch (Exception e) {
-                    Timber.e("Error showing \"Unknown Error\" AlertDialog", e);
+                    Timber.e(e, "Error showing \"Unknown Error\" AlertDialog");
                 }
 
                 // not possible without killing all app processes, including the UnkownErrorDialog!?

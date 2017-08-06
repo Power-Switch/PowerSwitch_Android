@@ -35,7 +35,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialog extends ConfigurationDialogTabbed<CallConfigurationHolder> {
+public class ConfigureCallEventDialog extends ConfigurationDialog<CallConfigurationHolder> {
 
     /**
      * ID of existing Call Event to Edit

@@ -146,7 +146,7 @@ public class ListenerService extends WearableListenerService {
                 actionHandler.execute(scene);
             }
         } catch (Exception e) {
-            Timber.e("parseMessage", e);
+            Timber.e(e, "parseMessage");
             statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
         }
     }

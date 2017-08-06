@@ -93,7 +93,7 @@ public class CallEventReceiver extends DaggerBroadcastReceiver {
                 Timber.d(">>>Broadcast", "onCallStateChanged " + callState);
 
             } catch (Exception e) {
-                Timber.e("Error receiving call event", e);
+                Timber.e(e, "Error receiving call event");
             }
         }
     };

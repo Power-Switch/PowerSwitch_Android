@@ -60,7 +60,7 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverConfigurationHolder> {
+public class ConfigureReceiverDialog extends ConfigurationDialog<ReceiverConfigurationHolder> {
 
     @Inject
     ReceiverReflectionMagic receiverReflectionMagic;

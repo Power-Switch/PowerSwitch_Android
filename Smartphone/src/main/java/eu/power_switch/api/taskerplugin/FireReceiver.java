@@ -109,7 +109,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
             Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG)
                     .show();
         } catch (Exception e) {
-            Timber.e("Error parsing intent!", e);
+            Timber.e(e, "Error parsing intent!");
             Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
                     .show();
         }

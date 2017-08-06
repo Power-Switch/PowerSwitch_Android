@@ -24,23 +24,27 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -49,16 +53,13 @@ import lombok.Setter;
 import timber.log.Timber;
 
 /**
- * Abstract class defining a configuration Dialog
+ * Abstract class defining a configuration Dialog with multiple tabs
  * <p/>
- * Every configuration Dialog has a bottom bar with 3 Buttons (Delete, Cancel, Save) and a contentView
+ * Every configuration Dialog has a bottom bar with 4 Buttons (Delete, Cancel, Next, Save)
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigurationDialog extends EventBusSupportDialogFragment {
-
-    @Inject
-    protected PersistenceHandler persistenceHandler;
+public abstract class ConfigurationDialog<Configuration extends ConfigurationHolder> extends EventBusSupportDialogFragment {
 
     @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
@@ -67,19 +68,67 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
 
-    @BindView(R.id.contentView)
-    FrameLayout contentViewContainer;
+    @BindView(R.id.tabLayout_configure_dialog)
+    TabLayout   tabLayout;
+    @BindView(R.id.tabHost)
+    ViewPager   tabViewPager;
+    @BindView(R.id.imageButton_next)
+    ImageButton imageButtonNext;
 
-    @Getter
-    private View contentView;
+    @Inject
+    protected PersistenceHandler persistenceHandler;
+
+    @Inject
+    protected IconicsHelper iconicsHelper;
 
     @Getter
     @Setter
-    private boolean modified;
+    private boolean                                      modified;
+    @Getter
+    private ConfigurationDialogTabAdapter<Configuration> tabAdapter;
 
+    @Getter
+    @Setter
+    private Configuration configuration;
+
+    /**
+     * NOT YET WORKING
+     * <p>
+     * Use this method to instantiate a configuration dialog
+     *
+     * @param clazz the dialog class that should be instantiated
+     *
+     * @return Instance of the configuration dialog
+     */
+//    @Deprecated
+//    public static <ConfigurationDialog extends ConfigurationDialogTabbed<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogTabbed newInstance(
+//            @NonNull Class<ConfigurationDialog> clazz, @NonNull Fragment targetFragment) {
+//        Bundle args = new Bundle();
+//
+//        if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
+//            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogTabbed.class.getName() + " or subclass!");
+//        }
+//
+//        try {
+//            Constructor<ConfigurationDialog>         constructor = clazz.getConstructor();
+//            ConfigurationDialogTabbed<Configuration> dialog      = constructor.newInstance();
+//
+////            Constructor<Configuration> configConstructor =
+//
+//            dialog.setTargetFragment(targetFragment, 0);
+//            dialog.setArguments(args);
+//            return dialog;
+//        } catch (Exception e) {
+//            throw new RuntimeException("Couldn't instantiate configuration dialog!", e);
+//        }
+//    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (configuration == null) {
+            throw new IllegalStateException("Missing ConfigurationHolder!");
+        }
     }
 
     @Nullable
@@ -87,17 +136,55 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getDialog().setTitle(getDialogTitle());
 
-        contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
+        tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
+            @Override
+            public void onPageSelected(int position) {
+                updateBottomBarButtons();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        IconicsDrawable deleteIcon = iconicsHelper.getConfigurationDialogControlBarIcon(MaterialDesignIconic.Icon.gmi_delete);
+        deleteIcon.color(ContextCompat.getColor(getContext(), R.color.delete_color));
+
+        imageButtonDelete.setImageDrawable(deleteIcon);
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteExistingConfigurationFromDatabase();
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                        .setMessage(R.string.this_action_is_irreversible)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    deleteConfiguration();
+
+                                    statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.item_removed, Toast.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    statusMessageHandler.showErrorMessage(getTargetFragment(), e);
+                                }
+                                // close dialog
+                                dismiss();
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
             }
         });
 
-        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
+        IconicsDrawable cancelIcon = iconicsHelper.getConfigurationDialogControlBarIcon(MaterialDesignIconic.Icon.gmi_close_circle);
+        cancelIcon.color(ContextCompat.getColor(getContext(), R.color.inactive_gray));
+
+        imageButtonCancel.setImageDrawable(cancelIcon);
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,97 +201,134 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
                             .setMessage(R.string.all_changes_will_be_lost)
                             .show();
                 } else {
-                    getDialog().dismiss();
+                    dismiss();
                 }
             }
         });
 
-        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
+        IconicsDrawable nextIcon = iconicsHelper.getConfigurationDialogControlBarIcon(MaterialDesignIconic.Icon.gmi_arrow_forward);
+        nextIcon.paddingDp(2);
+
+        imageButtonNext.setImageDrawable(nextIcon);
+        imageButtonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tabViewPager.setCurrentItem(tabViewPager.getCurrentItem() + 1, true);
+                updateBottomBarButtons();
+            }
+        });
+
+        IconicsDrawable saveIcon = iconicsHelper.getConfigurationDialogControlBarIcon(MaterialDesignIconic.Icon.gmi_check_circle);
+
+        imageButtonSave.setImageDrawable(saveIcon);
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!modified) {
-                    getDialog().dismiss();
+                    dismiss();
                 } else {
-                    saveCurrentConfigurationToDatabase();
-                    getDialog().dismiss();
+                    try {
+                        saveConfiguration();
+                        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.item_saved, Toast.LENGTH_LONG);
+                    } catch (Exception e) {
+                        statusMessageHandler.showErrorMessage(getTargetFragment(), e);
+                    }
+                    dismiss();
                 }
             }
         });
 
-        boolean isInitializedFromExistingData = initExistingData(getArguments());
-        if (isInitializedFromExistingData) {
+        setupTabAdapter();
+
+        // hide/show delete button if existing data is initialized
+        try {
+            initializeFromExistingData(getArguments());
+        } catch (Exception e) {
+            statusMessageHandler.showErrorMessage(getTargetFragment(), e);
+            dismiss();
+        }
+
+        if (isDeletable() && isValid()) {
             imageButtonDelete.setVisibility(View.VISIBLE);
         } else {
             imageButtonDelete.setVisibility(View.GONE);
         }
-
-        try {
-            setSaveButtonState(isValid());
-        } catch (Exception e) {
-            Timber.e(e);
-            setSaveButtonState(false);
-        }
+        setSaveButtonState(isValid());
 
         setModified(false);
 
         return rootView;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings("unused")
-    public void onConfigurationChanged(ConfigurationChangedEvent configurationChangedEvent) {
-        notifyConfigurationChanged();
+    /**
+     * Override this method if you don't want the delete button to show up.
+     *
+     * @return true if the configuration of this dialog can be deleted
+     */
+    protected boolean isDeletable() {
+        return true;
+    }
+
+    /**
+     * Used to notify parent Dialog that configuration has changed
+     * <p>
+     * Call this method when the configuration of the dialog has changed and UI has to be updated.
+     * This will check the dialog for validity and set the bottom bar buttons accordingly.
+     * This will also mark the dialog as modified so a confirmation dialog is shown when aborting.
+     */
+    public void notifyConfigurationChanged() {
+        setModified(true);
+
+        try {
+            setSaveButtonState(isValid());
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.dialog_configuration;
+        return R.layout.dialog_configuration_tabbed;
     }
-
-    /**
-     * Initialize the content view of this configuration dialog in here.
-     * Inflate your custom layout, find its views and bind their logic
-     *
-     * @param inflater           Layoutinflater
-     * @param container
-     * @param savedInstanceState
-     *
-     * @return
-     */
-    protected abstract View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     /**
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
-     *
-     * @return true if existing data was initialized, false otherwise
      */
-    protected abstract boolean initExistingData(Bundle arguments);
+    protected abstract void initializeFromExistingData(Bundle arguments) throws Exception;
+
+    @StringRes
+    protected abstract int getDialogTitle();
+
+    /**
+     * For each page of your ConfigurationDialog add a list item idicating it's name and Class to load
+     */
+    protected abstract void addPageEntries(List<PageEntry<Configuration>> pageEntries);
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
+        // ask to really close
         Dialog dialog = new Dialog(getActivity()) {
             @Override
             public void onBackPressed() {
                 if (modified) {
                     // ask to really close
                     new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(android.R.string.yes, new OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    getDialog().cancel();
+                                    cancel();
                                 }
                             })
                             .setNeutralButton(android.R.string.no, null)
                             .setMessage(R.string.all_changes_will_be_lost)
                             .show();
                 } else {
-                    getDialog().cancel();
+                    cancel();
                 }
             }
         };
@@ -212,12 +336,20 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
         dialog.setCanceledOnTouchOutside(isCancelableOnTouchOutside());
         dialog.getWindow()
                 .setSoftInputMode(getSoftInputMode());
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow()
+                .getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialog.show();
+        dialog.getWindow()
+                .setAttributes(lp);
+
+        dialog.show();
+
         return dialog;
     }
-
-    @StringRes
-    protected abstract int getDialogTitle();
 
     /**
      * Defines if the Dialog is cancelable on touch outside of the dialog
@@ -243,23 +375,65 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     }
 
     /**
+     * This method is called when the user wants to save the current configuration.
+     * Save the current configuration of the entity to your persistence handler.
+     * The dialog will be closed automatically.
+     */
+    protected abstract void saveConfiguration() throws Exception;
+
+    /**
+     * This method is called when the user wants to delete the existing configuration.
+     * This implies that an existing configuration was opened in the first place.
+     * Delete the existing configuration of the entity from your persistence handler in this method.
+     * The dialog will be closed automatically.
+     */
+    protected abstract void deleteConfiguration() throws Exception;
+
+    /**
+     * Setup a FragmentPagerAdapter for this configuration dialog
+     */
+    private void setupTabAdapter() {
+        // create a list of pageEntries
+        List<PageEntry<Configuration>> pages = new ArrayList<>();
+
+        // let the dialog implementation add it's pages
+        addPageEntries(pages);
+
+        // and create a tab adapter for those pages
+        tabAdapter = new ConfigurationDialogTabAdapter<>(this, pages);
+
+        tabViewPager.setAdapter(tabAdapter);
+        tabViewPager.setOffscreenPageLimit(tabAdapter.getCount());
+
+        tabLayout.setupWithViewPager(tabViewPager);
+
+        if (getTabAdapter().getCount() == 1) {
+            tabLayout.setVisibility(View.GONE);
+            updateBottomBarButtons();
+        }
+    }
+
+    /**
      * Checks if the current dialog configuration is valid
      *
      * @return true if the current configuration is valid, false otherwise
      */
-    protected abstract boolean isValid() throws Exception;
-
-    /**
-     * Call this method when the configuration of the dialog has changed and UI has to be updated
-     * f.ex. bottom bar buttons
-     */
-    protected void notifyConfigurationChanged() {
-        setModified(true);
+    private boolean isValid() {
         try {
-            setSaveButtonState(isValid());
+            return getConfiguration().isValid();
         } catch (Exception e) {
             Timber.e(e);
-            setSaveButtonState(false);
+            return false;
+        }
+    }
+
+    private void updateBottomBarButtons() {
+        if (tabViewPager.getCurrentItem() == tabAdapter.getCount() - 1) {
+            imageButtonSave.setVisibility(View.VISIBLE);
+            imageButtonNext.setVisibility(View.GONE);
+        } else {
+            imageButtonSave.setVisibility(View.GONE);
+            imageButtonNext.setVisibility(View.VISIBLE);
         }
     }
 
@@ -268,26 +442,14 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
      *
      * @param enabled true: green and clickable, false: gray and NOT clickable
      */
-    protected void setSaveButtonState(boolean enabled) {
+    private void setSaveButtonState(boolean enabled) {
         if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), R.color.active_green));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color.active_green));
             imageButtonSave.setClickable(true);
         } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color.inactive_gray));
             imageButtonSave.setClickable(false);
         }
     }
-
-    /**
-     * This method is called when the user wants to save the current configuration to database and close the dialog
-     * Save the current configuration of your object to database in this method.
-     */
-    protected abstract void saveCurrentConfigurationToDatabase();
-
-    /**
-     * This method is called when the user wants to delete the existing configuration from database (if one exists) and      * close
-     * the dialog. Delete the existing configuration of your object from the database in this method.
-     */
-    protected abstract void deleteExistingConfigurationFromDatabase();
 
 }

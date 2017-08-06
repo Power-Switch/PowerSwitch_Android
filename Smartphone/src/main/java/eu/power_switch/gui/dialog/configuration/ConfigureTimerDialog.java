@@ -44,7 +44,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigurationHolder> {
+public class ConfigureTimerDialog extends ConfigurationDialog<TimerConfigurationHolder> {
 
     @Inject
     AndroidAlarmHandler androidAlarmHandler;

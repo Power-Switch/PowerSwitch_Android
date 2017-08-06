@@ -48,7 +48,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceConfigurationHolder> {
+public class ConfigureGeofenceDialog extends ConfigurationDialog<GeofenceConfigurationHolder> {
 
     @Inject
     GeofenceApiHandler geofenceApiHandler;

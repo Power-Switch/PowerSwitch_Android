@@ -51,7 +51,7 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
     @Nullable
     View contentView;
 
-    private ConfigurationDialogTabbed<Configuration> parentDialog;
+    private ConfigurationDialog<Configuration> parentDialog;
 
     /**
      * Use this method to instantiate a page used in a (multipage) configuration dialog
@@ -61,8 +61,8 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
      *
      * @return Instance of the configuration dialog page
      */
-    public static <DialogPage extends ConfigurationDialogPage<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogPage newInstance(
-            @NonNull Class<DialogPage> clazz, @NonNull ConfigurationDialogTabbed<Configuration> parentDialog) {
+    public static <DialogPage extends ConfigurationDialogPage<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogPage<Configuration> newInstance(
+            @NonNull Class<DialogPage> clazz, @NonNull ConfigurationDialog<Configuration> parentDialog) {
         Bundle args = new Bundle();
 
         if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
@@ -125,7 +125,7 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
      *
      * @return parent ConfigurationDialogTabbed
      */
-    public ConfigurationDialogTabbed<Configuration> getParentConfigurationDialog() {
+    public ConfigurationDialog<Configuration> getParentConfigurationDialog() {
         if (parentDialog == null) {
             throw new IllegalStateException(
                     "Missing parent dialog! Did you use ConfigurationDialogPage.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
@@ -136,10 +136,10 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
     /**
      * Set the parent dialog of this page
      *
-     * @param configurationDialogTabbed Dialog
+     * @param configurationDialog Dialog
      */
-    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed<Configuration> configurationDialogTabbed) {
-        this.parentDialog = configurationDialogTabbed;
+    public void setParentConfigurationDialog(@NonNull ConfigurationDialog<Configuration> configurationDialog) {
+        this.parentDialog = configurationDialog;
     }
 
     @Nullable

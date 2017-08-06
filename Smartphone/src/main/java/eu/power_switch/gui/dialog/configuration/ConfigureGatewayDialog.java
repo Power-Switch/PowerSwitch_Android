@@ -45,7 +45,7 @@ import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 /**
  * Dialog to edit a Gateway
  */
-public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayConfigurationHolder> {
+public class ConfigureGatewayDialog extends ConfigurationDialog<GatewayConfigurationHolder> {
 
     public static ConfigureGatewayDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);

@@ -99,7 +99,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
                     }
 
                 } catch (Exception e) {
-                    Timber.e("malformed string, couldnt check IP", e);
+                    Timber.e(e, "malformed string, couldnt check IP");
                 }
 
                 receivedMessages.add(message);
@@ -110,7 +110,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
         } catch (SocketTimeoutException e) {
             Timber.d("AutoDetect Timeout Reached");
         } catch (Exception e) {
-            Timber.e("AutoGatewayDiscover", e);
+            Timber.e(e, "AutoGatewayDiscover");
         } finally {
 
             for (String message : receivedMessages) {

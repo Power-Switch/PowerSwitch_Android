@@ -42,7 +42,7 @@ import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandl
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigurationHolder> {
+public class ConfigureSceneDialog extends ConfigurationDialog<SceneConfigurationHolder> {
 
     public static ConfigureSceneDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);

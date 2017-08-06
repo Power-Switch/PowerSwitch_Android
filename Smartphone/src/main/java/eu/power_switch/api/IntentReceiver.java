@@ -133,7 +133,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
             Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG)
                     .show();
         } catch (Exception e) {
-            Timber.e("Error parsing intent!", e);
+            Timber.e(e, "Error parsing intent!");
             Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
                     .show();
         }
@@ -184,7 +184,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
 
                             actionHandler.execute(receiver, button);
                         } catch (Exception e) {
-                            Timber.e("invalid intent string: " + switchProperties + "\n", e);
+                            Timber.e(e, "invalid intent string: " + switchProperties + "\n");
                             Toast.makeText(context, "PowerSwitch - Error: invalid intent string: " + switchProperties, Toast.LENGTH_LONG)
                                     .show();
                         }
@@ -213,7 +213,7 @@ public class IntentReceiver extends DaggerBroadcastReceiver {
 
                             actionHandler.execute(room, buttonName);
                         } catch (Exception e) {
-                            Timber.e("invalid intent string" + "\n", e);
+                            Timber.e(e, "invalid intent string" + "\n");
                             Toast.makeText(context, "PowerSwitch - Error: invalid intent string: " + roomProperties, Toast.LENGTH_LONG)
                                     .show();
                         }

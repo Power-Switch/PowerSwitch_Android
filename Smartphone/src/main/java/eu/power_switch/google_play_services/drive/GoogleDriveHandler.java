@@ -89,7 +89,7 @@ public class GoogleDriveHandler implements GoogleApiClient.ConnectionCallbacks, 
         try {
             result.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
-            Timber.e("Exception while starting resolution activity", e);
+            Timber.e(e, "Exception while starting resolution activity");
         }
     }
 }
