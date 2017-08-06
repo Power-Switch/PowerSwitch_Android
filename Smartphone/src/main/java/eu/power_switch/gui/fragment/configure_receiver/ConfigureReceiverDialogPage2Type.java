@@ -244,6 +244,9 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
             updateModelList(getSelectedBrand());
 
             modelListView.setItemChecked(0, true);
+
+            getConfiguration().setBrand(getSelectedBrand());
+            getConfiguration().setModel(getSelectedModel());
         } else {
             try {
                 // init existing receiver

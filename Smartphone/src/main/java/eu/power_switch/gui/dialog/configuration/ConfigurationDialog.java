@@ -38,6 +38,8 @@ import android.widget.Toast;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.persistence.PersistenceHandler;
@@ -278,6 +281,9 @@ public abstract class ConfigurationDialog<Configuration extends ConfigurationHol
      */
     public void notifyConfigurationChanged() {
         setModified(true);
+
+        EventBus.getDefault()
+                .post(new ConfigurationChangedEvent());
 
         try {
             setSaveButtonState(isValid());

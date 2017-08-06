@@ -365,7 +365,12 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
         updateUi(null);
 
-        initializeReceiverData();
+        try {
+            initializeReceiverData();
+        } catch (Exception e) {
+            statusMessageHandler.showErrorMessage(getContext(), e);
+            getParentConfigurationDialog().dismiss();
+        }
     }
 
     @Override
@@ -417,7 +422,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
     }
 
-    private void initializeReceiverData() {
+    private void initializeReceiverData() throws Exception {
         Receiver receiver = getConfiguration().getReceiver();
 
         if (receiver != null) {
@@ -426,6 +431,19 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             } catch (Exception e) {
                 statusMessageHandler.showErrorMessage(getContentView(), e);
             }
+        } else {
+            receiver = receiverReflectionMagic.getDummy(Receiver.getJavaPath(getConfiguration().getModel()));
+
+            getConfiguration().setBrand(receiver.getBrand());
+            getConfiguration().setType(receiver.getType());
+
+            initType(receiver);
+
+            updateConfiguration(getSelectedChannelMaster(),
+                    getSelectedChannelSlave(),
+                    dipSwitchArrayList,
+                    getCurrentSeed(),
+                    getCurrentUniversalButtons());
         }
     }
 

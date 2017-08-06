@@ -184,6 +184,9 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
         String newRoomName = e.getRoomName();
         roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
+
+        getConfiguration().setParentRoomName(newRoomName);
+        notifyConfigurationChanged();
     }
 
     private void initializeReceiverData() {
