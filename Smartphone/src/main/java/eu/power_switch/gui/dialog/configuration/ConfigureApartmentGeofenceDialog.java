@@ -43,14 +43,25 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
         ConfigureApartmentGeofenceDialog fragment                    = new ConfigureApartmentGeofenceDialog();
         GeofenceConfigurationHolder      geofenceConfigurationHolder = new GeofenceConfigurationHolder();
+        geofenceConfigurationHolder.setApartmentId(apartmentId);
         if (geofence != null) {
-            geofenceConfigurationHolder.setApartmentId(apartmentId);
             geofenceConfigurationHolder.setGeofence(geofence);
         }
         fragment.setConfiguration(geofenceConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initializeFromExistingData(Bundle arguments) throws Exception {
+        super.initializeFromExistingData(arguments);
+
+        Long apartmentId = getConfiguration().getApartmentId();
+        if (apartmentId != null) {
+            String apartmentName = persistenceHandler.getApartmentName(apartmentId);
+            getConfiguration().setName(apartmentName);
+        }
     }
 
     @Override

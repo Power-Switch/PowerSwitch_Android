@@ -109,7 +109,6 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
             }
         });
 
-        checkValidity();
     }
 
     @Override
@@ -148,6 +147,8 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
             } catch (Exception e) {
                 statusMessageHandler.showErrorMessage(getContentView(), e);
             }
+        } else {
+            getConfiguration().setExecutionTime(getCurrentTime());
         }
     }
 
