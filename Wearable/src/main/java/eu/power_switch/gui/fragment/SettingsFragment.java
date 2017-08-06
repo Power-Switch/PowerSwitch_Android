@@ -27,16 +27,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.PreferenceChangedEvent;
-import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.IconicsHandler;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
 import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
@@ -59,31 +63,37 @@ public class SettingsFragment extends FragmentBase {
     private SettingsListAdapter settingsListAdapter;
     private boolean ownModification = false;
 
+    @Inject
+    IconicsHandler iconicsHandler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
+
         SingleSelectSettingsItem item0 = new SingleSelectSettingsItem(getActivity(),
-                IconicsHelper.getTabsIcon(getActivity()),
+                iconicsHandler.getWearableSettingsListIcon(MaterialDesignIconic.Icon.gmi_tab),
                 R.string.title_startupDefaultTab,
-                WearablePreferencesHandler.STARTUP_DEFAULT_TAB, R.array.wearable_tab_values, R.array.wearable_tab_names,
+                WearablePreferencesHandler.STARTUP_DEFAULT_TAB,
+                R.array.wearable_tab_values,
+                R.array.wearable_tab_names,
                 wearablePreferencesHandler) {
 
         };
 
         SettingsItem item1 = new BooleanSettingsItem(getActivity(),
-                IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
+                iconicsHandler.getWearableSettingsListIcon(MaterialDesignIconic.Icon.gmi_photo_size_select_small),
                 R.string.title_autoCollapseRooms,
                 WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS,
                 wearablePreferencesHandler);
         SettingsItem item2 = new BooleanSettingsItem(getActivity(),
-                IconicsHelper.getHistoryIcon(getActivity()),
+                iconicsHandler.getWearableSettingsListIcon(MaterialDesignIconic.Icon.gmi_time_restore),
                 R.string.title_highlightLastActivatedButton,
                 WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON,
                 wearablePreferencesHandler);
         SettingsItem item3 = new BooleanSettingsItem(getActivity(),
-                IconicsHelper.getVibrationIcon(getActivity()),
+                iconicsHandler.getWearableSettingsListIcon(MaterialDesignIconic.Icon.gmi_vibration),
                 R.string.title_vibrateOnButtonPress,
                 WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS,
                 wearablePreferencesHandler);

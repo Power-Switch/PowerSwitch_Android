@@ -19,6 +19,7 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.wear.widget.CircledImageView;
@@ -28,11 +29,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
 
 /**
  * Created by Markus on 08.06.2016.
@@ -40,15 +43,19 @@ import eu.power_switch.gui.IconicsHelper;
 public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<ValueSelectorListAdapter.ItemViewHolder> {
     private final LayoutInflater mInflater;
 
-    private Context      context;
-    private List<String> descriptions;
-    private Integer      currentValueIndex;
+    private final Context              context;
+    private final WearableRecyclerView parent;
+    private final List<String>         descriptions;
+    private       Integer              currentValueIndex;
 
-    private OnItemClickListener onItemClickListener;
+    private       OnItemClickListener onItemClickListener;
+    private final IconicsDrawable     checkmarkIcon;
+    private final IconicsDrawable     emptyIcon;
 
-    public ValueSelectorListAdapter(@NonNull Context context, @NonNull List<String> descriptions, @NonNull List<Integer> values,
-                                    @NonNull Integer currentValue) {
+    public ValueSelectorListAdapter(@NonNull Context context, WearableRecyclerView parent, @NonNull List<String> descriptions,
+                                    @NonNull List<Integer> values, @NonNull Integer currentValue) {
         this.context = context;
+        this.parent = parent;
         this.mInflater = LayoutInflater.from(context);
         this.descriptions = descriptions;
 
@@ -63,6 +70,12 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
         if (currentValueIndex == null) {
             throw new IllegalArgumentException("No matching value in values found for currentValue parameter!");
         }
+
+//        checkmarkIcon = IconicsHelper.getCheckmarkIcon(context);
+        checkmarkIcon = new IconicsDrawable(context, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline).sizeDp(24)
+                .color(Color.WHITE);
+        emptyIcon = new IconicsDrawable(context, CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline).sizeDp(24)
+                .color(Color.WHITE);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -77,9 +90,9 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
     @Override
     public void onBindViewHolder(ValueSelectorListAdapter.ItemViewHolder itemViewHolder, int position) {
         if (position == currentValueIndex) {
-            itemViewHolder.checkmark.setImageDrawable(IconicsHelper.getCheckmarkIcon(context));
+            itemViewHolder.checkmark.setImageDrawable(checkmarkIcon);
         } else {
-            itemViewHolder.checkmark.setImageDrawable(null);
+            itemViewHolder.checkmark.setImageDrawable(emptyIcon);
         }
 
         itemViewHolder.description.setText(descriptions.get(position));
@@ -117,6 +130,8 @@ public class ValueSelectorListAdapter extends WearableRecyclerView.Adapter<Value
                         // and update ui
                         notifyItemChanged(oldIndex);
                         notifyItemChanged(currentValueIndex);
+
+                        parent.scrollToPosition(currentValueIndex);
 
                         onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }

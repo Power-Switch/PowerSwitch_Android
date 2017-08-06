@@ -44,6 +44,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.DataChangedEvent;
@@ -51,6 +53,7 @@ import eu.power_switch.event.EventBusWearableActivity;
 import eu.power_switch.event.PreferenceChangedEvent;
 import eu.power_switch.event.RoomDataChangedEvent;
 import eu.power_switch.event.SceneDataChangedEvent;
+import eu.power_switch.gui.IconicsHandler;
 import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
@@ -91,6 +94,9 @@ public class MainActivity extends EventBusWearableActivity {
     @BindView(R.id.relativeLayout_status)
     RelativeLayout relativeLayoutStatus;
 
+    @Inject
+    IconicsHandler iconicsHandler;
+
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
 
@@ -108,7 +114,7 @@ public class MainActivity extends EventBusWearableActivity {
         dataApiHandler = new DataApiHandler(getApplicationContext());
 
         // Top Navigation Drawer
-        NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this);
+        NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this, iconicsHandler);
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
         mWearableNavigationDrawer.addOnItemSelectedListener(new WearableNavigationDrawerView.OnItemSelectedListener() {
             @Override

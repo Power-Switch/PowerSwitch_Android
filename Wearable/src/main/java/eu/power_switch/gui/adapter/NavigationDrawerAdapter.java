@@ -20,10 +20,13 @@ package eu.power_switch.gui.adapter;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.IconicsHandler;
 
 /**
  * Navigation Drawer implementation
@@ -36,10 +39,12 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawerView.Wearab
     public static final int INDEX_SCENES   = 1;
     public static final int INDEX_SETTINGS = 2;
 
-    private final Activity activity;
+    private final Activity       activity;
+    private final IconicsHandler iconicsHandler;
 
-    public NavigationDrawerAdapter(Activity activity) {
+    public NavigationDrawerAdapter(Activity activity, IconicsHandler iconicsHandler) {
         this.activity = activity;
+        this.iconicsHandler = iconicsHandler;
     }
 
     @Override
@@ -60,14 +65,13 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawerView.Wearab
     public Drawable getItemDrawable(int i) {
         switch (i) {
             case INDEX_ROOMS:
-                return IconicsHelper.getRoomsIcon(activity);
+                return iconicsHandler.getNavigationDrawerIcon(MaterialDesignIconic.Icon.gmi_view_dashboard);
             case INDEX_SCENES:
-                return IconicsHelper.getScenesIcon(activity);
+                return iconicsHandler.getNavigationDrawerIcon(MaterialDesignIconic.Icon.gmi_brightness_setting);
             case INDEX_SETTINGS:
-                return IconicsHelper.getSettingsIcon(activity);
+                return iconicsHandler.getNavigationDrawerIcon(MaterialDesignIconic.Icon.gmi_settings);
             default:
-                return activity.getResources()
-                        .getDrawable(R.drawable.wearable_ic_launcher);
+                return ContextCompat.getDrawable(activity, R.drawable.wearable_ic_launcher);
         }
     }
 

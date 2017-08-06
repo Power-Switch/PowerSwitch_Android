@@ -86,7 +86,8 @@ dependencies {
     compile "com.mikepenz:iconics-views:${rootProject.ext.iconicsVersion}@aar"
     // Fonts
     compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
-    compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.3@aar'
+    compile 'com.mikepenz:material-design-iconic-typeface:+@aar'
+    compile 'com.mikepenz:community-material-typeface:+@aar'
 
     // TextView with dynamic textsize based on available space
     compile 'me.grantland:autofittextview:0.2.1'

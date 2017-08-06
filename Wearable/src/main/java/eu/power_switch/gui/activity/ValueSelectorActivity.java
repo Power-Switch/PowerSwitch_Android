@@ -99,7 +99,7 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(wearableRecyclerView);
 
-        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, descriptions, values, currentValue);
+        final ValueSelectorListAdapter listAdapter = new ValueSelectorListAdapter(this, wearableRecyclerView, descriptions, values, currentValue);
         listAdapter.setOnItemClickListener(new ValueSelectorListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -117,6 +117,24 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
         });
 
         wearableRecyclerView.setAdapter(listAdapter);
+
+        // scroll to currently selected value
+        int index = 0;
+        for (int i = 0; i < values.size(); i++) {
+            Integer value = values.get(i);
+            if (value.equals(currentValue)) {
+                index = i;
+                break;
+            }
+        }
+
+        final int finalIndex = index;
+        wearableRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                wearableRecyclerView.scrollToPosition(finalIndex);
+            }
+        });
     }
 
     @Override
