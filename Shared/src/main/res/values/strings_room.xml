@@ -31,6 +31,6 @@
 
     <string name="please_enter_name">Please enter name</string>
 
-    <string name="room_empty">The room is empty. Add receivers using the "+"-button.</string>
+    <string name="room_empty">This room is empty. Add receivers using the "+" button.</string>
 
 </resources>

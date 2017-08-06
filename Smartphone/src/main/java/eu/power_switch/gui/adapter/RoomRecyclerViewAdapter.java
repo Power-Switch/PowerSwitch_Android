@@ -157,7 +157,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (smartphonePreferencesHandler.getValue(SHOW_ROOM_ALL_ON_OFF)) {
+        if (smartphonePreferencesHandler.getValue(SHOW_ROOM_ALL_ON_OFF) && room.getReceivers()
+                .size() > 0) {
             holder.buttonAllOn.setVisibility(View.VISIBLE);
             holder.buttonAllOff.setVisibility(View.VISIBLE);
         } else {
