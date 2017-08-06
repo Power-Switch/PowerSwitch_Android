@@ -77,6 +77,7 @@ public class ValueSelectorActivity extends EventBusWearableActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         // allow always-on screen
         setAmbientEnabled();
