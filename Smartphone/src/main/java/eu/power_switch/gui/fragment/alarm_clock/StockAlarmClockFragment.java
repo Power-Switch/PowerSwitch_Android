@@ -156,7 +156,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                 AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(
                         currentEventType.getId());
                 addStockAlarmClockEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
-                addStockAlarmClockEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addStockAlarmClockEventActionDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -203,7 +203,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
             case R.id.add_action:
                 AddStockAlarmClockEventActionDialog addAlarmEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
-                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addAlarmEventActionDialog.show(getFragmentManager(), null);
             default:
                 break;
 

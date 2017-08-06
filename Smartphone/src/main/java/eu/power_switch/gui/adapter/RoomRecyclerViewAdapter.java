@@ -69,11 +69,11 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     private final SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms,
-                                   ActionHandler actionHandler, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, ArrayList<Room> rooms, ActionHandler actionHandler,
+                                   SmartphonePreferencesHandler smartphonePreferencesHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
+        this.fragmentActivity = recyclerViewFragment.getActivity();
         this.rooms = rooms;
-        this.fragmentActivity = fragmentActivity;
         this.actionHandler = actionHandler;
         this.smartphonePreferencesHandler = smartphonePreferencesHandler;
     }
@@ -115,7 +115,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             public boolean onLongClick(View v) {
                 ConfigureRoomDialog configureRoomDialog = ConfigureRoomDialog.newInstance(room, recyclerViewFragment);
                 configureRoomDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
+                configureRoomDialog.show(recyclerViewFragment.getFragmentManager(), null);
                 return true;
             }
         });
@@ -286,7 +286,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 @Override
                 public boolean onLongClick(View v) {
                     ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(receiver, recyclerViewFragment);
-                    configureReceiverDialog.show(fragmentActivity.getSupportFragmentManager(), null);
+                    configureReceiverDialog.show(recyclerViewFragment.getFragmentManager(), null);
                     return true;
                 }
             });

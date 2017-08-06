@@ -175,7 +175,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
                 AddSleepAsAndroidAlarmEventActionDialog addAlarmEventActionDialog = AddSleepAsAndroidAlarmEventActionDialog.newInstance(
                         currentEventType.getId());
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
-                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addAlarmEventActionDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -239,7 +239,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
                 AddSleepAsAndroidAlarmEventActionDialog addAlarmEventActionDialog = AddSleepAsAndroidAlarmEventActionDialog.newInstance(
                         spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
-                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addAlarmEventActionDialog.show(getFragmentManager(), null);
             default:
                 break;
 

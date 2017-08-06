@@ -214,7 +214,7 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
 
                 PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
                 pathChooserDialog.setTargetFragment(fragment, 0);
-                pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+                pathChooserDialog.show(getFragmentManager(), null);
 
                 return true;
             }

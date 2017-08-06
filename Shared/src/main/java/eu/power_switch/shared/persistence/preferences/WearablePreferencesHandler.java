@@ -21,6 +21,8 @@ package eu.power_switch.shared.persistence.preferences;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import de.markusressel.typedpreferences.PreferenceItem;
 import de.markusressel.typedpreferences.PreferencesHandlerBase;
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.PreferenceItemChangedEvent;
 
 /**
  * This class is responsible for accessing and modifying Wear App Settings
@@ -80,4 +83,13 @@ public class WearablePreferencesHandler extends PreferencesHandlerBase {
         return allPreferenceItems;
     }
 
+    @Override
+    public <T> void setValue(@NonNull PreferenceItem<T> preferenceItem, @NonNull T newValue) {
+        T oldValue = getValue(preferenceItem);
+        super.setValue(preferenceItem, newValue);
+
+        // notify listeners about changed preference
+        EventBus.getDefault()
+                .post(new PreferenceItemChangedEvent<>(preferenceItem, oldValue, newValue));
+    }
 }

@@ -22,6 +22,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.location.Coordinate;
 import eu.power_switch.persistence.data.demo_mode.DemoModePersistenceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.PreferenceItemChangedEvent;
 
 /**
  * Preference handler used to store general app settings
@@ -164,6 +167,16 @@ public class SmartphonePreferencesHandler extends PreferencesHandlerBase {
         }
 
         return super.getValue(preferenceItem);
+    }
+
+    @Override
+    public <T> void setValue(@NonNull PreferenceItem<T> preferenceItem, @NonNull T newValue) {
+        T oldValue = getValue(preferenceItem);
+        super.setValue(preferenceItem, newValue);
+
+        // notify listeners about changed preference
+        EventBus.getDefault()
+                .post(new PreferenceItemChangedEvent<>(preferenceItem, oldValue, newValue));
     }
 
     public String getPublicKeyString() {

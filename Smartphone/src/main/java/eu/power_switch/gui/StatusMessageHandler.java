@@ -295,35 +295,6 @@ public class StatusMessageHandler {
     /**
      * Shows "No active Gateway" Message
      *
-     * @param recyclerViewFragment
-     */
-    public void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
-        showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_active_gateway, R.string.open_settings, new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS,
-                        SettingsTabFragment.class,
-                        recyclerViewFragment.getActivity()
-                                .getString(R.string.menu_settings));
-
-                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
-                recyclerViewFragment.getActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right,
-                                R.anim.slide_out_left,
-                                android.R.anim.slide_in_left,
-                                android.R.anim.slide_out_right)
-                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        }, Snackbar.LENGTH_LONG);
-    }
-
-    /**
-     * Shows "No active Gateway" Message
-     *
      * @param fragmentActivity
      */
     public void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
@@ -495,7 +466,7 @@ public class StatusMessageHandler {
      * @param e       throwable
      */
     public void showErrorToast(final Context context, final Throwable e) {
-        Timber.e(e, "Error Toast: ");
+        Timber.e(e, "Error Toast");
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {

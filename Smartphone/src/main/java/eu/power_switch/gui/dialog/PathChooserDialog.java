@@ -20,18 +20,14 @@ package eu.power_switch.gui.dialog;
 
 import android.os.Bundle;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.event.BackupPathChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialog;
 import eu.power_switch.gui.dialog.configuration.PageEntry;
 import eu.power_switch.gui.dialog.configuration.holder.BackupPathConfigurationHolder;
 import eu.power_switch.gui.fragment.settings.PathChooserDialogPage;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
-import timber.log.Timber;
 
 /**
  * Dialog used to select a Path on SDCard
@@ -49,13 +45,14 @@ public class PathChooserDialog extends ConfigurationDialog<BackupPathConfigurati
         return fragment;
     }
 
-    /**
-     * Used to notify Backup Fragment (this) that Backups have changed
-     */
-    public static void notifyBackupPathChanged() {
-        Timber.d("notifyBackupPathChanged");
-        EventBus.getDefault()
-                .post(new BackupPathChangedEvent());
+    @Override
+    protected int getDialogTitle() {
+        return R.string.path;
+    }
+
+    @Override
+    protected void addPageEntries(List<PageEntry<BackupPathConfigurationHolder>> list) {
+        list.add(new PageEntry<>(R.string.title_backupPath, PathChooserDialogPage.class));
     }
 
     @Override
@@ -65,25 +62,17 @@ public class PathChooserDialog extends ConfigurationDialog<BackupPathConfigurati
     }
 
     @Override
-    protected int getDialogTitle() {
-        return R.string.path;
+    protected void saveConfiguration() throws Exception {
+        smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.BACKUP_PATH, getConfiguration().getBackupPath());
     }
 
     @Override
-    protected void saveConfiguration() throws Exception {
-        smartphonePreferencesHandler.setValue(SmartphonePreferencesHandler.BACKUP_PATH, getConfiguration().getBackupPath());
-
-        notifyBackupPathChanged();
+    protected boolean isDeletable() {
+        return false;
     }
 
     @Override
     protected void deleteConfiguration() throws Exception {
         // nothing to do here
     }
-
-    @Override
-    protected void addPageEntries(List<PageEntry<BackupPathConfigurationHolder>> list) {
-        list.add(new PageEntry<>(R.string.title_backupPath, PathChooserDialogPage.class));
-    }
-
 }

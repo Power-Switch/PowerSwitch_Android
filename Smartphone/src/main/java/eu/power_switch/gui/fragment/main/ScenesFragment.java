@@ -87,7 +87,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes, actionHandler, persistenceHandler,
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, scenes, actionHandler, persistenceHandler,
                 smartphonePreferencesHandler);
         getRecyclerView().setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);

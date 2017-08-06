@@ -16,18 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.event;
+package eu.power_switch.shared.event;
 
-import eu.power_switch.shared.event.EventBusEvent;
+import de.markusressel.typedpreferences.PreferenceItem;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 /**
- * Created by Markus on 02.07.2017.
+ * Created by Markus on 06.08.2017.
  */
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @Value
-public class WearableSettingsChangedEvent extends EventBusEvent {
+public class PreferenceItemChangedEvent<T> extends EventBusEvent {
+
+    PreferenceItem<T> preferenceItem;
+    T                 oldValue;
+    T                 newValue;
+
 }

@@ -89,7 +89,7 @@ public class ConfigureGeofenceDialogPage3ExitActions extends ConfigurationDialog
             @Override
             public void onClick(View v) {
                 AddActionDialog addActionDialog = AddActionDialog.newInstance(fragment, REQUEST_CODE);
-                addActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addActionDialog.show(getFragmentManager(), null);
             }
         });
 

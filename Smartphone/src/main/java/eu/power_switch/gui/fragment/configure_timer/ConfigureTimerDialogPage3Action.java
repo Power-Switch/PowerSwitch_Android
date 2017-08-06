@@ -69,7 +69,7 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
             @Override
             public void onClick(View v) {
                 AddActionDialog addActionDialog = AddActionDialog.newInstance(fragment);
-                addActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                addActionDialog.show(getFragmentManager(), null);
             }
         });
 

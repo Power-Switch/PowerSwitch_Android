@@ -64,6 +64,7 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.event.PermissionChangedEvent;
+import eu.power_switch.shared.event.PreferenceItemChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -120,7 +121,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
                     PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
                     pathChooserDialog.setTargetFragment(BackupFragment.this, 0);
-                    pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+                    pathChooserDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
@@ -216,8 +217,16 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onBackupChanged(BackupChangedEvent backupChangedEvent) {
+    public void onBackupChanged(BackupChangedEvent e) {
         updateUI();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onBackupPathChanged(PreferenceItemChangedEvent e) {
+        if (e.getPreferenceItem() == SmartphonePreferencesHandler.BACKUP_PATH) {
+            updateUI();
+        }
     }
 
     @Override

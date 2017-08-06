@@ -101,7 +101,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         super.onCreateView(inflater, container, savedInstanceState);
 
         rooms = new ArrayList<>();
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms, actionHandler, smartphonePreferencesHandler);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, rooms, actionHandler, smartphonePreferencesHandler);
         getRecyclerView().setAdapter(roomsRecyclerViewAdapter);
         layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);

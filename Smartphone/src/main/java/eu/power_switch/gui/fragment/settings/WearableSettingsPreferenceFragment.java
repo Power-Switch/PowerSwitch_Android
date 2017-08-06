@@ -30,10 +30,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.event.WearableSettingsChangedEvent;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
+import eu.power_switch.shared.event.PreferenceItemChangedEvent;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 
@@ -65,7 +65,7 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onWearableSettingsChanged(WearableSettingsChangedEvent wearableSettingsChangedEvent) {
+    public void onWearableSettingsChanged(PreferenceItemChangedEvent e) {
         updateUI();
     }
 

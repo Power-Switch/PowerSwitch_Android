@@ -24,6 +24,7 @@ import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.gui.fragment.settings.GeneralSettingsPreferenceFragment;
+import eu.power_switch.gui.fragment.settings.PathChooserDialogPage;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.gui.fragment.settings.WearableSettingsPreferenceFragment;
 
@@ -47,6 +48,9 @@ public abstract class SettingsBindingsModule {
 
     @ContributesAndroidInjector
     abstract PathChooserDialog pathChooserDialog();
+
+    @ContributesAndroidInjector
+    abstract PathChooserDialogPage pathChooserDialogPage();
 
     @ContributesAndroidInjector
     abstract DeveloperOptionsDialog developerOptionsDialog();
