@@ -1,26 +1,25 @@
 /*
- *  PowerSwitch by Max Rosin & Markus Ressel
- *  Copyright (C) 2015  Markus Ressel
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -30,6 +29,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,13 +46,11 @@ import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.SceneChangedEvent;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
-import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
@@ -104,7 +104,8 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             }
         });
 
-        addFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        IconicsDrawable icon = iconicsHelper.getFabIcon(MaterialDesignIconic.Icon.gmi_plus);
+        addFAB.setImageDrawable(icon);
         addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,9 +183,9 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.scene_fragment_menu, menu);
-        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        IconicsDrawable icon = iconicsHelper.getOptionsMenuIcon(MaterialDesignIconic.Icon.gmi_plus);
         menu.findItem(R.id.create_scene)
-                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+                .setIcon(icon);
 
         boolean useOptionsMenuOnly = smartphonePreferencesHandler.getValue(SmartphonePreferencesHandler.USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         if (!useOptionsMenuOnly) {

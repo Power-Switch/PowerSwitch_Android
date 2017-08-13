@@ -19,6 +19,7 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 
@@ -48,70 +49,82 @@ public final class IconicsHelper {
     public IconicsHelper() {
     }
 
+    /**
+     * Get an icon suitable for the swipe menu
+     *
+     * @param icon the icon resource
+     *
+     * @return the icon
+     */
     public IconicsDrawable getMenuIcon(IIcon icon) {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         return getIcon(icon, color, 24);
     }
 
+    /**
+     * Get an icon suitable for a simple page of the wizard
+     *
+     * @param icon the icon resource
+     *
+     * @return the icon
+     */
     public IconicsDrawable getWizardIcon(IIcon icon) {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         return getIcon(icon, color, 64);
     }
 
+    /**
+     * Get an icon suitable for the ConfigurationDialog control bar
+     *
+     * @param icon the icon resource
+     *
+     * @return the icon
+     */
     public IconicsDrawable getConfigurationDialogControlBarIcon(IIcon icon) {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         return getIcon(icon, color, 36);
     }
 
+    /**
+     * Get an icon suitable for a fab button of normal size
+     *
+     * @param icon the icon resource
+     *
+     * @return the icon
+     */
+    public IconicsDrawable getFabIcon(IIcon icon) {
+        final int color = Color.WHITE;
+        return getIcon(icon, color, 24, 5);
+    }
+
+    /**
+     * Get an icon suitable for the options menu
+     *
+     * @param icon the icon resource
+     *
+     * @return the icon
+     */
+    public IconicsDrawable getOptionsMenuIcon(IIcon icon) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+
+        int padding = 0;
+        if (icon == MaterialDesignIconic.Icon.gmi_plus) {
+            padding = 5;
+        } else if (icon == MaterialDesignIconic.Icon.gmi_reorder || icon == MaterialDesignIconic.Icon.gmi_refresh) {
+            padding = 2;
+        }
+
+        return getIcon(icon, color, 24, padding);
+    }
+
     private IconicsDrawable getIcon(IIcon icon, @ColorInt int color, int sizeDp) {
+        return getIcon(icon, color, sizeDp, 0);
+    }
+
+    private IconicsDrawable getIcon(IIcon icon, @ColorInt int color, int sizeDp, int paddingDp) {
         return new IconicsDrawable(context, icon).sizeDp(sizeDp)
+                .paddingDp(paddingDp)
                 .color(color);
-    }
-
-    /**
-     * Get "Apartments" icon
-     *
-     * @param context any suitable context
-     *
-     * @return "Apartments" icon
-     */
-    public static IconicsDrawable getApartmentsIcon(Context context, int sizeDp) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
-        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_home).sizeDp(sizeDp)
-                .color(color);
-
-        return iconicsDrawable;
-    }
-
-    /**
-     * Get "Add" icon
-     *
-     * @param context any suitable context
-     * @param color   icon color
-     *
-     * @return "Add" icon
-     */
-    public static IconicsDrawable getAddIcon(Context context, int color) {
-        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_plus).color(color)
-                .sizeDp(24)
-                .paddingDp(5);
-
-        return iconicsDrawable;
-    }
-
-    /**
-     * Get "Refresh" icon
-     *
-     * @param context any suitable context
-     *
-     * @return "Refresh" icon
-     */
-    public static IconicsDrawable getRefreshIcon(Context context, int color) {
-        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_refresh).color(color)
-                .sizeDp(24)
-                .paddingDp(2);
-
-        return iconicsDrawable;
     }
 
     /**
@@ -125,14 +138,6 @@ public final class IconicsHelper {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_reorder).sizeDp(24)
                 .color(color);
-
-        return iconicsDrawable;
-    }
-
-    public static IconicsDrawable getReorderIcon(Context context, int color) {
-        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_reorder).color(color)
-                .sizeDp(24)
-                .paddingDp(2);
 
         return iconicsDrawable;
     }

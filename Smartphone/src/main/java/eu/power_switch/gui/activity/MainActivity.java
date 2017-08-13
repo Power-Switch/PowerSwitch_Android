@@ -1,19 +1,19 @@
 /*
- *  PowerSwitch by Max Rosin & Markus Ressel
- *  Copyright (C) 2015  Markus Ressel
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package eu.power_switch.gui.activity;
@@ -70,10 +70,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.application.PowerSaverHelper;
+import eu.power_switch.application.PowerSaverHandler;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.event.HistoryUpdatedEvent;
-import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
+import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.eventbus.EventBusActivity;
@@ -159,6 +159,12 @@ public class MainActivity extends EventBusActivity {
 
     @Inject
     IconicsHelper iconicsHelper;
+
+    @Inject
+    PowerSaverHandler powerSaverHandler;
+
+    @Inject
+    ChromeCustomTabHandler chromeCustomTabHandler;
 
     /**
      * Add class to Backstack
@@ -284,13 +290,13 @@ public class MainActivity extends EventBusActivity {
                     .show();
         }
 
-        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
+        if (Build.VERSION.SDK_INT >= 23 && !powerSaverHandler.isIgnoringBatteryOptimizations()) {
             new AlertDialog.Builder(this).setTitle(R.string.disable_battery_optimizations_title)
                     .setMessage(R.string.disable_battery_optimizations_message)
                     .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
+                            powerSaverHandler.openIgnoreOptimizationSettings();
                         }
                     })
                     .show();
@@ -613,7 +619,7 @@ public class MainActivity extends EventBusActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             String url = "http://power-switch.eu/faq/";
-                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                            chromeCustomTabHandler.openChromeCustomTab(url);
                             return true;
                         } catch (Exception e) {
                             statusMessageHandler.showErrorMessage(getActivity(), e);
@@ -674,7 +680,7 @@ public class MainActivity extends EventBusActivity {
                                     @Override
                                     public void onIconClicked(View v) {
                                         String url = "https://power-switch.eu/";
-                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                        chromeCustomTabHandler.openChromeCustomTab(url);
                                     }
 
                                     @Override
@@ -696,11 +702,11 @@ public class MainActivity extends EventBusActivity {
                                     public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
                                         if (specialButton == Libs.SpecialButton.SPECIAL1) {
                                             String url = "https://power-switch.eu/download/";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                            chromeCustomTabHandler.openChromeCustomTab(url);
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
                                             String url = "https://github.com/Power-Switch/PowerSwitch_Android";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                            chromeCustomTabHandler.openChromeCustomTab(url);
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
                                             return false;

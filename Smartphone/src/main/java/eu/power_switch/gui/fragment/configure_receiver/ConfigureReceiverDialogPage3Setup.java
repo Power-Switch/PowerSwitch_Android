@@ -24,7 +24,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
@@ -41,6 +40,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -55,7 +57,6 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHandler;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.network.NetworkHandler;
@@ -352,7 +353,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         });
 
         // Universal
-        addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        IconicsDrawable icon = iconicsHelper.getFabIcon(MaterialDesignIconic.Icon.gmi_plus);
+        addUniversalButtonFAB.setImageDrawable(icon);
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -72,7 +72,7 @@ dependencies {
     compile "com.google.android.gms:play-services-wearable:${rootProject.ext.playServicesVersion}"
 
     // Easy preferences
-    compile('com.github.markusressel:TypedPreferences:v1.1.2') {
+    compile('com.github.markusressel:TypedPreferences:v1.2.0') {
         exclude module: 'app'
         transitive = true
     }

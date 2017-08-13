@@ -23,25 +23,30 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
+ * Handler for managing Chrome custom tabs
+ *
  * Created by Markus on 21.02.2016.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ChromeCustomTabHelper {
+@Singleton
+public class ChromeCustomTabHandler {
 
-    public static final String EXTRA_CUSTOM_TABS_SESSION = "android.support.customtabs.extra.SESSION";
+    public static final String EXTRA_CUSTOM_TABS_SESSION       = "android.support.customtabs.extra.SESSION";
     public static final String EXTRA_CUSTOM_TABS_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
 
     // Key for the title string for a given custom menu item
-    public static final String KEY_CUSTOM_TABS_MENU_TITLE = "android.support.customtabs.customaction.MENU_ITEM_TITLE";
+    public static final String KEY_CUSTOM_TABS_MENU_TITLE     = "android.support.customtabs.customaction.MENU_ITEM_TITLE";
     // Key that specifies the PendingIntent to launch when the action button
     // or menu item was tapped. Chrome will be calling PendingIntent#send() on
     // taps after adding the url as data. The client app can call
@@ -50,7 +55,25 @@ public final class ChromeCustomTabHelper {
 
     public static final String EXTRA_CUSTOM_TABS_MENU_ITEMS = "android.support.customtabs.extra.MENU_ITEMS";
 
-    public static Intent getBrowserIntent(Context context, String url) {
+    @Inject
+    Context context;
+
+    @Inject
+    public ChromeCustomTabHandler() {
+    }
+
+    /**
+     * Opens a chrome custom tab with the specified URL.
+     *
+     * @param url the url to open
+     */
+    public void openChromeCustomTab(@NonNull String url) {
+        Intent intent = getIntent(url);
+        context.startActivity(intent);
+    }
+
+    @CheckResult
+    private Intent getIntent(@NonNull String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
         final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
@@ -75,5 +98,6 @@ public final class ChromeCustomTabHelper {
 
         return intent;
     }
+
 
 }
