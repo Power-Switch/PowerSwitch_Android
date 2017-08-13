@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -33,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,6 +47,7 @@ import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
 import lombok.Getter;
+import timber.log.Timber;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -79,6 +82,12 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
     private Loader dataLoader;
     private int    pageAnimationDuration;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,18 +121,10 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
 
             @Override
             public void deliverResult(RecyclerViewUpdateResult<T> result) {
+                super.deliverResult(result);
                 onLoadFinished(this, result);
             }
 
-            @Override
-            protected void onStopLoading() {
-                cancelLoad();
-            }
-
-            @Override
-            protected void onReset() {
-                onStopLoading();
-            }
         };
     }
 
@@ -146,6 +147,13 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         }
     }
 
+    @Override
+    public void onLoaderReset(Loader<RecyclerViewUpdateResult<T>> loader) {
+        Timber.i("loader with id: {} was reset", loader.getId());
+        onListDataChanged(new ArrayList<T>());
+        getRecyclerViewAdapter().notifyDataSetChanged();
+    }
+
     /**
      * This method is called after loader has finished loading data and the result is ready to be delivered
      *
@@ -153,53 +161,69 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
      */
     protected abstract void onListDataChanged(List<T> list);
 
-    @Override
-    public void onLoaderReset(Loader<RecyclerViewUpdateResult<T>> loader) {
-
-    }
-
+    @UiThread
     public void updateListContent() {
         showLoadingAnimation();
         dataLoader.forceLoad();
     }
 
+    @UiThread
     protected void showLoadingAnimation() {
-        layoutEmpty.setVisibility(View.GONE);
-        layoutError.setVisibility(View.GONE);
-        layoutLoading.setVisibility(View.VISIBLE);
-        getRecyclerView().setVisibility(View.GONE);
-        addFAB.setVisibility(View.GONE);
+        try {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutError.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.VISIBLE);
+            getRecyclerView().setVisibility(View.GONE);
+            addFAB.setVisibility(View.GONE);
+        } catch (Exception e) {
+            Timber.e(e, "Error showing loading animation");
+        }
     }
 
+    @UiThread
     protected void showList() {
-        layoutEmpty.setVisibility(View.GONE);
-        layoutError.setVisibility(View.GONE);
-        layoutLoading.setVisibility(View.GONE);
-        getRecyclerView().setVisibility(View.VISIBLE);
-        showFabIfEnabled();
+        try {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutError.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.GONE);
+            getRecyclerView().setVisibility(View.VISIBLE);
+            showFabIfEnabled();
+        } catch (Exception e) {
+            Timber.e(e, "Error showing list");
+        }
     }
 
+    @UiThread
     protected void showEmpty() {
-        layoutEmpty.setVisibility(View.VISIBLE);
-        layoutError.setVisibility(View.GONE);
-        layoutLoading.setVisibility(View.GONE);
-        getRecyclerView().setVisibility(View.INVISIBLE);
-        showFabIfEnabled();
+        try {
+            layoutEmpty.setVisibility(View.VISIBLE);
+            layoutError.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.GONE);
+            getRecyclerView().setVisibility(View.INVISIBLE);
+            showFabIfEnabled();
+        } catch (Exception e) {
+            Timber.e(e, "Error showing empty list");
+        }
     }
 
+    @UiThread
     protected void showError(final Exception e, final long timeInMilliseconds) {
-        layoutEmpty.setVisibility(View.GONE);
-        layoutError.setVisibility(View.VISIBLE);
-        layoutLoading.setVisibility(View.GONE);
-        getRecyclerView().setVisibility(View.GONE);
-        addFAB.setVisibility(View.GONE);
+        try {
+            layoutEmpty.setVisibility(View.GONE);
+            layoutError.setVisibility(View.VISIBLE);
+            layoutLoading.setVisibility(View.GONE);
+            getRecyclerView().setVisibility(View.GONE);
+            addFAB.setVisibility(View.GONE);
 
-        layoutError.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                statusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
-            }
-        });
+            layoutError.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    statusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
+                }
+            });
+        } catch (Exception e1) {
+            Timber.e(e1, "Error showing error in list");
+        }
     }
 
     private void showFabIfEnabled() {

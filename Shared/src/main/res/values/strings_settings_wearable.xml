@@ -24,6 +24,11 @@
         <item>@string/scenes</item>
     </string-array>
 
+    <string-array name="wearable_tab_values_as_string" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <integer-array name="wearable_tab_values" translatable="false">
         <item>0</item>
         <item>1</item>

@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -72,12 +71,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 .post(new ActiveApartmentChangedEvent());
 
         UtilityService.forceWearDataUpdate(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -141,7 +134,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             }
         });
 
-        updateUI();
+        updateListContent();
 
         return rootView;
     }
@@ -156,10 +149,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 .singleUse(TutorialConstants.APARTMENT_KEY)
                 .setDelay(500)
                 .show();
-    }
-
-    private void updateUI() {
-        updateListContent();
     }
 
     @Override
@@ -230,7 +219,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
     public void onActiveApartmentChanged(ActiveApartmentChangedEvent activeApartmentChangedEvent) {
-        updateUI();
+        updateListContent();
     }
 
     @Override

@@ -26,7 +26,7 @@
 
         <eu.power_switch.settings.IntListPreference
             android:entries="@array/wearable_tab_names"
-            android:entryValues="@array/wearable_tab_values"
+            android:entryValues="@array/wearable_tab_values_as_string"
             android:key="@string/key_startupDefaultTab"
             android:title="@string/title_startupDefaultTab"/>
 

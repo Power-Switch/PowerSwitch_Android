@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,12 +78,6 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override

@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.phone;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -73,12 +72,6 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
     public static void notifyCallEventsChanged() {
         EventBus.getDefault()
                 .post(new CallEventChangedEvent());
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override

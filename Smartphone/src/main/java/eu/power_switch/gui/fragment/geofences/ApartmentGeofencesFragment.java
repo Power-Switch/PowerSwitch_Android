@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.geofences;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -85,12 +84,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public static void notifyApartmentGeofencesChanged() {
         EventBus.getDefault()
                 .post(new ApartmentGeofenceChangedEvent());
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
