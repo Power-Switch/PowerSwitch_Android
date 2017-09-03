@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.settings;
+package eu.power_switch.persistence.settings;
 
 import android.content.Context;
 import android.support.annotation.ArrayRes;

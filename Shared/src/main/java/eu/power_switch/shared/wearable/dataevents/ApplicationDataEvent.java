@@ -16,35 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.shared.wearable.dataevents;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import me.denley.courier.Deliverable;
 
 /**
- * Represents a Button associated with a Receiver
- * <p/>
- * Created by Markus on 06.06.2015.
+ * DataEvent used to exchange configuration between Smartphone and Wearable App
+ * <p>
+ * Created by Markus on 08.08.2017.
  */
-@AllArgsConstructor
+@Deliverable
 @Data
-public class Button implements Serializable {
+public class ApplicationDataEvent {
 
-    /**
-     * ID of this Button
-     */
-    private long id;
-
-    /**
-     * Name of this Button
-     */
-    private String name;
-
-    /**
-     * ID of the Receiver this Button is associated with
-     */
-    private long receiverId;
+    ArrayList<ApartmentDataEvent> apartmentDataEvents;
 
 }

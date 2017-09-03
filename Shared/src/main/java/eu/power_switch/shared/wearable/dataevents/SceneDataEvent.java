@@ -16,28 +16,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.shared.wearable.dataevents;
 
-import java.io.Serializable;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import me.denley.courier.Deliverable;
 
 /**
- * Created by Markus on 11.07.2015.
+ * DataEvent used to exchange configuration between Smartphone and Wearable App
+ * <p>
+ * Created by Markus on 03.09.2017.
  */
-@AllArgsConstructor
-@Getter
-public class Scene implements Serializable {
+@Deliverable
+@Data
+public class SceneDataEvent {
 
-    /**
-     * Scene id
-     */
-    private long id;
-
-    /**
-     * Scene name
-     */
-    private String name;
+    long   id;
+    String name;
 
 }

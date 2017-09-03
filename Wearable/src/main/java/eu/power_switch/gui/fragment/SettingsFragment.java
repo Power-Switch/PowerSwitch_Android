@@ -44,9 +44,9 @@ import eu.power_switch.gui.IconicsHandler;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
 import eu.power_switch.gui.view.SettingsListLayoutCallback;
 import eu.power_switch.network.service.UtilityService;
-import eu.power_switch.settings.BooleanSettingsItem;
-import eu.power_switch.settings.SettingsItem;
-import eu.power_switch.settings.SingleSelectSettingsItem;
+import eu.power_switch.persistence.settings.BooleanSettingsItem;
+import eu.power_switch.persistence.settings.SettingsItem;
+import eu.power_switch.persistence.settings.SingleSelectSettingsItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 
 /**

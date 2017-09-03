@@ -31,10 +31,10 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import eu.power_switch.shared.wearable.dataevents.SceneDataEvent;
 
 /**
  * Created by Markus on 15.08.2015.
@@ -42,15 +42,15 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
 
     private Context                    context;
-    private List<Scene>                scenes;
+    private List<SceneDataEvent>       scenes;
     private DataApiHandler             dataApiHandler;
     private RecyclerView               parentRecyclerView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
-    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<Scene> scenes, DataApiHandler dataApiHandler,
+    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<SceneDataEvent> scenes, DataApiHandler dataApiHandler,
                                     WearablePreferencesHandler wearablePreferencesHandler) {
-        this.scenes = scenes;
         this.context = context;
+        this.scenes = scenes;
         this.parentRecyclerView = parentRecyclerView;
         this.dataApiHandler = dataApiHandler;
         this.wearablePreferencesHandler = wearablePreferencesHandler;
@@ -68,7 +68,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     @Override
     public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        final Scene scene = scenes.get(position);
+        final SceneDataEvent scene = scenes.get(position);
 
         // Set item views based on the data model
         holder.sceneName.setText(scene.getName());

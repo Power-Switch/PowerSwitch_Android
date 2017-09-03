@@ -16,31 +16,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.shared.wearable.dataevents;
 
-import java.io.Serializable;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import me.denley.courier.Deliverable;
 
 /**
- * Created by Markus on 06.06.2015.
+ * DataEvent used to exchange configuration between Smartphone and Wearable App
+ * <p>
+ * Created by Markus on 08.08.2017.
  */
-@AllArgsConstructor
+@Deliverable
 @Data
-public class Room implements Serializable {
+public class GatewayDataEvent {
 
-    private long id;
-    private String name;
-    private List<Receiver> receivers;
-    /**
-     * Specifies if this room should be rendered collapsed
-     */
-    private boolean collapsed;
-
-    public void addReceiver(Receiver receiver) {
-        receivers.add(receiver);
-    }
+    long   id;
+    String name;
 
 }

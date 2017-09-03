@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.view.SettingsListItemLayout;
-import eu.power_switch.settings.SettingsItem;
+import eu.power_switch.persistence.settings.SettingsItem;
 
 /**
  * Created by Markus on 08.06.2016.

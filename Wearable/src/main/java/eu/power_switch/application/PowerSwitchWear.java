@@ -27,6 +27,7 @@ import dagger.android.DaggerApplication;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.dagger.DaggerAppComponent;
 import io.fabric.sdk.android.Fabric;
+import io.paperdb.Paper;
 import timber.log.Timber;
 
 /**
@@ -79,5 +80,7 @@ public class PowerSwitchWear extends DaggerApplication {
                         .build())
                         .build(),
                 new Answers());
+
+        Paper.init(this);
     }
 }

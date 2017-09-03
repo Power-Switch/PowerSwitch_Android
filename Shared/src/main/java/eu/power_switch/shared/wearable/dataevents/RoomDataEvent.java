@@ -16,22 +16,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.event;
+package eu.power_switch.shared.wearable.dataevents;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import eu.power_switch.shared.event.EventBusEvent;
-import eu.power_switch.shared.wearable.dataevents.SceneDataEvent;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.Data;
+import me.denley.courier.Deliverable;
 
 /**
- * Created by Markus on 01.08.2017.
+ * DataEvent used to exchange configuration between Smartphone and Wearable App
+ * <p>
+ * Created by Markus on 08.08.2017.
  */
-@EqualsAndHashCode(callSuper = true)
-@Value
-public class SceneDataChangedEvent extends EventBusEvent {
+@Deliverable
+@Data
+public class RoomDataEvent {
 
-    List<SceneDataEvent> rooms;
+    long                         id;
+    String                       name;
+    boolean                      isCollapsed;
+    ArrayList<ReceiverDataEvent> receiverDataEvents;
+    ArrayList<GatewayDataEvent>  gatewayDataEvents;
 
 }

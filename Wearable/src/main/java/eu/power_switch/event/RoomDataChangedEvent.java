@@ -20,8 +20,8 @@ package eu.power_switch.event;
 
 import java.util.List;
 
-import eu.power_switch.obj.Room;
 import eu.power_switch.shared.event.EventBusEvent;
+import eu.power_switch.shared.wearable.dataevents.RoomDataEvent;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -32,6 +32,6 @@ import lombok.Value;
 @Value
 public class RoomDataChangedEvent extends EventBusEvent {
 
-    List<Room> rooms;
+    List<RoomDataEvent> rooms;
 
 }

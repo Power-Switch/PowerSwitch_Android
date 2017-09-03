@@ -92,6 +92,9 @@ dependencies {
     // TextView with dynamic textsize based on available space
     compile 'me.grantland:autofittextview:0.2.1'
 
+    // Smartphone <-> Wearable Data Synchronization
+    compile 'me.denley.courier:courier:1.2.1'
+
     // Fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

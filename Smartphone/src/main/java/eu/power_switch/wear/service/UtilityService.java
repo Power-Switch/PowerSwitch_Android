@@ -42,6 +42,7 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistenceHandler;
 import eu.power_switch.persistence.preferences.SmartphonePreferencesHandler;
@@ -49,9 +50,15 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import eu.power_switch.shared.wearable.dataevents.ApartmentDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ApplicationDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ButtonDataEvent;
+import eu.power_switch.shared.wearable.dataevents.GatewayDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ReceiverDataEvent;
+import eu.power_switch.shared.wearable.dataevents.RoomDataEvent;
+import eu.power_switch.shared.wearable.dataevents.SceneDataEvent;
+import me.denley.courier.Courier;
 import timber.log.Timber;
-
-import static eu.power_switch.persistence.preferences.SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -104,91 +111,6 @@ public class UtilityService extends DaggerIntentService {
     }
 
     /**
-     * Puts a Apartment into a DataMap
-     *
-     * @param apartment Apartment to convert
-     *
-     * @return DataMap
-     */
-    private DataMap convertToDataMap(Apartment apartment) {
-        DataMap roomDataMap = new DataMap();
-
-        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_APARTMENT_ID, apartment.getId());
-        roomDataMap.putString(WearableConstants.DATAMAP_KEY_APARTMENT_NAME, apartment.getName());
-
-        return roomDataMap;
-    }
-
-    /**
-     * Puts a Room into a DataMap
-     *
-     * @param room Room to convert
-     *
-     * @return DataMap
-     */
-    private DataMap convertToDataMap(Room room) {
-        DataMap roomDataMap = new DataMap();
-
-        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_ROOM_ID, room.getId());
-        roomDataMap.putString(WearableConstants.DATAMAP_KEY_ROOM_NAME, room.getName());
-        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_ROOM_APARTMENT_ID, room.getApartmentId());
-
-        return roomDataMap;
-    }
-
-    /**
-     * Puts a Receiver into a DataMap
-     *
-     * @param receiver Receiver to convert
-     *
-     * @return DataMap
-     */
-    private DataMap convertToDataMap(Receiver receiver) {
-        DataMap receiverDataMap = new DataMap();
-
-        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_ID, receiver.getId());
-        receiverDataMap.putString(WearableConstants.DATAMAP_KEY_RECEIVER_NAME, receiver.getName());
-        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_ROOM_ID, receiver.getRoomId());
-        receiverDataMap.putInt(WearableConstants.DATAMAP_KEY_RECEIVER_POSITION_IN_ROOM, receiver.getPositionInRoom());
-        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_LAST_ACTIVATED_BUTTON_ID, receiver.getLastActivatedButtonId());
-
-        return receiverDataMap;
-    }
-
-    /**
-     * Puts a Button into a DataMap
-     *
-     * @param button Button to convert
-     *
-     * @return DataMap
-     */
-    private DataMap convertToDataMap(Button button) {
-        DataMap buttonDataMap = new DataMap();
-
-        buttonDataMap.putLong(WearableConstants.DATAMAP_KEY_BUTTON_ID, button.getId());
-        buttonDataMap.putString(WearableConstants.DATAMAP_KEY_BUTTON_NAME, button.getName());
-        buttonDataMap.putLong(WearableConstants.DATAMAP_KEY_BUTTON_RECEIVER_ID, button.getReceiverId());
-
-        return buttonDataMap;
-    }
-
-    /**
-     * Puts a Scene into a DataMap
-     *
-     * @param scene Scene to convert
-     *
-     * @return DataMap
-     */
-    private DataMap convertToDataMap(Scene scene) {
-        DataMap roomDataMap = new DataMap();
-
-        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_SCENE_ID, scene.getId());
-        roomDataMap.putString(WearableConstants.DATAMAP_KEY_SCENE_NAME, scene.getName());
-
-        return roomDataMap;
-    }
-
-    /**
      * Receive internal intents
      *
      * @param intent
@@ -202,31 +124,11 @@ public class UtilityService extends DaggerIntentService {
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
                 Timber.d("Getting Data from Database to send to Wearable...");
 
-                long apartmentId = smartphonePreferencesHandler.getValue(KEY_CURRENT_APARTMENT_ID);
-                if (apartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
-                    List<Apartment> apartments = persistenceHandler.getAllApartments();
-
-                    Apartment activeApartment = persistenceHandler.getApartment(apartmentId);
-
-                    List<Room> rooms = activeApartment.getRooms();
-
-                    List<Receiver> receivers = new ArrayList<>();
-                    for (Room room : rooms) {
-                        receivers.addAll(room.getReceivers());
-                    }
-
-                    List<Button> buttons = new ArrayList<>();
-                    for (Receiver receiver : receivers) {
-                        buttons.addAll(receiver.getButtons());
-                    }
-                    List<Scene> scenes = activeApartment.getScenes();
-
-                    sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
-                }
+                List<Apartment> apartments = persistenceHandler.getAllApartments();
+                sendDataToWearable(apartments);
             } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
                 sendSettingsToWearable();
             }
-
         } catch (Exception e) {
             statusMessageHandler.showErrorMessage(getApplicationContext(), e);
         }
@@ -234,69 +136,113 @@ public class UtilityService extends DaggerIntentService {
 
     /**
      * Transfer the required data over to the wearable
-     *
-     * @param rooms     List containing Rooms from Database
-     * @param receivers List containing Receivers from Database
      */
-    private void sendDataToWearable(List<Apartment> apartments, List<Room> rooms, List<Receiver> receivers, List<Button> buttons,
-                                    List<Scene> scenes) {
+    private void sendDataToWearable(List<Apartment> apartments) {
         Timber.d("Sending new Data to Wearable...");
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
-                .build();
 
-        // It's OK to use blockingConnect() here as we are running in an
-        // IntentService that executes work on a separate (background) thread.
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+        ApplicationDataEvent applicationDataEvent = convertToDataEvent(apartments);
 
-        ArrayList<DataMap> data = new ArrayList<>();
+        Courier.deliverData(this, WearableConstants.DATA_PATH, applicationDataEvent);
+    }
 
+    private ApplicationDataEvent convertToDataEvent(List<Apartment> apartments) {
+        ApplicationDataEvent applicationDataEvent = new ApplicationDataEvent();
 
         for (Apartment apartment : apartments) {
-            data.add(convertToDataMap(apartment));
-        }
+            ApartmentDataEvent apartmentDataEvent = new ApartmentDataEvent();
+            apartmentDataEvent.setId(apartment.getId());
+            apartmentDataEvent.setName(apartment.getName());
 
-        for (Room room : rooms) {
-            data.add(convertToDataMap(room));
-        }
-
-        for (Receiver receiver : receivers) {
-            data.add(convertToDataMap(receiver));
-        }
-
-        for (Button button : buttons) {
-            data.add(convertToDataMap(button));
-        }
-
-        for (Scene scene : scenes) {
-            data.add(convertToDataMap(scene));
-        }
-
-        if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
-
-            PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.DATA_PATH);
-            dataMap.getDataMap()
-                    .putDataMapArrayList(WearableConstants.EXTRA_DATA, data);
-            PutDataRequest request = dataMap.asPutDataRequest();
-
-            // Send the data over
-            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request)
-                    .await();
-
-            if (!result.getStatus()
-                    .isSuccess()) {
-                Timber.e("",
-                        String.format(Locale.getDefault(),
-                                "Error sending data using DataApi (error code = %d)",
-                                result.getStatus()
-                                        .getStatusCode()));
-            } else {
-                Timber.d("Update data sent");
+            apartmentDataEvent.setRoomDataEvents(new ArrayList<RoomDataEvent>());
+            ArrayList<RoomDataEvent> roomDataEvents = apartmentDataEvent.getRoomDataEvents();
+            for (Room room : apartment.getRooms()) {
+                RoomDataEvent roomDataEvent = convertToDataEvent(room);
+                roomDataEvents.add(roomDataEvent);
             }
 
-        } else {
-            // GoogleApiClient connection error
-            Timber.e("Error connecting GoogleApiClient");
+            apartmentDataEvent.setSceneDataEvents(new ArrayList<SceneDataEvent>());
+            ArrayList<SceneDataEvent> sceneDataEvents = apartmentDataEvent.getSceneDataEvents();
+            for (Scene scene : apartment.getScenes()) {
+                SceneDataEvent sceneDataEvent = convertToDataEvent(scene);
+                sceneDataEvents.add(sceneDataEvent);
+            }
+
+            apartmentDataEvent.setGatewayDataEvents(new ArrayList<GatewayDataEvent>());
+            ArrayList<GatewayDataEvent> gatewayDataEvents = apartmentDataEvent.getGatewayDataEvents();
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                GatewayDataEvent gatewayDataEvent = convertToDataEvent(gateway);
+                gatewayDataEvents.add(gatewayDataEvent);
+            }
         }
+
+        return applicationDataEvent;
+    }
+
+    private RoomDataEvent convertToDataEvent(Room room) {
+        RoomDataEvent roomDataEvent = new RoomDataEvent();
+        roomDataEvent.setId(room.getId());
+        roomDataEvent.setName(room.getName());
+        roomDataEvent.setCollapsed(room.isCollapsed());
+
+        roomDataEvent.setGatewayDataEvents(new ArrayList<GatewayDataEvent>());
+        ArrayList<GatewayDataEvent> gatewayDataEvents = roomDataEvent.getGatewayDataEvents();
+        for (Gateway gateway : room.getAssociatedGateways()) {
+            GatewayDataEvent gatewayDataEvent = convertToDataEvent(gateway);
+            gatewayDataEvents.add(gatewayDataEvent);
+        }
+
+        roomDataEvent.setReceiverDataEvents(new ArrayList<ReceiverDataEvent>());
+        ArrayList<ReceiverDataEvent> receiverDataEvents = roomDataEvent.getReceiverDataEvents();
+        for (Receiver receiver : room.getReceivers()) {
+            ReceiverDataEvent receiverDataEvent = convertToDataEvent(receiver);
+            receiverDataEvents.add(receiverDataEvent);
+        }
+
+        return roomDataEvent;
+    }
+
+    private SceneDataEvent convertToDataEvent(Scene scene) {
+        SceneDataEvent sceneDataEvent = new SceneDataEvent();
+        sceneDataEvent.setId(scene.getId());
+        sceneDataEvent.setName(scene.getName());
+        return sceneDataEvent;
+    }
+
+    private ReceiverDataEvent convertToDataEvent(Receiver receiver) {
+        ReceiverDataEvent receiverDataEvent = new ReceiverDataEvent();
+        receiverDataEvent.setId(receiver.getId());
+        receiverDataEvent.setName(receiver.getName());
+        receiverDataEvent.setLastActivatedButtonId(receiver.getLastActivatedButtonId());
+
+        receiverDataEvent.setGatewayDataEvents(new ArrayList<GatewayDataEvent>());
+        ArrayList<GatewayDataEvent> gatewayDataEvents = receiverDataEvent.getGatewayDataEvents();
+        for (Gateway gateway : receiver.getAssociatedGateways()) {
+            GatewayDataEvent gatewayDataEvent = convertToDataEvent(gateway);
+            gatewayDataEvents.add(gatewayDataEvent);
+        }
+
+        receiverDataEvent.setButtonDataEvents(new ArrayList<ButtonDataEvent>());
+        ArrayList<ButtonDataEvent> buttonDataEvents = receiverDataEvent.getButtonDataEvents();
+        for (Button button : receiver.getButtons()) {
+            ButtonDataEvent buttonDataEvent = convertToDataEvent(button);
+            buttonDataEvents.add(buttonDataEvent);
+        }
+
+        return receiverDataEvent;
+    }
+
+    private ButtonDataEvent convertToDataEvent(Button button) {
+        ButtonDataEvent buttonDataEvent = new ButtonDataEvent();
+        buttonDataEvent.setId(button.getId());
+        buttonDataEvent.setName(button.getName());
+        return buttonDataEvent;
+    }
+
+    private GatewayDataEvent convertToDataEvent(Gateway gateway) {
+        GatewayDataEvent gatewayDataEvent = new GatewayDataEvent();
+        gatewayDataEvent.setId(gateway.getId());
+        gatewayDataEvent.setName(gateway.getName());
+        return gatewayDataEvent;
     }
 
     /**
@@ -328,11 +274,10 @@ public class UtilityService extends DaggerIntentService {
 
             if (!result.getStatus()
                     .isSuccess()) {
-                Timber.e("",
-                        String.format(Locale.getDefault(),
-                                "Error sending settings using DataApi (error code = %d)",
-                                result.getStatus()
-                                        .getStatusCode()));
+                Timber.e(String.format(Locale.getDefault(),
+                        "Error sending settings using DataApi (error code = %d)",
+                        result.getStatus()
+                                .getStatusCode()));
             } else {
                 Timber.d("Updated settings sent");
             }

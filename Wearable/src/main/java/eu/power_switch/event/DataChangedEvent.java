@@ -18,11 +18,8 @@
 
 package eu.power_switch.event;
 
-import java.util.List;
-
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.event.EventBusEvent;
+import eu.power_switch.shared.wearable.dataevents.ApplicationDataEvent;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -33,8 +30,6 @@ import lombok.Value;
 @Value
 public class DataChangedEvent extends EventBusEvent {
 
-    String      apartmentName;
-    List<Room>  rooms;
-    List<Scene> scenes;
+    ApplicationDataEvent applicationDataEvent;
 
 }

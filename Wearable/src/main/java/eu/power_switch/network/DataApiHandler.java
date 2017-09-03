@@ -31,22 +31,20 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.gui.animation.ActionResponse;
-import eu.power_switch.network.service.ListenerService;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Receiver;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import eu.power_switch.shared.wearable.dataevents.ButtonDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ReceiverDataEvent;
+import eu.power_switch.shared.wearable.dataevents.RoomDataEvent;
+import eu.power_switch.shared.wearable.dataevents.SceneDataEvent;
 import timber.log.Timber;
 
 /**
@@ -69,17 +67,17 @@ public class DataApiHandler {
     }
 
     @NonNull
-    public static String buildReceiverActionString(Room room, Receiver receiver, Button button) {
+    public static String buildReceiverActionString(RoomDataEvent room, ReceiverDataEvent receiver, ButtonDataEvent button) {
         return WearableConstants.KEY_ROOM_ID + room.getId() + WearableConstants.KEY_RECEIVER_ID + receiver.getId() + WearableConstants.KEY_BUTTON_ID + button.getId() + ";;";
     }
 
     @NonNull
-    public static String buildRoomActionString(Room room, Long buttonId) {
+    public static String buildRoomActionString(RoomDataEvent room, Long buttonId) {
         return WearableConstants.KEY_ROOM_ID + room.getId() + WearableConstants.KEY_BUTTON_ID + buttonId + ";;";
     }
 
     @NonNull
-    public static String buildSceneActionString(Scene scene) {
+    public static String buildSceneActionString(SceneDataEvent scene) {
         return WearableConstants.KEY_SCENE_ID + scene.getId() + ";;";
     }
 
@@ -190,106 +188,6 @@ public class DataApiHandler {
         googleApiClient.disconnect();
     }
 
-    public String getApartmentName() {
-        String apartmentName = "";
-
-        if (!googleApiClient.isConnected()) {
-            if (!blockingConnect()) {
-                return null;
-            }
-        }
-
-        ArrayList<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
-                .await();
-
-        if (dataItemBuffer.getStatus()
-                .isSuccess()) {
-            for (DataItem dataItem : dataItemBuffer) {
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap()
-                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
-                if (data != null) {
-                    apartmentName = ListenerService.extractApartmentDataMapItems(data);
-                    break;
-                }
-            }
-        }
-        dataItemBuffer.release();
-
-        return apartmentName;
-    }
-
-    /**
-     * Retrieve room data from Wear cloud storage
-     *
-     * @return List of Rooms
-     */
-    public List<Room> getRoomData() {
-        List<Room> rooms = new ArrayList<>();
-
-        if (!googleApiClient.isConnected()) {
-            if (!blockingConnect()) {
-                return null;
-            }
-        }
-
-        List<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
-                .await();
-
-        if (dataItemBuffer.getStatus()
-                .isSuccess()) {
-            for (DataItem dataItem : dataItemBuffer) {
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap()
-                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
-                if (data != null) {
-                    rooms = ListenerService.extractRoomDataMapItems(data);
-                    break;
-                }
-            }
-        }
-        dataItemBuffer.release();
-
-        return rooms;
-    }
-
-    /**
-     * Retrieve scene data from Wear cloud storage
-     *
-     * @return List of Scenes
-     */
-    public List<Scene> getSceneData() {
-        List<Scene> scenes = new ArrayList<>();
-
-        if (!googleApiClient.isConnected()) {
-            if (!blockingConnect()) {
-                return null;
-            }
-        }
-
-        List<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
-                .await();
-
-        if (dataItemBuffer.getStatus()
-                .isSuccess()) {
-            for (DataItem dataItem : dataItemBuffer) {
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap()
-                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
-                if (data != null) {
-                    scenes = ListenerService.extractSceneDataMapItems(data);
-                    break;
-                }
-            }
-        }
-        dataItemBuffer.release();
-
-        return scenes;
-    }
-
     /**
      * Retrieve wear settings from Wear cloud storage
      */
@@ -316,6 +214,7 @@ public class DataApiHandler {
                 }
             }
         }
+
         dataItemBuffer.release();
     }
 }

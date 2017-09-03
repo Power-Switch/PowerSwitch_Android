@@ -28,6 +28,7 @@ import de.markusressel.typedpreferences.PreferenceItem;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 25.07.2016.
@@ -42,58 +43,24 @@ public final class CommunicationHelper {
      */
     public static void extractSettings(Context context, WearablePreferencesHandler wearablePreferencesHandler, ArrayList<DataMap> settings) {
         // save map values to local preferenceHandler
-        PreferenceItem preferenceItem;
-        String         key;
         for (DataMap dataMapItem : settings) {
-            // TODO: a lot of redundancy here, should be cleaned up
+            for (PreferenceItem preferenceItem : wearablePreferencesHandler.getAllPreferenceItems()) {
+                String key = preferenceItem.getKey(context);
 
-            preferenceItem = WearablePreferencesHandler.STARTUP_DEFAULT_TAB;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                int value = dataMapItem.getInt(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
+                if (dataMapItem.containsKey(key)) {
+                    Object defaultValue = preferenceItem.getDefaultValue();
+                    Object value;
+                    if (defaultValue instanceof Integer) {
+                        value = dataMapItem.getInt(key);
+                    } else if (defaultValue instanceof Boolean) {
+                        value = dataMapItem.getBoolean(key);
+                    } else {
+                        Timber.w("ignoring dataMapItem of unexpected type");
+                        continue;
+                    }
 
-            preferenceItem = WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                boolean value = dataMapItem.getBoolean(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
-
-            preferenceItem = WearablePreferencesHandler.HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                boolean value = dataMapItem.getBoolean(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
-
-            preferenceItem = WearablePreferencesHandler.SHOW_ROOM_ALL_ON_OFF;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                boolean value = dataMapItem.getBoolean(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
-
-            preferenceItem = WearablePreferencesHandler.THEME;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                int value = dataMapItem.getInt(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
-
-            preferenceItem = WearablePreferencesHandler.VIBRATE_ON_BUTTON_PRESS;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                boolean value = dataMapItem.getBoolean(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
-            }
-
-            preferenceItem = WearablePreferencesHandler.VIBRATION_DURATION;
-            key = preferenceItem.getKey(context);
-            if (dataMapItem.containsKey(key)) {
-                int value = dataMapItem.getInt(key);
-                wearablePreferencesHandler.setValue(preferenceItem, value);
+                    wearablePreferencesHandler.setValue(preferenceItem, value);
+                }
             }
         }
     }

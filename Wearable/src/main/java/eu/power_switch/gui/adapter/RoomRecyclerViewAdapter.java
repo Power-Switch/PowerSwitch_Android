@@ -37,14 +37,14 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Receiver;
-import eu.power_switch.obj.Room;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.butterknife.ButterKnifeViewHolder;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import eu.power_switch.shared.wearable.dataevents.ButtonDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ReceiverDataEvent;
+import eu.power_switch.shared.wearable.dataevents.RoomDataEvent;
 
 /**
  * Created by Markus on 15.08.2015.
@@ -52,12 +52,12 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
 
     private Context                    context;
-    private List<Room>                 rooms;
+    private List<RoomDataEvent>        rooms;
     private DataApiHandler             dataApiHandler;
     private RecyclerView               parentRecyclerView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
-    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<Room> rooms, DataApiHandler dataApiHandler,
+    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, List<RoomDataEvent> rooms, DataApiHandler dataApiHandler,
                                    WearablePreferencesHandler wearablePreferencesHandler) {
         this.rooms = rooms;
         this.context = context;
@@ -75,7 +75,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
     @Override
     public void onBindViewHolder(final RoomRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Room room = rooms.get(position);
+        final RoomDataEvent room = rooms.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) parentRecyclerView.getContext()
@@ -128,8 +128,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 String actionString = DataApiHandler.buildRoomActionString(room, buttonId);
                 dataApiHandler.sendRoomActionTrigger(actionString);
 
-                for (Receiver receiver : room.getReceivers()) {
-                    for (Button currentButton : receiver.getButtons()) {
+                for (ReceiverDataEvent receiver : room.getReceiverDataEvents()) {
+                    for (ButtonDataEvent currentButton : receiver.getButtonDataEvents()) {
                         if (button.getText()
                                 .equals(currentButton.getName())) {
                             receiver.setLastActivatedButtonId(currentButton.getId());
@@ -151,7 +151,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         // clear previous items
         holder.linearLayoutOfReceivers.removeAllViews();
         // add items
-        for (final Receiver receiver : room.getReceivers()) {
+        for (final ReceiverDataEvent receiver : room.getReceiverDataEvents()) {
             LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver, holder.linearLayoutOfReceivers, false);
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
@@ -167,7 +167,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             int                                    i             = 0;
             final ArrayList<android.widget.Button> buttonViews   = new ArrayList<>();
             TableRow                               buttonRow     = null;
-            for (final Button button : receiver.getButtons()) {
+            for (final ButtonDataEvent button : receiver.getButtonDataEvents()) {
                 android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button_wear, buttonRow, false);
                 buttonViews.add(buttonView);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors

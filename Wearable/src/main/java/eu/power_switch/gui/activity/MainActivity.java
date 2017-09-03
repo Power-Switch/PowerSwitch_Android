@@ -59,9 +59,12 @@ import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.gui.fragment.SettingsFragment;
 import eu.power_switch.network.DataApiHandler;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler;
+import eu.power_switch.shared.wearable.dataevents.ApartmentDataEvent;
+import eu.power_switch.shared.wearable.dataevents.ApplicationDataEvent;
+import eu.power_switch.shared.wearable.dataevents.RoomDataEvent;
+import eu.power_switch.shared.wearable.dataevents.SceneDataEvent;
+import io.paperdb.Paper;
 import timber.log.Timber;
 
 import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_ROOMS;
@@ -73,11 +76,11 @@ import static eu.power_switch.gui.adapter.NavigationDrawerAdapter.INDEX_SETTINGS
  */
 public class MainActivity extends EventBusWearableActivity {
 
-    private static final int         MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
-    public static        String      apartmentName                                 = "";
-    public static        List<Room>  roomList                                      = new ArrayList<>();
-    public static        List<Scene> sceneList                                     = new ArrayList<>();
-    private static       boolean     isInitialized                                 = false;
+    private static final int                  MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
+    public static        String               apartmentName                                 = "";
+    public static        List<RoomDataEvent>  roomList                                      = new ArrayList<>();
+    public static        List<SceneDataEvent> sceneList                                     = new ArrayList<>();
+    private static       boolean              isInitialized                                 = false;
     private DataApiHandler dataApiHandler;
 
     @BindView(R.id.drawer_layout)
@@ -167,16 +170,21 @@ public class MainActivity extends EventBusWearableActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
     public void onDataChanged(DataChangedEvent e) {
-        apartmentName = e.getApartmentName();
+        ArrayList<ApartmentDataEvent> apartmentDataEvents = e.getApplicationDataEvent()
+                .getApartmentDataEvents();
 
-        List<Room> rooms = e.getRooms();
+        ApartmentDataEvent firstApartmentDataEvent = apartmentDataEvents.get(0);
+
+        apartmentName = firstApartmentDataEvent.getName();
+
+        List<RoomDataEvent> rooms = firstApartmentDataEvent.getRoomDataEvents();
         roomList.clear();
         roomList.addAll(rooms);
 
         EventBus.getDefault()
                 .post(new RoomDataChangedEvent(roomList));
 
-        List<Scene> scenes = e.getScenes();
+        List<SceneDataEvent> scenes = firstApartmentDataEvent.getSceneDataEvents();
         sceneList.clear();
         sceneList.addAll(scenes);
 
@@ -262,71 +270,53 @@ public class MainActivity extends EventBusWearableActivity {
     }
 
     /**
-     * A background task to load the room, receiver and scene data via the Wear DataApi.
+     * A background task to load the apartment, room, receiver and scene data via the Wear DataApi.
      * <p/>
      * Created by Markus on 07.06.2015.
      */
-    private class FetchDataAsyncTask extends AsyncTask<Uri, Void, List<Object>> {
+    private class FetchDataAsyncTask extends AsyncTask<Uri, Void, ApplicationDataEvent> {
 
         @Override
-        protected List<Object> doInBackground(Uri... params) {
-            List<Object> result = new ArrayList<>();
+        protected ApplicationDataEvent doInBackground(Uri... params) {
 
-            // Get Apartment Data from Smartphone App
-            String       apartmentName  = dataApiHandler.getApartmentName();
-            List<String> apartmentNames = new ArrayList<>();
-            apartmentNames.add(apartmentName);
-
-            result.add(apartmentNames);
-
-            // Get Room Data from Smartphone App
-            List<Room> rooms = dataApiHandler.getRoomData();
-            if (rooms != null) {
-                boolean autoCollapseRooms = wearablePreferencesHandler.getValue(WearablePreferencesHandler.AUTO_COLLAPSE_ROOMS);
-                for (Room room : rooms) {
-                    room.setCollapsed(autoCollapseRooms);
-                }
-
-                result.add(rooms);
-            } else {
-                result.add(new ArrayList<>());
-            }
-
-            // Get Scene Data from Smartphone App
-            List<Scene> scenes = dataApiHandler.getSceneData();
-            if (scenes != null) {
-                result.add(scenes);
-            } else {
-                result.add(new ArrayList<>());
-            }
+            ApplicationDataEvent applicationDataEvent = Paper.book()
+                    .read("apartments", null);
 
             // Get Wearable Settings from Smartphone App
             dataApiHandler.updateSettings();
 
-            return result;
+            return applicationDataEvent;
         }
 
         @Override
-        protected void onPostExecute(List<Object> result) {
-            if (result != null) {
+        protected void onPostExecute(ApplicationDataEvent applicationDataEvent) {
+            if (applicationDataEvent != null) {
                 // Update UI based on the result of the background processing
 //                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
 
-                apartmentName = ((List<String>) result.get(0)).get(0);
+                // TODO: read data from persistence
 
+                Timber.d("reading data from persistence");
+
+                ArrayList<ApartmentDataEvent> apartmentDataEvents = applicationDataEvent.getApartmentDataEvents();
+
+                ApartmentDataEvent firstApartmentDataEvent = apartmentDataEvents.get(0);
+
+                apartmentName = firstApartmentDataEvent.getName();
+
+                List<RoomDataEvent> rooms = firstApartmentDataEvent.getRoomDataEvents();
                 roomList.clear();
-                List<Room> rooms = (List<Room>) result.get(1);
                 roomList.addAll(rooms);
 
                 EventBus.getDefault()
-                        .post(new RoomDataChangedEvent(rooms));
+                        .post(new RoomDataChangedEvent(roomList));
 
+                List<SceneDataEvent> scenes = firstApartmentDataEvent.getSceneDataEvents();
                 sceneList.clear();
-                List<Scene> scenes = (List<Scene>) result.get(2);
                 sceneList.addAll(scenes);
 
                 EventBus.getDefault()
-                        .post(new SceneDataChangedEvent(scenes));
+                        .post(new SceneDataChangedEvent(sceneList));
 
                 textViewStatus.setVisibility(View.GONE);
                 if (!isAmbient()) {
@@ -336,6 +326,8 @@ public class MainActivity extends EventBusWearableActivity {
 
                 isInitialized = true;
             } else {
+                Timber.d("no persisted data yet");
+
                 Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)
                         .show();
                 isInitialized = true;

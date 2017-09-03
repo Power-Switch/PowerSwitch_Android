@@ -48,6 +48,7 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
     private SwitchPreference  vibrateOnButtonPress;
     private SliderPreference  vibrationDuration;
     private IntListPreference theme;
+    private Preference        forceSync;
 
     @Inject
     WearablePreferencesHandler wearablePreferencesHandler;
@@ -93,6 +94,16 @@ public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragme
 
         theme = (IntListPreference) findPreference(WearablePreferencesHandler.THEME.getKey(getContext()));
         theme.setDefaultValue(WearablePreferencesHandler.THEME.getDefaultValue());
+
+        forceSync = findPreference(getString(R.string.key_forceWearDataSync));
+        forceSync.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                UtilityService.forceWearDataUpdate(getContext());
+
+                return false;
+            }
+        });
 
         updateUI();
     }

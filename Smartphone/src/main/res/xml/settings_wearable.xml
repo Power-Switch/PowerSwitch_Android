@@ -60,4 +60,8 @@
 
     </PreferenceCategory>
 
+    <Preference
+        android:key="@string/key_forceWearDataSync"
+        android:title="@string/title_forceWearDataSync"/>
+
 </PreferenceScreen>

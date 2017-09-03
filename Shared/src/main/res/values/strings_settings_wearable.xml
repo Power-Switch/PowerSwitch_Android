@@ -50,4 +50,7 @@
         <item>4</item>
     </string-array>
 
+    <string name="key_forceWearDataSync" translatable="false">forceWearDataSync</string>
+    <string name="title_forceWearDataSync">Force data sync</string>
+
 </resources>

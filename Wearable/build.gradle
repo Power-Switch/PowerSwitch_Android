@@ -68,5 +68,8 @@ dependencies {
     // Butterknife View Annotation
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknifeVersion}"
 
+    // Paper - fast NoSQL data storage
+    compile 'io.paperdb:paperdb:2.1'
+
     compile project(':Shared')
 }
