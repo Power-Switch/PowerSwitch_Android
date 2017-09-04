@@ -18,6 +18,9 @@
 
 package eu.power_switch.application;
 
+import android.os.Looper;
+import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -49,6 +52,17 @@ public class PowerSwitchWear extends DaggerApplication {
             @Override
             public void uncaughtException(Thread thread, final Throwable throwable) {
                 Timber.e("FATAL EXCEPTION", throwable);
+
+                // show toast of unhandled exception
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                        Looper.loop();
+                    }
+                }.start();
 
                 if (originalUncaughtExceptionHandler != null) {
                     //Delegates to Android's error handling

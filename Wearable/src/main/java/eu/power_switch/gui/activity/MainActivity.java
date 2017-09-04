@@ -170,24 +170,30 @@ public class MainActivity extends EventBusWearableActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
     public void onDataChanged(DataChangedEvent e) {
-        ArrayList<ApartmentDataEvent> apartmentDataEvents = e.getApplicationDataEvent()
-                .getApartmentDataEvents();
-
-        ApartmentDataEvent firstApartmentDataEvent = apartmentDataEvents.get(0);
-
-        apartmentName = firstApartmentDataEvent.getName();
-
-        List<RoomDataEvent> rooms = firstApartmentDataEvent.getRoomDataEvents();
         roomList.clear();
-        roomList.addAll(rooms);
+        sceneList.clear();
+
+        if (e == null) {
+            Timber.d("data was deleted");
+            return;
+        }
+
+        ApplicationDataEvent applicationDataEvent = e.getApplicationDataEvent();
+        if (applicationDataEvent != null) {
+            ArrayList<ApartmentDataEvent> apartmentDataEvents     = applicationDataEvent.getApartmentDataEvents();
+            ApartmentDataEvent            firstApartmentDataEvent = apartmentDataEvents.get(0);
+
+            apartmentName = firstApartmentDataEvent.getName();
+
+            List<RoomDataEvent> rooms = firstApartmentDataEvent.getRoomDataEvents();
+            roomList.addAll(rooms);
+
+            List<SceneDataEvent> scenes = firstApartmentDataEvent.getSceneDataEvents();
+            sceneList.addAll(scenes);
+        }
 
         EventBus.getDefault()
                 .post(new RoomDataChangedEvent(roomList));
-
-        List<SceneDataEvent> scenes = firstApartmentDataEvent.getSceneDataEvents();
-        sceneList.clear();
-        sceneList.addAll(scenes);
-
         EventBus.getDefault()
                 .post(new SceneDataChangedEvent(sceneList));
     }
@@ -294,8 +300,6 @@ public class MainActivity extends EventBusWearableActivity {
                 // Update UI based on the result of the background processing
 //                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
 
-                // TODO: read data from persistence
-
                 Timber.d("reading data from persistence");
 
                 ArrayList<ApartmentDataEvent> apartmentDataEvents = applicationDataEvent.getApartmentDataEvents();
@@ -308,15 +312,9 @@ public class MainActivity extends EventBusWearableActivity {
                 roomList.clear();
                 roomList.addAll(rooms);
 
-                EventBus.getDefault()
-                        .post(new RoomDataChangedEvent(roomList));
-
                 List<SceneDataEvent> scenes = firstApartmentDataEvent.getSceneDataEvents();
                 sceneList.clear();
                 sceneList.addAll(scenes);
-
-                EventBus.getDefault()
-                        .post(new SceneDataChangedEvent(sceneList));
 
                 textViewStatus.setVisibility(View.GONE);
                 if (!isAmbient()) {
@@ -328,10 +326,17 @@ public class MainActivity extends EventBusWearableActivity {
             } else {
                 Timber.d("no persisted data yet");
 
-                Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)
+//                Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)
+//                        .show();
+                Toast.makeText(getApplicationContext(), "no persisted data yet", Toast.LENGTH_LONG)
                         .show();
                 isInitialized = true;
             }
+
+            EventBus.getDefault()
+                    .post(new RoomDataChangedEvent(roomList));
+            EventBus.getDefault()
+                    .post(new SceneDataChangedEvent(sceneList));
         }
     }
 }

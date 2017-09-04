@@ -44,7 +44,9 @@ import eu.power_switch.shared.persistence.preferences.WearablePreferencesHandler
 import eu.power_switch.shared.wearable.CommunicationHelper;
 import eu.power_switch.shared.wearable.dataevents.ApplicationDataEvent;
 import io.paperdb.Paper;
+import me.denley.courier.Courier;
 import me.denley.courier.Packager;
+import me.denley.courier.ReceiveData;
 
 /**
  * Created by Markus on 05.06.2015.
@@ -60,6 +62,24 @@ public class ListenerService extends DaggerWearableListenerService {
     @Inject
     WearablePreferencesHandler wearablePreferencesHandler;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Courier.startReceiving(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        Courier.stopReceiving(this);
+        super.onDestroy();
+    }
+
+    @ReceiveData(WearableConstants.DATA_PATH)
+    void onDataReceived(ApplicationDataEvent applicationDataEvent, String nodeId) {
+        Toast.makeText(this, "dataReceivedEvent: " + String.valueOf(applicationDataEvent), Toast.LENGTH_LONG)
+                .show();
+    }
+
     /**
      * Reacts to DataChanged Events from DataApi
      *
@@ -72,15 +92,23 @@ public class ListenerService extends DaggerWearableListenerService {
         final List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
 
         for (DataEvent event : events) {
+            Toast.makeText(this, "dataChanged type=" + event.getType(), Toast.LENGTH_LONG)
+                    .show();
+
             if (event.getDataItem() != null) {
+                Toast.makeText(this,
+                        "eventDataPath=" + event.getDataItem()
+                                .getUri()
+                                .getPath(),
+                        Toast.LENGTH_LONG)
+                        .show();
+
                 if (event.getType() == DataEvent.TYPE_CHANGED) {
                     if (WearableConstants.DATA_PATH.equals(event.getDataItem()
                             .getUri()
                             .getPath())) {
 
                         final DataItem dataItem = event.getDataItem();
-
-                        final DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
 
                         ApplicationDataEvent dataEvent = Packager.unpack(this, dataItem, ApplicationDataEvent.class);
 
