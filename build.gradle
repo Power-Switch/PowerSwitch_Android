@@ -25,15 +25,15 @@ buildscript {
         targetSdkVersion = 26
         buildToolsVersion = "26.0.1"
 
-        supportLibVersion = "26.0.0"
-        supportLibWearableVersion = "2.0.4"
-        supportLibWearableUiVersion = "26.0.0"
-        playServicesVersion = "11.0.4"
+        supportLibVersion = "26.1.0"
+        supportLibWearableVersion = "2.0.5"
+        supportLibWearableUiVersion = "26.1.0"
+        playServicesVersion = "11.4.0"
         dagger2Version = "2.11"
-        butterknifeVersion = "8.6.0"
-        lombokVersion = "1.16.16"
+        butterknifeVersion = "8.8.1"
+        lombokVersion = "1.16.18"
 
-        iconicsVersion = "2.9.0"
+        iconicsVersion = "2.9.3"
     }
 
     repositories {

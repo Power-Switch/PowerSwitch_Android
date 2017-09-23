@@ -78,7 +78,7 @@ dependencies {
     compile "com.google.android.gms:play-services-maps:${rootProject.ext.playServicesVersion}"
     compile "com.google.android.gms:play-services-location:${rootProject.ext.playServicesVersion}"
     // In-app purchases
-    compile 'com.android.billingclient:billing:dp-1'
+    compile 'com.android.billingclient:billing:1.0'
 
     // MultiDex
     compile 'com.android.support:multidex:1.0.1'
@@ -109,7 +109,7 @@ dependencies {
     }
 
     // MaterialDrawer (Swipe menu)
-    compile('com.mikepenz:materialdrawer:5.9.4@aar') {
+    compile('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
     }
 

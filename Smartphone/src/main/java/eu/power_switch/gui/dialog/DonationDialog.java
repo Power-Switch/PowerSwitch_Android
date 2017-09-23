@@ -36,6 +36,7 @@ import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -147,7 +148,10 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
         super.onCreate(savedInstanceState);
 
         try {
-            billingClient = new BillingClient.Builder(getActivity()).setListener(this)
+
+
+            billingClient = BillingClient.newBuilder(getActivity())
+                    .setListener(this)
                     .build();
 
             connectBillingService();
@@ -177,13 +181,17 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
             billingServiceIsConnected = true;
             // The billing client is ready. You can query purchases here.
 
-            billingClient.querySkuDetailsAsync(BillingClient.SkuType.INAPP, IAP_IDS_LIST, new SkuDetailsResponseListener() {
+            SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+            params.setSkusList(IAP_IDS_LIST);
+            params.setType(BillingClient.SkuType.INAPP);
+
+            billingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
+
                 @Override
-                public void onSkuDetailsResponse(SkuDetails.SkuDetailsResult result) {
+                public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
                     // Process the result.
-                    switch (result.getResponseCode()) {
+                    switch (responseCode) {
                         case BillingResponse.OK:
-                            List<SkuDetails> skuDetailsList = result.getSkuDetailsList();
                             for (SkuDetails skuDetails : skuDetailsList) {
                                 String sku   = skuDetails.getSku();
                                 String price = skuDetails.getPrice();
@@ -220,9 +228,9 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
                         case BillingResponse.ITEM_ALREADY_OWNED:
                         case BillingResponse.ITEM_NOT_OWNED:
                         default:
-                            Timber.w("unhandled result response code: " + result.getResponseCode());
+                            Timber.w("unhandled result response code: " + responseCode);
                         case BillingResponse.ERROR:
-                            statusMessageHandler.showInfoMessage(getContext(), "Error: " + result.getResponseCode(), Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getContext(), "Error: " + responseCode, Snackbar.LENGTH_LONG);
                             dismissAllowingStateLoss();
                             break;
 
@@ -284,7 +292,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
     private void consumePurchase(Purchase purchase) {
         billingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
             @Override
-            public void onConsumeResponse(String outToken, int responseCode) {
+            public void onConsumeResponse(@BillingResponse int responseCode, String outToken) {
                 if (responseCode == BillingResponse.OK) {
                     // Handle the success of the consume operation.
                     // For example, increase the number of coins inside the user's basket.
@@ -298,7 +306,8 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
     }
 
     private void initiatePurchase(String skuId) {
-        BillingFlowParams.Builder builder = new BillingFlowParams.Builder().setSku(skuId)
+        BillingFlowParams.Builder builder = BillingFlowParams.newBuilder()
+                .setSku(skuId)
                 .setType(BillingClient.SkuType.INAPP);
         int responseCode = billingClient.launchBillingFlow(getActivity(), builder.build());
     }
@@ -310,7 +319,7 @@ public class DonationDialog extends EventBusSupportDialogFragment implements Bil
             for (Purchase purchase : purchases) {
                 billingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
                     @Override
-                    public void onConsumeResponse(String outToken, int responseCode) {
+                    public void onConsumeResponse(@BillingResponse int responseCode, String outToken) {
                         if (responseCode == BillingResponse.OK) {
                             Timber.i("Previous purchase consumed");
                         } else {

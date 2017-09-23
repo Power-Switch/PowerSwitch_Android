@@ -94,6 +94,7 @@ dependencies {
 
     // Smartphone <-> Wearable Data Synchronization
     compile 'me.denley.courier:courier:1.2.1'
+    compile 'com.github.markusressel:courier:dev-SNAPSHOT'
 
     // Fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

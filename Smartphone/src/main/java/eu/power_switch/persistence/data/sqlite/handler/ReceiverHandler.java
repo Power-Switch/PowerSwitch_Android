@@ -85,8 +85,7 @@ class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_TYPE,
                 receiver.getType()
                         .toString());
-        // TODO: Check if 999 yields the expected results
-        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, 999); // so it is always added in last position
+        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, receiver.getPositionInRoom());
         values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
         Long receiverId = database.insert(ReceiverTable.TABLE_NAME, null, values);

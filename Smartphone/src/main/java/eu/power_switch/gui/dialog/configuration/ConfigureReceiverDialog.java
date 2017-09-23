@@ -207,6 +207,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialog<ReceiverConfigu
                 break;
         }
 
+        receiver.setPositionInRoom(getConfiguration().getParentRoom()
+                .getReceivers()
+                .size() + 1);
         receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
 
         if (receiverId == -1) {
